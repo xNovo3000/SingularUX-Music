@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="global_app_name">Music</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="p">P</string>
 </resources>
