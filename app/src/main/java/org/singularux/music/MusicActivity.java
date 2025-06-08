@@ -18,8 +18,8 @@ public class MusicActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
         SplashScreen.installSplashScreen(this);
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
     }
 

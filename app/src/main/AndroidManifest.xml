@@ -11,6 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Music"
-        tools:targetApi="36"/>
+        tools:targetApi="36">
+
+        <activity android:name=".MusicActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.Music.Splash">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+    </application>
 
 </manifest>

@@ -29,7 +29,7 @@ android {
 
 dependencies {
     // Project
-    api project(':core:ui')
+    api(project ':core:ui')
     // AndroidX
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
@@ -38,4 +38,7 @@ dependencies {
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // Navigation
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
 }
