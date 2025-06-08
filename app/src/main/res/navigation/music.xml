@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/music">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/music"
+    app:startDestination="@id/track_list">
+
+    <fragment android:id="@+id/track_list"
+        android:name="org.singularux.music.feature.tracklist.ui.TrackListRoute"
+        android:label="@string/track_list_route"
+        tools:layout="@layout/route_track_list"/>
 
 </navigation>
