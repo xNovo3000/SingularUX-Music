@@ -1,0 +1,24 @@
+[versions]
+agp = "8.10.1"
+hilt = "2.56.2"
+androidx-core = "1.16.0"
+androidx-core-splashscreen = "1.0.1"
+androidx-activity = "1.10.1"
+androidx-fragment = "1.8.8"
+google-material = "1.12.0"
+lombok = "1.18.38"
+
+[libraries]
+androidx-core = { group = "androidx.core", name = "core", version.ref = "androidx-core" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-core-splashscreen" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "androidx-activity" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "androidx-fragment" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
