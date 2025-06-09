@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/track_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/track_item_background"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="72dp"
     android:paddingHorizontal="16dp"
@@ -31,7 +33,8 @@
             android:id="@+id/track_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/placeholder"/>
+            android:text="@string/placeholder"
+            android:textColor="@color/track_item_headline"/>
 
         <com.google.android.material.textview.MaterialTextView
             style="?attr/textAppearanceBodyMedium"
@@ -39,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/placeholder"
-            android:textColor="?attr/colorOnSurfaceVariant"/>
+            android:textColor="@color/track_item_support"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

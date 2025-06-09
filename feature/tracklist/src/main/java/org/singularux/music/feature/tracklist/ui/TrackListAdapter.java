@@ -22,6 +22,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
     @Inject
     public TrackListAdapter(TrackItemDiffCallback diffCallback) {
         super(diffCallback);
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -34,7 +35,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TrackItemViewHolder holder, int position) {
-        TrackItem trackItem = getCurrentList().get(position);
+        TrackItem trackItem = getItem(position);
         // Title
         holder.getTitle().setText(trackItem.getTitle());
         // Duration and artists
@@ -44,7 +45,14 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
                 trackItem.getDuration().getSeconds() % 60,
                 trackItem.getArtistsName());
         holder.getDurationArtists().setText(durationArtists);
+        // Change colors if currently playing
+        holder.getContainer().setSelected(trackItem.isCurrentlyPlaying());
         // TODO: Artwork
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).getId();
     }
 
 }

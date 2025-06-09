@@ -35,9 +35,16 @@ dependencies {
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // Lifecycle
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.reactivestreams
+    implementation libs.lifecycle.viewmodel
     // Lombok
     implementation libs.lombok
     annotationProcessor libs.lombok
     // Material 3
     implementation libs.google.material
+    // RxJava
+    implementation libs.rxjava
+    implementation libs.rxjava.android
 }

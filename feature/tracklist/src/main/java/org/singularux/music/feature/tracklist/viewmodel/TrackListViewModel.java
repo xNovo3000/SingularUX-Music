@@ -1,0 +1,29 @@
+package org.singularux.music.feature.tracklist.viewmodel;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
+import androidx.lifecycle.ViewModel;
+
+import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
+import org.singularux.music.feature.tracklist.model.TrackItem;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+import lombok.Getter;
+
+@HiltViewModel
+@Getter
+public class TrackListViewModel extends ViewModel {
+
+    private final LiveData<List<TrackItem>> tracks;
+
+    @Inject
+    public TrackListViewModel(@NonNull ListenTrackListUseCase listenTrackListUseCase) {
+        this.tracks = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
+    }
+
+}

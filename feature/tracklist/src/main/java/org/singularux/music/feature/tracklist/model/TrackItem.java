@@ -15,4 +15,5 @@ public class TrackItem {
     private final String artistsName;
     private final Uri artworkUri;
     private final Duration duration;
+    private final boolean isCurrentlyPlaying;
 }
