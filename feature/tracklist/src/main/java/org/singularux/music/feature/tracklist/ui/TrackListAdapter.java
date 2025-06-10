@@ -14,6 +14,8 @@ import org.singularux.music.feature.tracklist.model.TrackItem;
 import org.singularux.music.feature.tracklist.model.TrackItemDiffCallback;
 import org.singularux.music.feature.tracklist.ui.component.TrackItemViewHolder;
 
+import java.time.Duration;
+
 import javax.inject.Inject;
 
 public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder> {
@@ -34,18 +36,23 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TrackItemViewHolder holder, int position) {
-        TrackItem trackItem = getItem(position);
-        // Title
-        holder.getTitle().setText(trackItem.getTitle());
-        // Duration and artists
         Context context = ContextCompat.getContextForLanguage(holder.itemView.getContext());
-        String durationArtists = context.getString(R.string.track_item_duration_artists,
-                trackItem.getDuration().getSeconds() / 60,
-                trackItem.getDuration().getSeconds() % 60,
-                trackItem.getArtistsName());
-        holder.getDurationArtists().setText(durationArtists);
-        // Change colors if currently playing
-        holder.itemView.setSelected(trackItem.isCurrentlyPlaying());
+        TrackItem trackItem = getItem(position);
+        // Extract data
+        String title = trackItem.getTitle();
+        String artistsName = trackItem.getArtistsName();
+        if (artistsName == null) {
+            artistsName = context.getString(R.string.track_item_unknown_artist);
+        }
+        long durationMinutes = trackItem.getDuration().getSeconds() / 60;
+        long durationSeconds = trackItem.getDuration().getSeconds() % 60;
+        boolean isCurrentlyPlaying = trackItem.isCurrentlyPlaying();
+        // Apply
+        holder.itemView.setSelected(isCurrentlyPlaying);
+        holder.getTitle().setText(title);
+        String durationArtistsName = context.getString(R.string.track_item_duration_artists,
+                durationMinutes, durationSeconds, artistsName);
+        holder.getDurationArtists().setText(durationArtistsName);
         // TODO: Artwork
     }
 

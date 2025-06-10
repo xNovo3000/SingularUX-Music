@@ -5,7 +5,7 @@
     android:id="@+id/playback_bar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/md_theme_surfaceContainer"
+    android:background="?attr/colorSurfaceContainer"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical">
 
@@ -27,7 +27,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center_vertical"
-            android:background="@color/md_theme_surfaceContainerHighest"/>
+            android:background="?attr/colorSurfaceContainerHighest"/>
 
         <Space
             android:layout_width="16dp"

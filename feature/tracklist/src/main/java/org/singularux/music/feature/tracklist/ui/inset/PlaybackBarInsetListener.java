@@ -20,7 +20,6 @@ public class PlaybackBarInsetListener implements OnApplyWindowInsetsListener {
             @NonNull View view, @NonNull WindowInsetsCompat windowInsets
     ) {
         Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
-        float displayDensity = view.getContext().getResources().getDisplayMetrics().density;
         view.setPadding(
                 0,
                 0,

@@ -1,20 +1,18 @@
-package org.singularux.music.feature.tracklist.model;
+package org.singularux.music.feature.playback.model;
 
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.time.Duration;
-
 import lombok.Data;
 
 @Data
-public class TrackItem {
-    private final int id;
+public class PlaybackInfo {
     private final @NonNull String title;
     private final @Nullable String artistsName;
     private final @Nullable Uri artworkUri;
-    private final @NonNull Duration duration;
-    private final boolean isCurrentlyPlaying;
+    private final boolean isPlaying;
+    private final boolean hasPrevious;
+    private final boolean hasNext;
 }
