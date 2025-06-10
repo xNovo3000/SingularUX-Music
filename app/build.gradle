@@ -29,7 +29,7 @@ android {
 
 dependencies {
     // Project
-    api(project ':core:ui')
+    api(project ':feature:playback')
     api(project ':feature:tracklist')
     // AndroidX
     implementation libs.androidx.core

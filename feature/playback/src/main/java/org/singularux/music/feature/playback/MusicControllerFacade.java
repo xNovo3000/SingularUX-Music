@@ -13,17 +13,22 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.Getter;
 
 public class MusicControllerFacade {
 
-    private static final String TAG = "MediaControllerFacade";
+    private static final String TAG = "MusicControllerFacade";
 
     private final Single<MediaController> mediaControllerSingle;
     private @Getter boolean isReady = false;
 
     public MusicControllerFacade(@NonNull Context context) {
+        // Try to load MediaController
         ComponentName componentName = new ComponentName(context, MusicPlaybackService.class);
         SessionToken sessionToken = new SessionToken(context, componentName);
         ListenableFuture<MediaController> mediaControllerFuture = new MediaController
@@ -34,15 +39,29 @@ public class MusicControllerFacade {
                 @Override
                 public void onSuccess(MediaController result) {
                     emitter.onSuccess(result);
-                    isReady = true;
                 }
                 @Override
                 public void onFailure(@NonNull Throwable t) {
                     emitter.onError(t);
-                    Log.e(TAG, "Error loading MediaController", t);
                 }
             }, ContextCompat.getMainExecutor(context));
         });
+        // Get the controller when it's ready or the error if fails
+        this.mediaControllerSingle.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {}
+                    @Override
+                    public void onSuccess(@NonNull MediaController mediaController) {
+                        Log.d(TAG, "Loaded MediaController");
+                        isReady = true;
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(TAG, "Failed to load MediaController", e);
+                    }
+                });
     }
 
 }
