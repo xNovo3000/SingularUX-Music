@@ -23,4 +23,5 @@ rootProject.name = "Music"
 include ':app'
 include ':core:ui'
 include ':core:permission'
+include ':feature:playback'
 include ':feature:tracklist'
