@@ -9,8 +9,11 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
+import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
+import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListSearchBarInsetListener;
 import org.singularux.music.feature.tracklist.viewmodel.TrackListViewModel;
 
@@ -21,11 +24,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class TrackListRoute extends Fragment {
 
+    @Inject public MusicPermissionManager musicPermissionManager;
+    @Inject public PlaybackBarInsetListener playbackBarInsetListener;
     @Inject public TrackListSearchBarInsetListener trackListSearchBarInsetListener;
+    @Inject public TrackListInsetListener trackListInsetListener;
     @Inject public TrackListAdapter trackListAdapter;
-
-    public RouteTrackListBinding binding;
-    private TrackListViewModel viewModel;
 
     public TrackListRoute() {
         super(R.layout.route_track_list);
@@ -33,12 +36,17 @@ public class TrackListRoute extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        binding = RouteTrackListBinding.bind(view);
-        viewModel = new ViewModelProvider(this).get(TrackListViewModel.class);
+        RouteTrackListBinding binding = RouteTrackListBinding.bind(view);
+        TrackListViewModel viewModel = new ViewModelProvider(this)
+                .get(TrackListViewModel.class);
         // Add InsetListeners
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListSearchBar, trackListSearchBarInsetListener);
-        // Listen data
+        ViewCompat.setOnApplyWindowInsetsListener(
+                binding.trackListRecyclerview, trackListInsetListener);
+        ViewCompat.setOnApplyWindowInsetsListener(
+                binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
+        // Set binders and adapters
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
         viewModel.getTracks().observe(getViewLifecycleOwner(),
                 trackItems -> trackListAdapter.submitList(trackItems));

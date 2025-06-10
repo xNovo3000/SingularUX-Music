@@ -26,6 +26,12 @@
             app:defaultMarginsEnabled="false"/>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <include layout="@layout/component_playback_bar"
+        android:id="@+id/playback_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+
     <com.google.android.material.search.SearchView
         android:id="@+id/track_list_search_view"
         android:layout_width="match_parent"

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import org.singularux.music.feature.tracklist.R;
@@ -46,7 +45,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
                 trackItem.getArtistsName());
         holder.getDurationArtists().setText(durationArtists);
         // Change colors if currently playing
-        holder.getContainer().setSelected(trackItem.isCurrentlyPlaying());
+        holder.itemView.setSelected(trackItem.isCurrentlyPlaying());
         // TODO: Artwork
     }
 
