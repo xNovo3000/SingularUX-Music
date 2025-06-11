@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 
+import org.singularux.music.feature.playback.domain.ListenPlaybackPositionUseCase;
+import org.singularux.music.feature.playback.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
 import org.singularux.music.feature.tracklist.model.TrackItem;
 
@@ -20,10 +22,15 @@ import lombok.Getter;
 public class TrackListViewModel extends ViewModel {
 
     private final LiveData<List<TrackItem>> tracks;
+    private final LiveData<PlaybackPosition> playbackPosition;
 
     @Inject
-    public TrackListViewModel(@NonNull ListenTrackListUseCase listenTrackListUseCase) {
+    public TrackListViewModel(
+            @NonNull ListenTrackListUseCase listenTrackListUseCase,
+            @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase
+    ) {
         this.tracks = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
+        this.playbackPosition = LiveDataReactiveStreams.fromPublisher(listenPlaybackPositionUseCase.get());
     }
 
 }
