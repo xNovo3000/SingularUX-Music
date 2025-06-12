@@ -1,33 +1,139 @@
 package org.singularux.music.feature.tracklist.domain;
 
+import android.content.Context;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import org.singularux.music.core.permission.MusicPermission;
+import org.singularux.music.core.permission.MusicPermissionManager;
+import org.singularux.music.data.library.entity.TrackEntity;
+import org.singularux.music.data.library.repository.TrackRepository;
+import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
 import org.singularux.music.feature.tracklist.model.TrackItem;
 
-import java.time.Duration;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.FlowableEmitter;
+import io.reactivex.rxjava3.core.FlowableOnSubscribe;
+import io.reactivex.rxjava3.functions.Cancellable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import lombok.RequiredArgsConstructor;
 
 public class ListenTrackListUseCase {
 
+    private static final String TAG = "ListenTrackListUseCase";
+
+    private final Context context;
+    private final TrackRepository trackRepository;
+    private final MusicPermissionManager musicPermissionManager;
+
     @Inject
-    public ListenTrackListUseCase() {
+    public ListenTrackListUseCase(
+            @ApplicationContext Context context,
+            TrackRepository trackRepository,
+            MusicPermissionManager musicPermissionManager
+    ) {
+        this.context = context;
+        this.trackRepository = trackRepository;
+        this.musicPermissionManager = musicPermissionManager;
     }
 
     public @NonNull Flowable<List<TrackItem>> get() {
-        List<TrackItem> items = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            TrackItem item = new TrackItem(i, "Title " + i, "Artist " + i % 10,
-                    null, Duration.ofSeconds(i), i == 4);
-            items.add(item);
+        return Flowable.create(new TrackItemListOnSubscribe(context, musicPermissionManager),
+                        BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.computation())  // Execute flowable on computation thread
+                .observeOn(Schedulers.io())  // Read on IO thread
+                .map(o -> trackRepository.getAll())
+                .observeOn(Schedulers.computation())  // Map to item on computation thread
+                .map(trackEntities -> trackEntities.stream()
+                        .map(new TrackEntityToTrackItemMapper()).collect(Collectors.toList()));
+    }
+
+    @RequiredArgsConstructor
+    private static class TrackItemListOnSubscribe implements FlowableOnSubscribe<Object> {
+
+        private final Context context;
+        private final MusicPermissionManager musicPermissionManager;
+
+        @Override
+        public void subscribe(@NonNull FlowableEmitter<Object> emitter) {
+            // Only if has permission
+            if (musicPermissionManager.hasPermission(MusicPermission.READ_MUSIC)) {
+                Log.d(TAG, "Adding track list observer");
+                TrackListObserver observer = new TrackListObserver(emitter);
+                // Add observer, force first update and remove when flowable is cancelled
+                context.getContentResolver().registerContentObserver(TrackRepositoryAndroid.URI,
+                        false, observer);
+                observer.onChange(false);
+                emitter.setCancellable(new RemoveListenerCancellable(context, observer));
+            } else {
+                Log.i(TAG, "Missing READ_MUSIC permission");
+            }
         }
-        return Flowable.create(emitter -> emitter.onNext(items),
-                BackpressureStrategy.LATEST);
+
+    }
+
+    @RequiredArgsConstructor
+    private static class RemoveListenerCancellable implements Cancellable {
+
+        private final Context context;
+        private final TrackListObserver observer;
+
+        @Override
+        public void cancel() {
+            Log.d(TAG, "Removing track list observer");
+            context.getContentResolver().unregisterContentObserver(observer);
+        }
+
+    }
+
+    private static class TrackListObserver extends ContentObserver {
+
+        private final FlowableEmitter<Object> emitter;
+        private final Object dummy = new Object();
+
+        public TrackListObserver(FlowableEmitter<Object> emitter) {
+            super(new Handler(Looper.getMainLooper()));
+            this.emitter = emitter;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            Log.d(TAG, "Change requested");
+            emitter.onNext(dummy);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, @NonNull Collection<Uri> uris, int flags) {
+            // Call only once
+            this.onChange(selfChange);
+        }
+
+    }
+
+    private static class TrackEntityToTrackItemMapper implements Function<TrackEntity, TrackItem> {
+
+        @Override
+        public TrackItem apply(TrackEntity trackEntity) {
+            // TODO: Implement isCurrentlyPlaying
+            return new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
+                    trackEntity.getArtistsName(), trackEntity.getArtworkUri(),
+                    trackEntity.getDuration(), false);
+        }
+
     }
 
 }

@@ -13,7 +13,9 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -24,8 +26,9 @@ public class ListenPlaybackPositionUseCase {
     private final MusicControllerFacade musicControllerFacade;
 
     public Flowable<PlaybackPosition> get() {
-        // Must be done on main thread because MediaController can be queried only there
-        return Flowable.interval(250, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+        // Must be watched on main thread because MediaController can be queried only there
+        return Flowable.interval(250, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new PlaybackPositionMapper(musicControllerFacade));
     }
 

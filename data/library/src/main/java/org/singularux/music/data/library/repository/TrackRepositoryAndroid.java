@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
@@ -54,7 +56,7 @@ public class TrackRepositoryAndroid implements TrackRepository {
     }
 
     @Override
-    public List<TrackEntity> getAll() {
+    public @NonNull List<TrackEntity> getAll() {
         // Check for permission
         if (!musicPermissionManager.hasPermission(MusicPermission.READ_MUSIC)) {
             Log.d(TAG, "Cannot load tracks, missing READ_MUSIC permission");
