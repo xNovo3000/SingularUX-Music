@@ -14,8 +14,6 @@ import org.singularux.music.feature.tracklist.model.TrackItem;
 import org.singularux.music.feature.tracklist.model.TrackItemDiffCallback;
 import org.singularux.music.feature.tracklist.ui.component.TrackItemViewHolder;
 
-import java.time.Duration;
-
 import javax.inject.Inject;
 
 public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder> {

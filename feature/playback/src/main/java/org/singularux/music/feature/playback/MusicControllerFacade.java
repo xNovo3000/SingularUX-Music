@@ -70,63 +70,12 @@ public class MusicControllerFacade {
                 });
     }
 
-    public void addListener(Player.Listener listener) {
-        mediaControllerSingle.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(MediaControllerPlayerAdd.builder().listener(listener).build());
-    }
-
-    public void removeListener(Player.Listener listener) {
-        mediaControllerSingle.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(MediaControllerPlayerRemove.builder().listener(listener).build());
-    }
-
     public @NonNull MediaController requireMediaController() {
         return Objects.requireNonNull(mediaController);
     }
 
     public boolean isReady() {
         return mediaController != null && mediaController.isConnected();
-    }
-
-    @SuperBuilder
-    private static abstract class MediaControllerPlayerAction
-            implements SingleObserver<MediaController> {
-
-        protected final Player.Listener listener;
-
-        @Override
-        public void onSubscribe(@NonNull Disposable d) {}
-
-    }
-
-    @SuperBuilder
-    private static class MediaControllerPlayerAdd extends MediaControllerPlayerAction {
-
-        @Override
-        public void onSuccess(@NonNull MediaController mediaController) {
-            mediaController.addListener(listener);
-        }
-
-        @Override
-        public void onError(@NonNull Throwable e) {
-            Log.e(TAG, "Cannot add listener " + listener, e);
-        }
-
-    }
-
-    @SuperBuilder
-    private static class MediaControllerPlayerRemove extends MediaControllerPlayerAction {
-
-        @Override
-        public void onSuccess(@NonNull MediaController mediaController) {
-            mediaController.removeListener(listener);
-        }
-
-        @Override
-        public void onError(@NonNull Throwable e) {
-            Log.e(TAG, "Cannot remove listener " + listener, e);
-        }
-
     }
 
 }
