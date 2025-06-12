@@ -35,7 +35,7 @@ public class ListenPlaybackPositionUseCase {
         private final MusicControllerFacade musicControllerFacade;
 
         @Override
-        public PlaybackPosition apply(Long aLong) {
+        public PlaybackPosition apply(Long value) {
             MediaController maybeMediaController = musicControllerFacade.getMediaController();
             if (maybeMediaController != null) {
                 Log.v(TAG, "MediaController is ok, reading position");
