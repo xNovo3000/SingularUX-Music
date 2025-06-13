@@ -3,8 +3,11 @@ package org.singularux.music.feature.tracklist.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -13,8 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.progressindicator.LinearProgressIndicator;
-
+import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.feature.playback.model.PlaybackInfo;
 import org.singularux.music.feature.playback.model.PlaybackPosition;
@@ -35,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 
 @AndroidEntryPoint
 public class TrackListRoute extends Fragment {
+
+    private static final String TAG = "TrackListRoute";
 
     @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public PlaybackBarInsetListener playbackBarInsetListener;
@@ -58,12 +62,24 @@ public class TrackListRoute extends Fragment {
                 binding.trackListRecyclerview, trackListInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
+        // Request permission to read music
+        ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                result -> {
+                    if (result) {
+                        Log.i(TAG, "Permission READ_MUSIC granted");
+                        // Observe track list
+                        viewModel.getTracks().observe(getViewLifecycleOwner(),
+                                trackItems -> trackListAdapter.submitList(trackItems));
+                    } else {
+                        Log.i(TAG, "Permission DENIED granted");
+                    }
+                });
         // Set binders and adapters
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
-        viewModel.getTracks().observe(getViewLifecycleOwner(),
-                trackItems -> trackListAdapter.submitList(trackItems));
+        readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
-                new PlaybackPositionObserver(binding.playbackBar.playbackBarProgress));
+                new PlaybackPositionObserver(binding.playbackBar));
         viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(),
                 new PlaybackInfoObserver(binding.playbackBar, requireContext()));
     }
@@ -71,12 +87,12 @@ public class TrackListRoute extends Fragment {
     @RequiredArgsConstructor
     private static class PlaybackPositionObserver implements Observer<PlaybackPosition> {
 
-        private final LinearProgressIndicator playbackBarProgress;
+        private final ComponentPlaybackBarBinding binding;
 
         @Override
         public void onChanged(PlaybackPosition playbackPosition) {
             int position = (int) (playbackPosition.getPosition() * 1000.0F);
-            playbackBarProgress.setProgress(position);
+            binding.playbackBarProgress.setProgress(position);
         }
 
     }

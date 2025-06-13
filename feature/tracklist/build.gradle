@@ -47,6 +47,8 @@ dependencies {
     annotationProcessor libs.lombok
     // Material 3
     implementation libs.google.material
+    // Picasso
+    implementation libs.picasso
     // RxJava
     implementation libs.rxjava
     implementation libs.rxjava.android
