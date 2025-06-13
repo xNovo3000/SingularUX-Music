@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -81,6 +82,9 @@ public class TrackRepositoryAndroid implements TrackRepository {
                 String artistsName = null;
                 if (!cursor.isNull(3)) {
                     artistsName = cursor.getString(3);
+                    if (Objects.equals(artistsName, "<unknown>")) {
+                        artistsName = null;
+                    }
                 }
                 Uri artworkUri = null;
                 if (!cursor.isNull(4)) {
