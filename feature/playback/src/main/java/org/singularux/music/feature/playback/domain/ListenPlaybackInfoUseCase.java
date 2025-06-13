@@ -64,7 +64,7 @@ public class ListenPlaybackInfoUseCase {
 
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
-            Log.d(TAG, "Adding MediaController listener");
+            Log.i(TAG, "Adding MediaController listener");
             PlaybackInfoListener listener = new PlaybackInfoListener(mediaController, emitter);
             // Add listener, force first update and remove when flowable is cancelled
             mediaController.addListener(listener);
@@ -89,7 +89,7 @@ public class ListenPlaybackInfoUseCase {
 
         @Override
         public void cancel() {
-            Log.d(TAG, "Removing MediaController listener");
+            Log.i(TAG, "Removing MediaController listener");
             mediaController.removeListener(listener);
         }
 
@@ -112,9 +112,9 @@ public class ListenPlaybackInfoUseCase {
         }
 
         public void update() {
-            Log.d(TAG, "Updating PlaybackInfo");
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
+                Log.d(TAG, "Updating PlaybackInfo with mediaItem " + mediaItem);
                 // Extract data
                 String title = null;
                 if (mediaItem.mediaMetadata.title != null) {

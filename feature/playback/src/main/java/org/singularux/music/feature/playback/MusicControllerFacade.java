@@ -7,7 +7,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.SessionToken;
 
@@ -21,9 +20,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 public class MusicControllerFacade {
@@ -53,14 +50,13 @@ public class MusicControllerFacade {
             }, ContextCompat.getMainExecutor(context));
         });
         // Get the controller when it's ready or the error if fails
-        this.mediaControllerSingle.subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
+        this.mediaControllerSingle.observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {}
                     @Override
                     public void onSuccess(@NonNull MediaController result) {
-                        Log.d(TAG, "Loaded MediaController");
+                        Log.i(TAG, "Loaded MediaController");
                         mediaController = result;
                     }
                     @Override

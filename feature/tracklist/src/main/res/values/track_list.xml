@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="track_list_route">Track List</string>
+    <string name="track_list_search_bar">Search tracks</string>
+</resources>

@@ -25,7 +25,6 @@ import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.feature.playback.model.PlaybackInfo;
 import org.singularux.music.feature.playback.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.R;
-import org.singularux.music.feature.tracklist.databinding.ComponentPlaybackBarBinding;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
@@ -37,7 +36,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import lombok.RequiredArgsConstructor;
 
 @AndroidEntryPoint
 public class TrackListRoute extends Fragment {
@@ -73,7 +71,10 @@ public class TrackListRoute extends Fragment {
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 new RequestMusicPermissionResultCallback());
-        // Set binders and adapters
+        // Add click listeners
+        trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrack);
+        binding.playbackBar.playbackBarContainer.setOnClickListener(v -> {});
+        // Set binders, listeners and adapters
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
         readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
@@ -103,7 +104,7 @@ public class TrackListRoute extends Fragment {
         @Override
         public void onChanged(PlaybackPosition playbackPosition) {
             int position = (int) (playbackPosition.getPosition() * 1000.0F);
-            binding.playbackBar.playbackBarProgress.setProgress(position);
+            binding.playbackBar.playbackBarProgress.setProgressCompat(position, true);
         }
 
     }
@@ -116,9 +117,11 @@ public class TrackListRoute extends Fragment {
             // Extract data
             String title;
             String artist;
+            boolean isPlaying = false;
             Drawable icon;
             boolean enabled;
             Uri artworkUri = null;
+            // Apply data
             if (maybePlaybackInfo.isPresent()) {
                 PlaybackInfo playbackInfo = maybePlaybackInfo.get();
                 if (playbackInfo.getTitle() != null) {
@@ -131,6 +134,7 @@ public class TrackListRoute extends Fragment {
                 } else {
                     artist = context.getString(R.string.track_item_unknown_artist);
                 }
+                isPlaying = playbackInfo.isPlaying();
                 if (playbackInfo.isPlaying()) {
                     icon = ContextCompat.getDrawable(context, R.drawable.round_pause_24);
                 } else {
@@ -144,14 +148,21 @@ public class TrackListRoute extends Fragment {
                 icon = ContextCompat.getDrawable(context, R.drawable.round_play_arrow_24);
                 enabled = false;
             }
-            // Apply
+            // Apply UI
             binding.playbackBar.playbackBarTitle.setText(title);
             binding.playbackBar.playbackBarArtist.setText(artist);
             binding.playbackBar.playbackBarPlayPause.setIcon(icon);
             binding.playbackBar.playbackBarPlayPause.setEnabled(enabled);
-            // Load artwork
             picasso.load(artworkUri)
+                    .resizeDimen(R.dimen.playback_bar_artwork_size, R.dimen.playback_bar_artwork_size)
                     .into(binding.playbackBar.playbackBarArtwork);
+            if (isPlaying) {
+                binding.playbackBar.playbackBarPlayPause.setOnClickListener(
+                        v -> viewModel.pause());
+            } else {
+                binding.playbackBar.playbackBarPlayPause.setOnClickListener(
+                        v -> viewModel.play());
+            }
         }
 
     }
