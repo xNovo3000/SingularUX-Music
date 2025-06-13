@@ -72,7 +72,7 @@ public class TrackListRoute extends Fragment {
                 new ActivityResultContracts.RequestPermission(),
                 new RequestMusicPermissionResultCallback());
         // Add click listeners
-        trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrack);
+        trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
         binding.playbackBar.playbackBarContainer.setOnClickListener(v -> {});
         // Set binders, listeners and adapters
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
@@ -90,7 +90,7 @@ public class TrackListRoute extends Fragment {
             if (result) {
                 Log.i(TAG, "Permission READ_MUSIC granted");
                 // Observe track list
-                viewModel.getTracks().observe(getViewLifecycleOwner(),
+                viewModel.getTrackList().observe(getViewLifecycleOwner(),
                         trackItems -> trackListAdapter.submitList(trackItems));
             } else {
                 Log.i(TAG, "Permission DENIED granted");

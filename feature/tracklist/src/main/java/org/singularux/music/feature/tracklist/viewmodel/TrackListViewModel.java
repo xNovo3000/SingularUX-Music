@@ -22,6 +22,7 @@ import org.singularux.music.feature.tracklist.model.TrackItem;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -34,7 +35,7 @@ public class TrackListViewModel extends ViewModel {
 
     private static final String TAG = "TrackListViewModel";
 
-    private final LiveData<List<TrackItem>> tracks;
+    private final LiveData<List<TrackItem>> trackList;
     private final LiveData<PlaybackPosition> playbackPosition;
     private final LiveData<Optional<PlaybackInfo>> playbackInfo;
 
@@ -47,7 +48,7 @@ public class TrackListViewModel extends ViewModel {
             @NonNull ListenPlaybackInfoUseCase listenPlaybackInfoUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
-        this.tracks = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
+        this.trackList = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
         this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackInfoUseCase.get());
@@ -72,6 +73,35 @@ public class TrackListViewModel extends ViewModel {
         if (mediaController != null) {
             mediaController.clearMediaItems();
             mediaController.addMediaItem(mediaItem);
+            mediaController.play();
+        }
+    }
+
+    public void playFromSpecificTrackListIndex(int index) {
+        List<TrackItem> currentList = trackList.getValue();
+        if (currentList == null) {
+            return;
+        }
+        List<MediaItem> mediaItems = currentList.stream()
+                .skip(index)
+                .map(trackItem -> {
+                    Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                            String.valueOf(trackItem.getId()));
+                    MediaMetadata mediaMetadata = new MediaMetadata.Builder()
+                            .setTitle(trackItem.getTitle())
+                            .setArtist(trackItem.getArtistsName())
+                            .setArtworkUri(trackItem.getArtworkUri())
+                            .build();
+                    return new MediaItem.Builder()
+                            .setUri(uri)
+                            .setMediaMetadata(mediaMetadata)
+                            .build();
+                })
+                .collect(Collectors.toList());
+        MediaController mediaController = musicControllerFacade.getMediaController();
+        if (mediaController != null) {
+            mediaController.clearMediaItems();
+            mediaController.addMediaItems(mediaItems);
             mediaController.play();
         }
     }

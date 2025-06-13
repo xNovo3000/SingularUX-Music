@@ -69,7 +69,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
                 .resizeDimen(R.dimen.track_item_artwork_size, R.dimen.track_item_artwork_size)
                 .into(holder.getArtwork());
         // Click
-        holder.itemView.setOnClickListener(new TrackOnClickListenerCompat(onItemClickListener, trackItem));
+        holder.itemView.setOnClickListener(new TrackOnClickListenerCompat(onItemClickListener, position));
     }
 
     @Override
@@ -81,11 +81,11 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
     private static final class TrackOnClickListenerCompat implements View.OnClickListener {
 
         private final TrackItemOnClickListener onItemClickListener;
-        private final TrackItem trackItem;
+        private final int index;
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.onClick(trackItem);
+            onItemClickListener.onClick(index);
         }
 
     }
