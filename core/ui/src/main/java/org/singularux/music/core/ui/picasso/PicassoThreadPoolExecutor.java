@@ -1,6 +1,6 @@
 package org.singularux.music.core.ui.picasso;
 
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +11,7 @@ public class PicassoThreadPoolExecutor extends ThreadPoolExecutor {
 
     public PicassoThreadPoolExecutor() {
         super(1, MAX_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
-                new PriorityBlockingQueue<>(), new PicassoThreadFactory());
+                new LinkedBlockingQueue<>(), new PicassoThreadFactory());
     }
 
 }

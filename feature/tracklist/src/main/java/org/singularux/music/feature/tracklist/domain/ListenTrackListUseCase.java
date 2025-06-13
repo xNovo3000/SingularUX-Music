@@ -128,6 +128,7 @@ public class ListenTrackListUseCase {
 
         @Override
         public TrackItem apply(TrackEntity trackEntity) {
+            Log.v(TAG, "Received " + trackEntity);
             // TODO: Implement isCurrentlyPlaying
             return new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
                     trackEntity.getArtistsName(), trackEntity.getArtworkUri(),

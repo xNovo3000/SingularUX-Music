@@ -5,6 +5,7 @@ import android.content.Context;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
+import org.singularux.music.core.ui.picasso.PicassoNoOpDownloader;
 import org.singularux.music.core.ui.picasso.PicassoThreadPoolExecutor;
 
 import dagger.Module;
@@ -18,14 +19,13 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 @InstallIn(ActivityRetainedComponent.class)
 public class CoreUiModule {
 
-    private static final int MAX_BYTES = 4 * 1024 * 1024;  // 4 MB
-
     @Provides
     @ActivityRetainedScoped
     public Picasso providesPicasso(@ApplicationContext Context context) {
         return new Picasso.Builder(context)
+                .downloader(new PicassoNoOpDownloader())
                 .executor(new PicassoThreadPoolExecutor())
-                .memoryCache(new LruCache(MAX_BYTES))
+                .memoryCache(new LruCache(context))
                 .build();
     }
 

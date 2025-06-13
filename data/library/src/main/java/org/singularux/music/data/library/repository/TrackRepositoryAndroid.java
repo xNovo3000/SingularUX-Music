@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
-import org.singularux.music.data.library.util.ArtworkUriGenerator;
-import org.singularux.music.data.library.util.ArtworkUriGeneratorSupplier;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -28,6 +26,8 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private static final String TAG = "TrackRepositoryAndroid";
 
     public static final Uri URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    private static final Uri ARTWORK_URI = Uri.parse("content://media/external/audio/albumart");
+
     private static final String[] GET_ALL_PROJECTION = {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DISPLAY_NAME,
@@ -42,17 +42,14 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
-    private final ArtworkUriGeneratorSupplier artworkUriGeneratorSupplier;
 
     @Inject
     public TrackRepositoryAndroid(
             @ApplicationContext Context context,
-            MusicPermissionManager musicPermissionManager,
-            ArtworkUriGeneratorSupplier artworkUriGeneratorSupplier
+            MusicPermissionManager musicPermissionManager
     ) {
         this.context = context;
         this.musicPermissionManager = musicPermissionManager;
-        this.artworkUriGeneratorSupplier = artworkUriGeneratorSupplier;
     }
 
     @Override
@@ -71,7 +68,6 @@ public class TrackRepositoryAndroid implements TrackRepository {
                 return Collections.emptyList();
             }
             // Build the list of tracks
-            ArtworkUriGenerator artworkUriGenerator = artworkUriGeneratorSupplier.get();
             List<TrackEntity> result = new ArrayList<>();
             while (cursor.moveToNext()) {
                 // Extract data
@@ -88,8 +84,8 @@ public class TrackRepositoryAndroid implements TrackRepository {
                 }
                 Uri artworkUri = null;
                 if (!cursor.isNull(4)) {
-                    int albumId = cursor.getInt(4);
-                    artworkUri = artworkUriGenerator.maybeGet(albumId).orElse(null);
+                    long albumId = cursor.getLong(4);
+                    artworkUri = Uri.withAppendedPath(ARTWORK_URI, String.valueOf(albumId));
                 }
                 Duration duration = Duration.ZERO;
                 if (!cursor.isNull(5)) {

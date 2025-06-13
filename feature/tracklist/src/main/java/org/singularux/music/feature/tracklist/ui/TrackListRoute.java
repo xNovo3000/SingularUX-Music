@@ -2,10 +2,12 @@ package org.singularux.music.feature.tracklist.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -15,6 +17,8 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
@@ -45,6 +49,10 @@ public class TrackListRoute extends Fragment {
     @Inject public TrackListSearchBarInsetListener trackListSearchBarInsetListener;
     @Inject public TrackListInsetListener trackListInsetListener;
     @Inject public TrackListAdapter trackListAdapter;
+    @Inject public Picasso picasso;
+
+    private RouteTrackListBinding binding;
+    private TrackListViewModel viewModel;
 
     public TrackListRoute() {
         super(R.layout.route_track_list);
@@ -52,9 +60,8 @@ public class TrackListRoute extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        RouteTrackListBinding binding = RouteTrackListBinding.bind(view);
-        TrackListViewModel viewModel = new ViewModelProvider(this)
-                .get(TrackListViewModel.class);
+        binding = RouteTrackListBinding.bind(view);
+        viewModel = new ViewModelProvider(this).get(TrackListViewModel.class);
         // Add InsetListeners
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListSearchBar, trackListSearchBarInsetListener);
@@ -65,52 +72,53 @@ public class TrackListRoute extends Fragment {
         // Request permission to read music
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
-                result -> {
-                    if (result) {
-                        Log.i(TAG, "Permission READ_MUSIC granted");
-                        // Observe track list
-                        viewModel.getTracks().observe(getViewLifecycleOwner(),
-                                trackItems -> trackListAdapter.submitList(trackItems));
-                    } else {
-                        Log.i(TAG, "Permission DENIED granted");
-                    }
-                });
+                new RequestMusicPermissionResultCallback());
         // Set binders and adapters
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
         readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
-                new PlaybackPositionObserver(binding.playbackBar));
+                new PlaybackPositionObserver());
         viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(),
-                new PlaybackInfoObserver(binding.playbackBar, requireContext()));
+                new PlaybackInfoObserver());
     }
 
-    @RequiredArgsConstructor
-    private static class PlaybackPositionObserver implements Observer<PlaybackPosition> {
-
-        private final ComponentPlaybackBarBinding binding;
+    private class RequestMusicPermissionResultCallback implements ActivityResultCallback<Boolean> {
 
         @Override
-        public void onChanged(PlaybackPosition playbackPosition) {
-            int position = (int) (playbackPosition.getPosition() * 1000.0F);
-            binding.playbackBarProgress.setProgress(position);
+        public void onActivityResult(Boolean result) {
+            if (result) {
+                Log.i(TAG, "Permission READ_MUSIC granted");
+                // Observe track list
+                viewModel.getTracks().observe(getViewLifecycleOwner(),
+                        trackItems -> trackListAdapter.submitList(trackItems));
+            } else {
+                Log.i(TAG, "Permission DENIED granted");
+            }
         }
 
     }
 
-    @RequiredArgsConstructor
-    private static class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
+    private class PlaybackPositionObserver implements Observer<PlaybackPosition> {
 
-        private final ComponentPlaybackBarBinding binding;
-        private final Context baseContext;
+        @Override
+        public void onChanged(PlaybackPosition playbackPosition) {
+            int position = (int) (playbackPosition.getPosition() * 1000.0F);
+            binding.playbackBar.playbackBarProgress.setProgress(position);
+        }
+
+    }
+
+    private class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
 
         @Override
         public void onChanged(Optional<PlaybackInfo> maybePlaybackInfo) {
-            Context context = ContextCompat.getContextForLanguage(baseContext);
+            Context context = ContextCompat.getContextForLanguage(requireContext());
             // Extract data
             String title;
             String artist;
             Drawable icon;
             boolean enabled;
+            Uri artworkUri = null;
             if (maybePlaybackInfo.isPresent()) {
                 PlaybackInfo playbackInfo = maybePlaybackInfo.get();
                 if (playbackInfo.getTitle() != null) {
@@ -129,6 +137,7 @@ public class TrackListRoute extends Fragment {
                     icon = ContextCompat.getDrawable(context, R.drawable.round_play_arrow_24);
                 }
                 enabled = true;
+                artworkUri = playbackInfo.getArtworkUri();
             } else {
                 title = context.getString(R.string.track_item_unknown_track);
                 artist = context.getString(R.string.track_item_unknown_artist);
@@ -136,11 +145,13 @@ public class TrackListRoute extends Fragment {
                 enabled = false;
             }
             // Apply
-            binding.playbackBarTitle.setText(title);
-            binding.playbackBarArtist.setText(artist);
-            binding.playbackBarPlayPause.setIcon(icon);
-            binding.playbackBarPlayPause.setEnabled(enabled);
-            // TODO: Artwork
+            binding.playbackBar.playbackBarTitle.setText(title);
+            binding.playbackBar.playbackBarArtist.setText(artist);
+            binding.playbackBar.playbackBarPlayPause.setIcon(icon);
+            binding.playbackBar.playbackBarPlayPause.setEnabled(enabled);
+            // Load artwork
+            picasso.load(artworkUri)
+                    .into(binding.playbackBar.playbackBarArtwork);
         }
 
     }

@@ -1,6 +1,7 @@
 package org.singularux.music.feature.tracklist.ui;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ListAdapter;
+
+import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.model.TrackItem;
@@ -18,10 +21,13 @@ import javax.inject.Inject;
 
 public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder> {
 
+    private final Picasso picasso;
+
     @Inject
-    public TrackListAdapter(TrackItemDiffCallback diffCallback) {
+    public TrackListAdapter(TrackItemDiffCallback diffCallback, Picasso picasso) {
         super(diffCallback);
         setHasStableIds(true);
+        this.picasso = picasso;
     }
 
     @NonNull
@@ -45,13 +51,15 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
         long durationMinutes = trackItem.getDuration().getSeconds() / 60;
         long durationSeconds = trackItem.getDuration().getSeconds() % 60;
         boolean isCurrentlyPlaying = trackItem.isCurrentlyPlaying();
+        Uri artworkUri = trackItem.getArtworkUri();
         // Apply
         holder.itemView.setSelected(isCurrentlyPlaying);
         holder.getTitle().setText(title);
         String durationArtistsName = context.getString(R.string.track_item_duration_artists,
                 durationMinutes, durationSeconds, artistsName);
         holder.getDurationArtists().setText(durationArtistsName);
-        // TODO: Artwork
+        picasso.load(artworkUri)
+                .into(holder.getArtwork());
     }
 
     @Override
