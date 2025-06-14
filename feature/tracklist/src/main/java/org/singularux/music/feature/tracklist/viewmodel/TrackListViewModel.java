@@ -98,7 +98,7 @@ public class TrackListViewModel extends ViewModel {
             MediaMetadata mediaMetadata = new MediaMetadata.Builder()
                     .setTitle(trackItem.getTitle())
                     .setArtist(trackItem.getArtistName())
-                    .setAlbumTitle(trackItem.getAlbumName())
+                    .setAlbumTitle(trackItem.getAlbumTitle())
                     .setArtworkUri(trackItem.getArtworkUri())
                     .setExtras(extras)
                     .build();

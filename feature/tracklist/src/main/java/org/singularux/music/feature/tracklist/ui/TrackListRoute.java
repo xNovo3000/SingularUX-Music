@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.search.SearchView;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.permission.MusicPermission;
@@ -29,6 +26,8 @@ import org.singularux.music.feature.playback.model.PlaybackInfo;
 import org.singularux.music.feature.playback.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
+import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;
+import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListSearchBarInsetListener;
@@ -39,17 +38,20 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import lombok.RequiredArgsConstructor;
 
 @AndroidEntryPoint
 public class TrackListRoute extends Fragment {
 
     private static final String TAG = "TrackListRoute";
 
-    @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public PlaybackBarInsetListener playbackBarInsetListener;
     @Inject public TrackListSearchBarInsetListener trackListSearchBarInsetListener;
     @Inject public TrackListInsetListener trackListInsetListener;
+
+    @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
+    @Inject public SearchViewTransitionListener searchViewTransitionListener;
+
+    @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public TrackListAdapter trackListAdapter;
     @Inject public Picasso picasso;
 
@@ -64,12 +66,8 @@ public class TrackListRoute extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding = RouteTrackListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(TrackListViewModel.class);
-        // Create objects that cannot be created using Hilt
-        SearchViewOnBackPressedCallback searchViewOnBackPressedCallback =
-                new SearchViewOnBackPressedCallback();
-        SearchViewTransitionListener searchViewTransitionListener =
-                new SearchViewTransitionListener(searchViewOnBackPressedCallback);
         // Add back button callbacks
+        searchViewOnBackPressedCallback.setSearchView(binding.trackListSearchView);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 searchViewOnBackPressedCallback);
         // Add listeners
@@ -94,42 +92,6 @@ public class TrackListRoute extends Fragment {
                 new PlaybackPositionObserver());
         viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(),
                 new PlaybackInfoObserver());
-    }
-
-    @RequiredArgsConstructor
-    private static class SearchViewTransitionListener implements SearchView.TransitionListener {
-
-        private final OnBackPressedCallback onBackPressedCallback;
-
-        @Override
-        public void onStateChanged(
-                @NonNull SearchView searchView,
-                @NonNull SearchView.TransitionState previousState,
-                @NonNull SearchView.TransitionState newState
-        ) {
-            switch (newState) {
-                case SHOWING:
-                    onBackPressedCallback.setEnabled(true);
-                    break;
-                case HIDING:
-                    onBackPressedCallback.setEnabled(false);
-                    break;
-            }
-        }
-
-    }
-
-    private class SearchViewOnBackPressedCallback extends OnBackPressedCallback {
-
-        public SearchViewOnBackPressedCallback() {
-            super(false);
-        }
-
-        @Override
-        public void handleOnBackPressed() {
-            binding.trackListSearchView.hide();
-        }
-
     }
 
     private class RequestMusicPermissionResultCallback implements ActivityResultCallback<Boolean> {

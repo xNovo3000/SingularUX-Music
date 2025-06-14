@@ -22,6 +22,7 @@ import org.singularux.music.feature.tracklist.model.TrackItem;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -138,7 +139,6 @@ public class ListenTrackListUseCase {
     private static class TrackEntityWithPlaybackInfoToTrackItemMapper
             implements BiFunction<List<TrackEntity>, Optional<PlaybackInfo>, List<TrackItem>> {
 
-
         @Override
         public @NonNull List<TrackItem> apply(
                 @NonNull List<TrackEntity> trackEntityList,
@@ -147,18 +147,24 @@ public class ListenTrackListUseCase {
             // Get current id playing
             final long currentIdPlaying = playbackInfo.map(PlaybackInfo::getId).orElse(-1L);
             return trackEntityList.stream()
-                    .map(trackEntity -> TrackItem.builder()
-                            .id(trackEntity.getId())
-                            .title(trackEntity.getTitle())
-                            .artistId(trackEntity.getArtistId())
-                            .artistName(trackEntity.getArtistName())
-                            .albumId(trackEntity.getAlbumId())
-                            .albumName(trackEntity.getAlbumTitle())
-                            .artworkUri(trackEntity.getArtworkUri())
-                            .duration(trackEntity.getDuration())
-                            .isCurrentlyPlaying(currentIdPlaying == trackEntity.getId())
-                            .build())
+                    .map(new TrackEntityToTrackItemMapper(currentIdPlaying))
                     .collect(Collectors.toList());
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    private static class TrackEntityToTrackItemMapper implements Function<TrackEntity, TrackItem> {
+
+        private final long currentPlayingId;
+
+        @Override
+        public @NonNull TrackItem apply(@NonNull TrackEntity trackEntity) {
+            return new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
+                    trackEntity.getArtistId(), trackEntity.getArtistName(),
+                    trackEntity.getAlbumId(), trackEntity.getAlbumTitle(),
+                    trackEntity.getArtworkUri(), trackEntity.getDuration(),
+                    trackEntity.getId() == currentPlayingId);
         }
 
     }
