@@ -9,16 +9,19 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
+import org.singularux.music.feature.playback.domain.ListenPlaybackInfoUseCase;
+import org.singularux.music.feature.playback.model.PlaybackInfo;
 import org.singularux.music.feature.tracklist.model.TrackItem;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -28,6 +31,7 @@ import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableEmitter;
 import io.reactivex.rxjava3.core.FlowableOnSubscribe;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Cancellable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
@@ -40,26 +44,34 @@ public class ListenTrackListUseCase {
     private final TrackRepository trackRepository;
     private final MusicPermissionManager musicPermissionManager;
 
+    private final ListenPlaybackInfoUseCase listenPlaybackInfoUseCase;
+
     @Inject
     public ListenTrackListUseCase(
             @ApplicationContext Context context,
             TrackRepository trackRepository,
-            MusicPermissionManager musicPermissionManager
+            MusicPermissionManager musicPermissionManager,
+            ListenPlaybackInfoUseCase listenPlaybackInfoUseCase
     ) {
         this.context = context;
         this.trackRepository = trackRepository;
         this.musicPermissionManager = musicPermissionManager;
+        this.listenPlaybackInfoUseCase = listenPlaybackInfoUseCase;
     }
 
     public @NonNull Flowable<List<TrackItem>> get() {
-        return Flowable.create(new TrackItemListOnSubscribe(context, musicPermissionManager),
+        // Get list of EntityTrack
+        Flowable<List<TrackEntity>> tracksEntityFlowable = Flowable
+                .create(new TrackItemListOnSubscribe(context, musicPermissionManager),
                         BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation())  // Execute flowable on computation thread
                 .observeOn(Schedulers.io())  // Read on IO thread
-                .map(o -> trackRepository.getAll())
-                .observeOn(Schedulers.computation())  // Map to item on computation thread
-                .map(trackEntities -> trackEntities.stream()
-                        .map(new TrackEntityToTrackItemMapper()).collect(Collectors.toList()));
+                .map(o -> trackRepository.getAll());
+        // Merge with playbackInfo
+        return Flowable
+                .combineLatest(tracksEntityFlowable, listenPlaybackInfoUseCase.get(),
+                        new TrackEntityWithPlaybackInfoToTrackItemMapper())
+                .subscribeOn(Schedulers.computation());
     }
 
     @RequiredArgsConstructor
@@ -124,15 +136,22 @@ public class ListenTrackListUseCase {
 
     }
 
-    private static class TrackEntityToTrackItemMapper implements Function<TrackEntity, TrackItem> {
+    private static class TrackEntityWithPlaybackInfoToTrackItemMapper
+            implements BiFunction<List<TrackEntity>, Optional<PlaybackInfo>, List<TrackItem>> {
+
 
         @Override
-        public TrackItem apply(TrackEntity trackEntity) {
-            Log.v(TAG, "Received " + trackEntity);
-            // TODO: Implement isCurrentlyPlaying
-            return new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
-                    trackEntity.getArtistsName(), trackEntity.getArtworkUri(),
-                    trackEntity.getDuration(), false);
+        public @NonNull List<TrackItem> apply(
+                @NonNull List<TrackEntity> trackEntityList,
+                @NotNull Optional<PlaybackInfo> playbackInfo
+        ) {
+            // Get current id playing
+            final int currentIdPlaying = playbackInfo.map(PlaybackInfo::getId).orElse(-1);
+            return trackEntityList.stream()
+                    .map(trackEntity -> new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
+                            trackEntity.getArtistsName(), trackEntity.getArtworkUri(),
+                            trackEntity.getDuration(), trackEntity.getId() == currentIdPlaying))
+                    .collect(Collectors.toList());
         }
 
     }

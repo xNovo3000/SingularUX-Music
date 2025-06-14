@@ -116,6 +116,11 @@ public class ListenPlaybackInfoUseCase {
             if (mediaItem != null) {
                 Log.d(TAG, "Updating PlaybackInfo with mediaItem " + mediaItem);
                 // Extract data
+                int id = -1;
+                if (mediaItem.mediaMetadata.extras != null &&
+                        mediaItem.mediaMetadata.extras.containsKey("id")) {
+                    id = mediaItem.mediaMetadata.extras.getInt("id");
+                }
                 String title = null;
                 if (mediaItem.mediaMetadata.title != null) {
                     title = mediaItem.mediaMetadata.title.toString();
@@ -129,8 +134,8 @@ public class ListenPlaybackInfoUseCase {
                 boolean hasPrevious = mediaController.hasPreviousMediaItem();
                 boolean hasNext = mediaController.hasNextMediaItem();
                 // Create PlaybackInfo object
-                PlaybackInfo playbackInfo = new PlaybackInfo(title, artistsName, artworkUri,
-                        isPlaying, hasPrevious, hasNext);
+                PlaybackInfo playbackInfo = new PlaybackInfo(id, title, artistsName,
+                        artworkUri, isPlaying, hasPrevious, hasNext);
                 // Push to the subscribers
                 emitter.onNext(Optional.of(playbackInfo));
             } else {

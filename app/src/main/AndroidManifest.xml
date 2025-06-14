@@ -14,6 +14,7 @@
         tools:targetApi="36">
 
         <activity android:name=".MusicActivity"
+            android:enableOnBackInvokedCallback="false"
             android:exported="true"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Music.Splash">

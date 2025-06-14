@@ -49,7 +49,6 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
         Context context = ContextCompat.getContextForLanguage(holder.itemView.getContext());
         TrackItem trackItem = getItem(position);
         // Extract data
-        int id = trackItem.getId();
         String title = trackItem.getTitle();
         String artistsName = trackItem.getArtistsName();
         if (artistsName == null) {

@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class PlaybackInfo {
+    private final int id;
     private final @Nullable String title;
     private final @Nullable String artistsName;
     private final @Nullable Uri artworkUri;

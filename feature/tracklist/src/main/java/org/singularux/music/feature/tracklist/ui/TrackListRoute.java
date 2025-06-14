@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.search.SearchView;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.permission.MusicPermission;
@@ -36,6 +39,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import lombok.RequiredArgsConstructor;
 
 @AndroidEntryPoint
 public class TrackListRoute extends Fragment {
@@ -60,27 +64,72 @@ public class TrackListRoute extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding = RouteTrackListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(TrackListViewModel.class);
-        // Add InsetListeners
+        // Create objects that cannot be created using Hilt
+        SearchViewOnBackPressedCallback searchViewOnBackPressedCallback =
+                new SearchViewOnBackPressedCallback();
+        SearchViewTransitionListener searchViewTransitionListener =
+                new SearchViewTransitionListener(searchViewOnBackPressedCallback);
+        // Add back button callbacks
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+                searchViewOnBackPressedCallback);
+        // Add listeners
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListSearchBar, trackListSearchBarInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListRecyclerview, trackListInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
+        binding.trackListSearchView.addTransitionListener(searchViewTransitionListener);
+        trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
+        binding.playbackBar.playbackBarContainer.setOnClickListener(v -> {});
         // Request permission to read music
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 new RequestMusicPermissionResultCallback());
-        // Add click listeners
-        trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
-        binding.playbackBar.playbackBarContainer.setOnClickListener(v -> {});
-        // Set binders, listeners and adapters
+        // Set binders
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
+        // Listen for data
         readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
                 new PlaybackPositionObserver());
         viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(),
                 new PlaybackInfoObserver());
+    }
+
+    @RequiredArgsConstructor
+    private static class SearchViewTransitionListener implements SearchView.TransitionListener {
+
+        private final OnBackPressedCallback onBackPressedCallback;
+
+        @Override
+        public void onStateChanged(
+                @NonNull SearchView searchView,
+                @NonNull SearchView.TransitionState previousState,
+                @NonNull SearchView.TransitionState newState
+        ) {
+            switch (newState) {
+                case SHOWING:
+                    onBackPressedCallback.setEnabled(true);
+                    break;
+                case HIDING:
+                    onBackPressedCallback.setEnabled(false);
+                    break;
+            }
+        }
+
+    }
+
+    private class SearchViewOnBackPressedCallback extends OnBackPressedCallback {
+
+        public SearchViewOnBackPressedCallback() {
+            super(false);
+        }
+
+        @Override
+        public void handleOnBackPressed() {
+            binding.trackListSearchView.hide();
+        }
+
     }
 
     private class RequestMusicPermissionResultCallback implements ActivityResultCallback<Boolean> {
