@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
-import org.singularux.music.data.library.util.ArtworkUriRetriever;
-import org.singularux.music.data.library.util.TrackEntityRetriever;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private static final String TAG = "TrackRepositoryAndroid";
 
     public static final Uri URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+    private static final Uri ARTWORK_URI = Uri.parse("content://media/external/audio/albumart");
 
     private static final String[] GET_ALL_PROJECTION = {
             MediaStore.Audio.Media._ID,
@@ -44,17 +43,14 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
-    private final TrackEntityRetriever trackEntityRetriever;
 
     @Inject
     public TrackRepositoryAndroid(
             @ApplicationContext Context context,
-            MusicPermissionManager musicPermissionManager,
-            TrackEntityRetriever trackEntityRetriever
+            MusicPermissionManager musicPermissionManager
     ) {
         this.context = context;
         this.musicPermissionManager = musicPermissionManager;
-        this.trackEntityRetriever = trackEntityRetriever;
     }
 
     @Override
@@ -75,7 +71,49 @@ public class TrackRepositoryAndroid implements TrackRepository {
             // Build the list of tracks
             List<TrackEntity> result = new ArrayList<>();
             while (cursor.moveToNext()) {
-                TrackEntity trackEntity = trackEntityRetriever.apply(cursor);
+                // ID
+                long id = cursor.getInt(0);
+                // Title (or display name if not present)
+                String title;
+                if (!cursor.isNull(1)) {
+                    title = cursor.getString(1);
+                } else {
+                    title = cursor.getString(2);
+                }
+                // Artist ID and name
+                Long artistId = null;
+                if (!cursor.isNull(3)) {
+                    artistId = cursor.getLong(3);
+                }
+                String artistName = null;
+                if (!cursor.isNull(4)) {
+                    artistName = cursor.getString(4);
+                    if (Objects.equals(artistName, "<unknown>")) {
+                        artistName = null;
+                    }
+                }
+                // Album ID and name
+                Long albumId = null;
+                if (!cursor.isNull(5)) {
+                    albumId = cursor.getLong(5);
+                }
+                String albumTitle = null;
+                if (!cursor.isNull(6)) {
+                    albumTitle = cursor.getString(6);
+                    if (Objects.equals(albumTitle, "<unknown>")) {
+                        albumTitle = null;
+                    }
+                }
+                // Artwork
+                Uri artworkUri = null;
+                if (albumId != null) {
+                    artworkUri = Uri.withAppendedPath(ARTWORK_URI, String.valueOf(albumId));
+                }
+                // Duration
+                Duration duration = Duration.ofMillis(cursor.getLong(7));
+                // Create TrackEntity
+                TrackEntity trackEntity = new TrackEntity(id, title, artistId, artistName,
+                        albumId, albumTitle, artworkUri, duration);
                 result.add(trackEntity);
             }
             return result;

@@ -154,7 +154,7 @@ public class ListenTrackListUseCase {
                             .artistId(trackEntity.getArtistId())
                             .artistName(trackEntity.getArtistName())
                             .albumId(trackEntity.getAlbumId())
-                            .albumName(trackEntity.getAlbumName())
+                            .albumName(trackEntity.getAlbumTitle())
                             .artworkUri(trackEntity.getArtworkUri())
                             .duration(trackEntity.getDuration())
                             .isCurrentlyPlaying(currentIdPlaying == trackEntity.getId())
