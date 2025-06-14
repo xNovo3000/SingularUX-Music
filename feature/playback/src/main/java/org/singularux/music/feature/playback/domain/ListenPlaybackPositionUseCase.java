@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackPosition;
 
 import java.util.concurrent.TimeUnit;
@@ -13,7 +13,6 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;

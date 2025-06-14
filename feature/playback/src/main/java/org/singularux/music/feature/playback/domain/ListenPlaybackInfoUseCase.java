@@ -9,11 +9,10 @@ import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackInfo;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.inject.Inject;
 
@@ -36,7 +35,8 @@ public class ListenPlaybackInfoUseCase {
     private final MusicControllerFacade musicControllerFacade;
 
     public Flowable<Optional<PlaybackInfo>> get() {
-        return Flowable.create(new PlaybackInfoSource(musicControllerFacade), BackpressureStrategy.LATEST)
+        return Flowable.create(new PlaybackInfoSource(musicControllerFacade),
+                        BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation());
     }
 
@@ -144,9 +144,9 @@ public class ListenPlaybackInfoUseCase {
                         mediaItem.mediaMetadata.extras.containsKey("album_id")) {
                     albumId = mediaItem.mediaMetadata.extras.getLong("album_id");
                 }
-                String albumName = null;
+                String albumTitle = null;
                 if (mediaItem.mediaMetadata.albumTitle != null) {
-                    albumName = mediaItem.mediaMetadata.albumTitle.toString();
+                    albumTitle = mediaItem.mediaMetadata.albumTitle.toString();
                 }
                 // Artwork
                 Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
@@ -154,20 +154,9 @@ public class ListenPlaybackInfoUseCase {
                 boolean isPlaying = mediaController.isPlaying();
                 boolean hasPrevious = mediaController.hasPreviousMediaItem();
                 boolean hasNext = mediaController.hasNextMediaItem();
-                // Create PlaybackInfo object
-                PlaybackInfo playbackInfo = PlaybackInfo.builder()
-                        .id(id)
-                        .title(title)
-                        .artistId(artistId)
-                        .artistName(artistName)
-                        .albumId(albumId)
-                        .albumName(albumName)
-                        .artworkUri(artworkUri)
-                        .isPlaying(isPlaying)
-                        .hasPrevious(hasPrevious)
-                        .hasNext(hasNext)
-                        .build();
-                // Push to the subscribers
+                // Create PlaybackInfo object and push further into the stream
+                PlaybackInfo playbackInfo = new PlaybackInfo(id, title, artistId, artistName,
+                        albumId, albumTitle, artworkUri, isPlaying, hasPrevious, hasNext);
                 emitter.onNext(Optional.of(playbackInfo));
             } else {
                 // Send empty value

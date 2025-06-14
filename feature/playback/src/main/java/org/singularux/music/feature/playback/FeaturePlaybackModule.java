@@ -2,6 +2,8 @@ package org.singularux.music.feature.playback;
 
 import android.content.Context;
 
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;

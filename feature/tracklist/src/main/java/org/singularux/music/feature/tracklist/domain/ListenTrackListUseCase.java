@@ -68,8 +68,7 @@ public class ListenTrackListUseCase {
                 .observeOn(Schedulers.io())  // Read on IO thread
                 .map(o -> trackRepository.getAll());
         // Merge with playbackInfo
-        return Flowable
-                .combineLatest(tracksEntityFlowable, listenPlaybackInfoUseCase.get(),
+        return Flowable.combineLatest(tracksEntityFlowable, listenPlaybackInfoUseCase.get(),
                         new TrackEntityWithPlaybackInfoToTrackItemMapper())
                 .subscribeOn(Schedulers.computation());
     }

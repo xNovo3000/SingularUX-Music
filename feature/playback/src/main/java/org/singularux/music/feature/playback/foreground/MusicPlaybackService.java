@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback;
+package org.singularux.music.feature.playback.foreground;
 
 import android.app.PendingIntent;
 import android.content.Intent;

@@ -5,18 +5,16 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class PlaybackInfo {
     private final long id;
     private final @NonNull String title;
     private final @Nullable Long artistId;
     private final @Nullable String artistName;
     private final @Nullable Long albumId;
-    private final @Nullable String albumName;
+    private final @Nullable String albumTitle;
     private final @Nullable Uri artworkUri;
     private final boolean isPlaying;
     private final boolean hasPrevious;
