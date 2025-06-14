@@ -50,7 +50,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
         TrackItem trackItem = getItem(position);
         // Extract data
         String title = trackItem.getTitle();
-        String artistsName = trackItem.getArtistsName();
+        String artistsName = trackItem.getArtistName();
         if (artistsName == null) {
             artistsName = context.getString(R.string.track_item_unknown_artist);
         }

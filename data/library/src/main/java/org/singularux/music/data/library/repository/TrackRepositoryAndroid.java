@@ -12,6 +12,7 @@ import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.util.ArtworkUriRetriever;
+import org.singularux.music.data.library.util.TrackEntityRetriever;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -28,13 +29,12 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private static final String TAG = "TrackRepositoryAndroid";
 
     public static final Uri URI = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-    private static final Uri ARTWORK_URI = Uri.parse("content://media/external/audio/albumart");
 
     private static final String[] GET_ALL_PROJECTION = {
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.ALBUM_ID,
+            MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ALBUM_ID, MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.DURATION
     };
     private static final String GET_ALL_SELECTION = MediaStore.Audio.Media.IS_MUSIC +
@@ -44,17 +44,17 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
-    private final ArtworkUriRetriever artworkUriRetriever;
+    private final TrackEntityRetriever trackEntityRetriever;
 
     @Inject
     public TrackRepositoryAndroid(
             @ApplicationContext Context context,
             MusicPermissionManager musicPermissionManager,
-            ArtworkUriRetriever artworkUriRetriever
+            TrackEntityRetriever trackEntityRetriever
     ) {
         this.context = context;
         this.musicPermissionManager = musicPermissionManager;
-        this.artworkUriRetriever = artworkUriRetriever;
+        this.trackEntityRetriever = trackEntityRetriever;
     }
 
     @Override
@@ -75,34 +75,8 @@ public class TrackRepositoryAndroid implements TrackRepository {
             // Build the list of tracks
             List<TrackEntity> result = new ArrayList<>();
             while (cursor.moveToNext()) {
-                // Extract data
-                int id = cursor.getInt(0);
-                String title;
-                if (!cursor.isNull(1)) {
-                    title = cursor.getString(1);
-                } else {
-                    title = cursor.getString(2);
-                }
-                String artistsName = null;
-                if (!cursor.isNull(3)) {
-                    artistsName = cursor.getString(3);
-                    if (Objects.equals(artistsName, "<unknown>")) {
-                        artistsName = null;
-                    }
-                }
-                Uri artworkUri = null;
-                if (!cursor.isNull(4)) {
-                    long albumId = cursor.getLong(4);
-                    artworkUri = artworkUriRetriever.apply(albumId);
-                }
-                Duration duration = Duration.ZERO;
-                if (!cursor.isNull(5)) {
-                    int durationMillis = cursor.getInt(5);
-                    duration = Duration.ofSeconds(durationMillis / 1_000, durationMillis % 1_000 * 1_000_000);
-                }
-                // Generate class and push into list
-                TrackEntity track = new TrackEntity(id, title, artistsName, artworkUri, duration);
-                result.add(track);
+                TrackEntity trackEntity = trackEntityRetriever.apply(cursor);
+                result.add(trackEntity);
             }
             return result;
         } catch (Exception e) {

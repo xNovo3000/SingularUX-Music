@@ -13,6 +13,7 @@ import org.singularux.music.feature.playback.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackInfo;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 
@@ -115,27 +116,57 @@ public class ListenPlaybackInfoUseCase {
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
                 Log.d(TAG, "Updating PlaybackInfo with mediaItem " + mediaItem);
-                // Extract data
-                int id = -1;
-                if (mediaItem.mediaMetadata.extras != null &&
-                        mediaItem.mediaMetadata.extras.containsKey("id")) {
-                    id = mediaItem.mediaMetadata.extras.getInt("id");
+                // ID
+                long id;
+                try {
+                    id = Long.parseLong(mediaItem.mediaId);
+                } catch (NumberFormatException e) {
+                    id = -1;
                 }
-                String title = null;
+                // Title
+                String title = "";
                 if (mediaItem.mediaMetadata.title != null) {
                     title = mediaItem.mediaMetadata.title.toString();
                 }
-                String artistsName = null;
-                if (mediaItem.mediaMetadata.artist != null) {
-                    artistsName = mediaItem.mediaMetadata.artist.toString();
+                // Artist ID and name
+                Long artistId = null;
+                if (mediaItem.mediaMetadata.extras != null &&
+                        mediaItem.mediaMetadata.extras.containsKey("artist_id")) {
+                    artistId = mediaItem.mediaMetadata.extras.getLong("artist_id");
                 }
+                String artistName = null;
+                if (mediaItem.mediaMetadata.artist != null) {
+                    artistName = mediaItem.mediaMetadata.artist.toString();
+                }
+                // Album ID and name
+                Long albumId = null;
+                if (mediaItem.mediaMetadata.extras != null &&
+                        mediaItem.mediaMetadata.extras.containsKey("album_id")) {
+                    albumId = mediaItem.mediaMetadata.extras.getLong("album_id");
+                }
+                String albumName = null;
+                if (mediaItem.mediaMetadata.albumTitle != null) {
+                    albumName = mediaItem.mediaMetadata.albumTitle.toString();
+                }
+                // Artwork
                 Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
+                // State
                 boolean isPlaying = mediaController.isPlaying();
                 boolean hasPrevious = mediaController.hasPreviousMediaItem();
                 boolean hasNext = mediaController.hasNextMediaItem();
                 // Create PlaybackInfo object
-                PlaybackInfo playbackInfo = new PlaybackInfo(id, title, artistsName,
-                        artworkUri, isPlaying, hasPrevious, hasNext);
+                PlaybackInfo playbackInfo = PlaybackInfo.builder()
+                        .id(id)
+                        .title(title)
+                        .artistId(artistId)
+                        .artistName(artistName)
+                        .albumId(albumId)
+                        .albumName(albumName)
+                        .artworkUri(artworkUri)
+                        .isPlaying(isPlaying)
+                        .hasPrevious(hasPrevious)
+                        .hasNext(hasNext)
+                        .build();
                 // Push to the subscribers
                 emitter.onNext(Optional.of(playbackInfo));
             } else {

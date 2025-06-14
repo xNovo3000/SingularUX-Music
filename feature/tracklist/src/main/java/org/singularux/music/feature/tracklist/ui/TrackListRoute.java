@@ -173,13 +173,9 @@ public class TrackListRoute extends Fragment {
             // Apply data
             if (maybePlaybackInfo.isPresent()) {
                 PlaybackInfo playbackInfo = maybePlaybackInfo.get();
-                if (playbackInfo.getTitle() != null) {
-                    title = playbackInfo.getTitle();
-                } else {
-                    title = context.getString(R.string.track_item_unknown_track);
-                }
-                if (playbackInfo.getArtistsName() != null) {
-                    artist = playbackInfo.getArtistsName();
+                title = playbackInfo.getTitle();
+                if (playbackInfo.getArtistName() != null) {
+                    artist = playbackInfo.getArtistName();
                 } else {
                     artist = context.getString(R.string.track_item_unknown_artist);
                 }

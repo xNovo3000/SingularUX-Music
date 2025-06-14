@@ -146,11 +146,19 @@ public class ListenTrackListUseCase {
                 @NotNull Optional<PlaybackInfo> playbackInfo
         ) {
             // Get current id playing
-            final int currentIdPlaying = playbackInfo.map(PlaybackInfo::getId).orElse(-1);
+            final long currentIdPlaying = playbackInfo.map(PlaybackInfo::getId).orElse(-1L);
             return trackEntityList.stream()
-                    .map(trackEntity -> new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
-                            trackEntity.getArtistsName(), trackEntity.getArtworkUri(),
-                            trackEntity.getDuration(), trackEntity.getId() == currentIdPlaying))
+                    .map(trackEntity -> TrackItem.builder()
+                            .id(trackEntity.getId())
+                            .title(trackEntity.getTitle())
+                            .artistId(trackEntity.getArtistId())
+                            .artistName(trackEntity.getArtistName())
+                            .albumId(trackEntity.getAlbumId())
+                            .albumName(trackEntity.getAlbumName())
+                            .artworkUri(trackEntity.getArtworkUri())
+                            .duration(trackEntity.getDuration())
+                            .isCurrentlyPlaying(currentIdPlaying == trackEntity.getId())
+                            .build())
                     .collect(Collectors.toList());
         }
 

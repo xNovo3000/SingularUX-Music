@@ -7,16 +7,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Function;
 
-import javax.inject.Inject;
-
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor
 public class ArtworkUriRetriever implements Function<Long, Uri> {
 
     private static final String TAG = "ArtworkUriRetriever";
