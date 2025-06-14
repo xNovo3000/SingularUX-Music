@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
+import org.singularux.music.data.library.util.ArtworkUriRetriever;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -43,14 +44,17 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
+    private final ArtworkUriRetriever artworkUriRetriever;
 
     @Inject
     public TrackRepositoryAndroid(
             @ApplicationContext Context context,
-            MusicPermissionManager musicPermissionManager
+            MusicPermissionManager musicPermissionManager,
+            ArtworkUriRetriever artworkUriRetriever
     ) {
         this.context = context;
         this.musicPermissionManager = musicPermissionManager;
+        this.artworkUriRetriever = artworkUriRetriever;
     }
 
     @Override
@@ -89,7 +93,7 @@ public class TrackRepositoryAndroid implements TrackRepository {
                 Uri artworkUri = null;
                 if (!cursor.isNull(4)) {
                     long albumId = cursor.getLong(4);
-                    artworkUri = Uri.withAppendedPath(ARTWORK_URI, String.valueOf(albumId));
+                    artworkUri = artworkUriRetriever.apply(albumId);
                 }
                 Duration duration = Duration.ZERO;
                 if (!cursor.isNull(5)) {

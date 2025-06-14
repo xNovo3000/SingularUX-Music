@@ -1,5 +1,6 @@
 package org.singularux.music.feature.playback;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,17 @@ public class MusicPlaybackService extends MediaSessionService {
     @Override
     public void onCreate() {
         super.onCreate();
+        getPackageManager().getLaunchIntentForPackage("org.singularux.music.MusicActivity");
+        // Set the activity to open when clicking on the notification
+        Intent intent = getPackageManager()
+                .getLaunchIntentForPackage("org.singularux.music");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        // Create the player
         ExoPlayer player = new ExoPlayer.Builder(this).build();
-        mediaSession = new MediaSession.Builder(this, player).build();
+        mediaSession = new MediaSession.Builder(this, player)
+                .setSessionActivity(pendingIntent)
+                .build();
     }
 
     @Override
