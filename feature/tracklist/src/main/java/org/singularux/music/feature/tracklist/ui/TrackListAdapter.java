@@ -30,8 +30,8 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
     private @Setter @Nullable TrackItemOnClickListener onItemClickListener = null;
 
     @Inject
-    public TrackListAdapter(TrackItemDiffCallback diffCallback, Picasso picasso) {
-        super(diffCallback);
+    public TrackListAdapter(Picasso picasso) {
+        super(new TrackItemDiffCallback());
         setHasStableIds(true);
         this.picasso = picasso;
     }

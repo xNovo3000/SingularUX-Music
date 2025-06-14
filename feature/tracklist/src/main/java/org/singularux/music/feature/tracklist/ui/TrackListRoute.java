@@ -142,7 +142,7 @@ public class TrackListRoute extends Fragment {
                 viewModel.getTrackList().observe(getViewLifecycleOwner(),
                         trackItems -> trackListAdapter.submitList(trackItems));
             } else {
-                Log.i(TAG, "Permission DENIED granted");
+                Log.i(TAG, "Permission READ_MUSIC denied");
             }
         }
 

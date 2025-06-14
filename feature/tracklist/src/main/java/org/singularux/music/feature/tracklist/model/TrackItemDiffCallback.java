@@ -5,11 +5,6 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
-
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TrackItemDiffCallback extends DiffUtil.ItemCallback<TrackItem> {
 
     @Override
