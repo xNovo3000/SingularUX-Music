@@ -19,7 +19,6 @@ public class MusicPlaybackService extends MediaSessionService {
     @Override
     public void onCreate() {
         super.onCreate();
-        getPackageManager().getLaunchIntentForPackage("org.singularux.music.MusicActivity");
         // Set the activity to open when clicking on the notification
         Intent intent = getPackageManager()
                 .getLaunchIntentForPackage("org.singularux.music");

@@ -7,7 +7,12 @@
 
     <fragment android:id="@+id/track_list"
         android:name="org.singularux.music.feature.tracklist.ui.TrackListRoute"
-        android:label="@string/track_list_route"
+        android:label="@string/route_track_list"
         tools:layout="@layout/route_track_list"/>
+
+    <fragment android:id="@+id/now_playing"
+        android:name="org.singularux.music.feature.playback.ui.NowPlayingRoute"
+        android:label="@string/route_now_playing"
+        tools:layout="@layout/route_now_playing"/>
 
 </navigation>

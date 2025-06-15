@@ -2,11 +2,13 @@ package org.singularux.music.feature.playback.domain;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackPosition;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -37,18 +39,21 @@ public class ListenPlaybackPositionUseCase {
         private final MusicControllerFacade musicControllerFacade;
 
         @Override
-        public PlaybackPosition apply(Long value) {
+        public @NonNull PlaybackPosition apply(@NonNull Long value) {
             MediaController maybeMediaController = musicControllerFacade.getMediaController();
             if (maybeMediaController != null) {
                 Log.v(TAG, "MediaController is ok, reading position");
-                double currentPositionMs = (double) Math
+                long currentPositionMs = Math
                         .clamp(maybeMediaController.getCurrentPosition(), 0, Long.MAX_VALUE);
-                double totalDurationMs = (double) Math
+                long totalDurationMs = Math
                         .clamp(maybeMediaController.getContentDuration(), 0, Long.MAX_VALUE);
-                return new PlaybackPosition((float) (currentPositionMs / totalDurationMs));
+                float position = (float) (((double) currentPositionMs) / ((double) totalDurationMs));
+                Duration current = Duration.ofMillis(currentPositionMs);
+                Duration total =  Duration.ofMillis(totalDurationMs);
+                return new PlaybackPosition(position, current, total);
             } else {
                 Log.v(TAG, "MediaController is null, setting progress to zero");
-                return new PlaybackPosition(0.0F);
+                return new PlaybackPosition(0.0F, Duration.ZERO, Duration.ZERO);
             }
         }
 
