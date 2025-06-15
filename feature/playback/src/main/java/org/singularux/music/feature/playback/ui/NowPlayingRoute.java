@@ -193,9 +193,7 @@ public class NowPlayingRoute extends Fragment {
             long totalSeconds = (long) (total.getSeconds() * value);
             long minutesPart = totalSeconds / 60;
             long secondsPart = totalSeconds % 60;
-            // TODO: Check the efficiency of this
-            // return context.getString(R.string.now_playing_duration, minutesPart, secondsPart);
-            return minutesPart + ":" + secondsPart;
+            return context.getString(R.string.now_playing_duration, minutesPart, secondsPart);
         }
 
     }
