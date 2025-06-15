@@ -17,6 +17,9 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDeepLinkRequest;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.squareup.picasso.Picasso;
 
@@ -57,6 +60,7 @@ public class TrackListRoute extends Fragment {
 
     private RouteTrackListBinding binding;
     private TrackListViewModel viewModel;
+    private NavController navController;
 
     public TrackListRoute() {
         super(R.layout.route_track_list);
@@ -66,10 +70,14 @@ public class TrackListRoute extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding = RouteTrackListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(TrackListViewModel.class);
+        navController = NavHostFragment.findNavController(this);
         // Add back button callbacks
         searchViewOnBackPressedCallback.setSearchView(binding.trackListSearchView);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 searchViewOnBackPressedCallback);
+        // Add navigation callbacks
+        binding.playbackBar.playbackBarContainer
+                .setOnClickListener(new OnPlaybackBarContainerClickListener());
         // Add listeners
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListSearchBar, trackListSearchBarInsetListener);
@@ -79,7 +87,6 @@ public class TrackListRoute extends Fragment {
                 binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
         binding.trackListSearchView.addTransitionListener(searchViewTransitionListener);
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
-        binding.playbackBar.playbackBarContainer.setOnClickListener(v -> {});
         // Request permission to read music
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
@@ -92,6 +99,18 @@ public class TrackListRoute extends Fragment {
                 new PlaybackPositionObserver());
         viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(),
                 new PlaybackInfoObserver());
+    }
+
+    private class OnPlaybackBarContainerClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            NavDeepLinkRequest request = NavDeepLinkRequest.Builder
+                    .fromUri(Uri.parse("nav://org.singularux.music/now_playing"))
+                    .build();
+            navController.navigate(request);
+        }
+
     }
 
     private class RequestMusicPermissionResultCallback implements ActivityResultCallback<Boolean> {

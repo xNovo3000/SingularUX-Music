@@ -78,6 +78,7 @@
         android:layout_width="0dp"
         android:layout_height="16dp"/>
 
+    <!-- TODO: Custom slider formatter -->
     <com.google.android.material.slider.Slider
         android:id="@+id/now_playing_progress"
         android:layout_width="match_parent"

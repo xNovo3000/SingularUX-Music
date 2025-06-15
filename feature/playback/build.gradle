@@ -42,6 +42,9 @@ dependencies {
     // Media3
     implementation libs.media3.exoplayer
     implementation libs.media3.session
+    // Navigation
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     // Lombok
     implementation libs.lombok
     annotationProcessor libs.lombok
