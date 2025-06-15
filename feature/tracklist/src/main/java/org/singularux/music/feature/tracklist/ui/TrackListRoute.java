@@ -179,9 +179,13 @@ public class TrackListRoute extends Fragment {
             binding.playbackBar.playbackBarArtist.setText(artist);
             binding.playbackBar.playbackBarPlayPause.setIcon(icon);
             binding.playbackBar.playbackBarPlayPause.setEnabled(enabled);
-            picasso.load(artworkUri)
-                    .resizeDimen(R.dimen.playback_bar_artwork_size, R.dimen.playback_bar_artwork_size)
-                    .into(binding.playbackBar.playbackBarArtwork);
+            if (artworkUri != null) {
+                picasso.load(artworkUri)
+                        .resizeDimen(R.dimen.playback_bar_artwork_size, R.dimen.playback_bar_artwork_size)
+                        .into(binding.playbackBar.playbackBarArtwork);
+            } else {
+                binding.playbackBar.playbackBarArtwork.setImageDrawable(null);
+            }
             if (isPlaying) {
                 binding.playbackBar.playbackBarPlayPause.setOnClickListener(
                         v -> viewModel.pause());

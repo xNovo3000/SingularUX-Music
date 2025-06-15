@@ -136,6 +136,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="?attr/materialIconButtonFilledTonalStyle"
+            android:id="@+id/now_playing_prev"
             android:width="64dp"
             android:height="96dp"
             android:layout_width="wrap_content"
@@ -147,6 +148,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="?attr/materialIconButtonFilledStyle"
+            android:id="@+id/now_playing_play_pause"
             android:width="128dp"
             android:height="96dp"
             android:layout_width="wrap_content"
@@ -159,6 +161,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="?attr/materialIconButtonFilledTonalStyle"
+            android:id="@+id/now_playing_next"
             android:width="64dp"
             android:height="96dp"
             android:layout_width="wrap_content"

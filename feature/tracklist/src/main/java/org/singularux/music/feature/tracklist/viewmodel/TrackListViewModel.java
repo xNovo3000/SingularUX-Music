@@ -31,12 +31,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import lombok.Getter;
 
 @HiltViewModel
-@Getter
 public class TrackListViewModel extends ViewModel {
 
-    private final LiveData<List<TrackItem>> trackList;
-    private final LiveData<PlaybackPosition> playbackPosition;
-    private final LiveData<Optional<PlaybackInfo>> playbackInfo;
+    private final @Getter LiveData<List<TrackItem>> trackList;
+    private final @Getter LiveData<PlaybackPosition> playbackPosition;
+    private final @Getter LiveData<Optional<PlaybackInfo>> playbackInfo;
 
     private final MusicControllerFacade musicControllerFacade;
 
