@@ -7,21 +7,31 @@
     android:background="?attr/colorSurfaceContainer"
     android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minHeight="64dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledTonalStyle"
+            android:id="@+id/now_playing_close"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/now_playing_close"
+            app:icon="@drawable/round_keyboard_arrow_down_24"
+            app:iconGravity="textStart"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="?attr/textAppearanceTitleLarge"
+            android:id="@+id/now_playing_app_bar_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="?attr/colorSurfaceContainer"
-            app:title="@string/now_playing_title"
-            app:titleCentered="true"
-            app:navigationIcon="@drawable/round_keyboard_arrow_down_24"
-            app:navigationIconTint="?attr/colorOnSurfaceVariant"/>
+            android:layout_gravity="center"
+            android:text="@string/now_playing_title"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </FrameLayout>
 
     <Space
         android:layout_width="0dp"
