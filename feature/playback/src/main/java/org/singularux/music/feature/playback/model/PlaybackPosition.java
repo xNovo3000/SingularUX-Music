@@ -11,5 +11,4 @@ import lombok.Data;
 public class PlaybackPosition {
     @FloatRange(from = 0.0, to = 1.0) private final float position;
     private final @NonNull Duration current;
-    private final @NonNull Duration total;
 }

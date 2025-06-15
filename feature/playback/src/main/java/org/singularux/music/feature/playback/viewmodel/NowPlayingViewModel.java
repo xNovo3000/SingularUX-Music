@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
+import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.domain.ListenPlaybackInfoUseCase;
 import org.singularux.music.feature.playback.domain.ListenPlaybackPositionUseCase;
@@ -47,11 +48,19 @@ public class NowPlayingViewModel extends ViewModel {
     }
 
     public void skipPrev() {
-        musicControllerFacade.requireMediaController().seekToPreviousMediaItem();
+        MediaController mediaController = musicControllerFacade.requireMediaController();
+        mediaController.seekToPrevious();
+        mediaController.play();
     }
 
     public void skipNext() {
-        musicControllerFacade.requireMediaController().seekToNextMediaItem();
+        MediaController mediaController = musicControllerFacade.requireMediaController();
+        mediaController.seekToNext();
+        mediaController.play();
+    }
+
+    public void seekTo(long newPosition) {
+        musicControllerFacade.requireMediaController().seekTo(newPosition * 1000);
     }
 
 }

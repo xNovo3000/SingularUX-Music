@@ -49,11 +49,10 @@ public class ListenPlaybackPositionUseCase {
                         .clamp(maybeMediaController.getContentDuration(), 0, Long.MAX_VALUE);
                 float position = (float) (((double) currentPositionMs) / ((double) totalDurationMs));
                 Duration current = Duration.ofMillis(currentPositionMs);
-                Duration total =  Duration.ofMillis(totalDurationMs);
-                return new PlaybackPosition(position, current, total);
+                return new PlaybackPosition(position, current);
             } else {
                 Log.v(TAG, "MediaController is null, setting progress to zero");
-                return new PlaybackPosition(0.0F, Duration.ZERO, Duration.ZERO);
+                return new PlaybackPosition(0.0F, Duration.ZERO);
             }
         }
 

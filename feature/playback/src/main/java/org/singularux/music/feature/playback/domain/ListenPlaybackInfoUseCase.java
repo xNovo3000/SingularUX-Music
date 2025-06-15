@@ -12,6 +12,7 @@ import androidx.media3.session.MediaController;
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackInfo;
 
+import java.time.Duration;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -148,15 +149,18 @@ public class ListenPlaybackInfoUseCase {
                 if (mediaItem.mediaMetadata.albumTitle != null) {
                     albumTitle = mediaItem.mediaMetadata.albumTitle.toString();
                 }
+                // Duration
+                Duration duration = Duration
+                        .ofMillis(Math.max(0, mediaController.getContentDuration()));
                 // Artwork
                 Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
                 // State
                 boolean isPlaying = mediaController.isPlaying();
-                boolean hasPrevious = mediaController.hasPreviousMediaItem();
+                boolean hasPrevious = true;  // mediaController.hasPreviousMediaItem();
                 boolean hasNext = mediaController.hasNextMediaItem();
                 // Create PlaybackInfo object and push further into the stream
                 PlaybackInfo playbackInfo = new PlaybackInfo(id, title, artistId, artistName,
-                        albumId, albumTitle, artworkUri, isPlaying, hasPrevious, hasNext);
+                        albumId, albumTitle, artworkUri, duration, isPlaying, hasPrevious, hasNext);
                 emitter.onNext(Optional.of(playbackInfo));
             } else {
                 // Send empty value
