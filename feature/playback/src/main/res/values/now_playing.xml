@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="now_playing_title">Now Playing</string>
+    <string name="now_playing_duration" formatted="false">%d:%02d</string>
+    <string name="now_playing_skip_prev">Skip previous</string>
+    <string name="now_playing_skip_next">Skip next</string>
+    <string name="now_playing_play">Play</string>
+    <string name="now_playing_pause">Pause</string>
+    <string name="now_playing_progress">Progress</string>
+    <style name="Widget.MaterialComponents.ShapeableImageView.NowPlayingArtwork">
+        <item name="cornerSize">28dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+</resources>

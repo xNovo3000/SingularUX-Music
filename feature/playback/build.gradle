@@ -37,6 +37,8 @@ dependencies {
     implementation libs.lifecycle.livedata
     implementation libs.lifecycle.reactivestreams
     implementation libs.lifecycle.viewmodel
+    // Material 3
+    implementation libs.google.material
     // Media3
     implementation libs.media3.exoplayer
     implementation libs.media3.session

@@ -18,13 +18,13 @@
         <item name="fontFamily">@font/pt_serif</item>
     </style>
     <style name="TextAppearance.Music.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/pt_serif</item>
+        <item name="fontFamily">@font/inter</item>
     </style>
     <style name="TextAppearance.Music.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
-        <item name="fontFamily">@font/pt_serif</item>
+        <item name="fontFamily">@font/inter</item>
     </style>
     <style name="TextAppearance.Music.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
-        <item name="fontFamily">@font/pt_serif</item>
+        <item name="fontFamily">@font/inter</item>
     </style>
     <style name="TextAppearance.Music.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
         <item name="fontFamily">@font/inter</item>
