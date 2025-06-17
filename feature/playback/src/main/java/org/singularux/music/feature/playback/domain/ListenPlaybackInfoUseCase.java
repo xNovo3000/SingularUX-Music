@@ -156,11 +156,10 @@ public class ListenPlaybackInfoUseCase {
                 Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
                 // State
                 boolean isPlaying = mediaController.isPlaying();
-                boolean hasPrevious = true;  // mediaController.hasPreviousMediaItem();
                 boolean hasNext = mediaController.hasNextMediaItem();
                 // Create PlaybackInfo object and push further into the stream
                 PlaybackInfo playbackInfo = new PlaybackInfo(id, title, artistId, artistName,
-                        albumId, albumTitle, artworkUri, duration, isPlaying, hasPrevious, hasNext);
+                        albumId, albumTitle, artworkUri, duration, isPlaying, hasNext);
                 emitter.onNext(Optional.of(playbackInfo));
             } else {
                 // Send empty value

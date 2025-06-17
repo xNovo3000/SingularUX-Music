@@ -20,6 +20,5 @@ public class PlaybackInfo {
     private final @Nullable Uri artworkUri;
     private final @NonNull Duration duration;
     private final boolean isPlaying;
-    @Deprecated private final boolean hasPrevious;
     private final boolean hasNext;
 }
