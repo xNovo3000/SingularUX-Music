@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.foreground;
+package org.singularux.music.feature.playback;
 
 import android.content.ComponentName;
 import android.content.Context;

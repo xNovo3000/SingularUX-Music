@@ -1,14 +1,13 @@
 package org.singularux.music.feature.nowplaying.ui.observer;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import lombok.RequiredArgsConstructor;
 

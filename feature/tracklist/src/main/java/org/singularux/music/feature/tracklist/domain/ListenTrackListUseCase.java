@@ -15,8 +15,8 @@ import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
-import org.singularux.music.feature.playback.domain.ListenPlaybackInfoUseCase;
-import org.singularux.music.feature.playback.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
+import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
 import org.singularux.music.feature.tracklist.model.TrackItem;
 
 import java.util.Collection;

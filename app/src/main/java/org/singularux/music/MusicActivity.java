@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.feature.playback.MusicControllerFacade;
 
 import javax.inject.Inject;
 

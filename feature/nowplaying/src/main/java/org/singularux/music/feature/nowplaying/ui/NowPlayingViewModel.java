@@ -6,11 +6,11 @@ import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.domain.ListenPlaybackInfoUseCase;
-import org.singularux.music.feature.playback.domain.ListenPlaybackPositionUseCase;
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackInfo;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
+import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import java.util.Optional;
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer;
 import com.google.android.material.slider.Slider;
 
 import org.singularux.music.feature.nowplaying.ui.NowPlayingViewModel;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import java.time.Duration;
 

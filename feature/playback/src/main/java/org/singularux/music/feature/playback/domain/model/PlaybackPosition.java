@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.model;
+package org.singularux.music.feature.playback.domain.model;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;

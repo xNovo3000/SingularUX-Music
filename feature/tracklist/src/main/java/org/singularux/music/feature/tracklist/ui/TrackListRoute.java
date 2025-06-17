@@ -25,8 +25,8 @@ import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.permission.MusicPermission;
 import org.singularux.music.core.permission.MusicPermissionManager;
-import org.singularux.music.feature.playback.model.PlaybackInfo;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;

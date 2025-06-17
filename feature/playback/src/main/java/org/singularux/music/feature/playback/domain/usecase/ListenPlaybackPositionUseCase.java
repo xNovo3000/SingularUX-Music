@@ -1,12 +1,12 @@
-package org.singularux.music.feature.playback.domain;
+package org.singularux.music.feature.playback.domain.usecase;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;

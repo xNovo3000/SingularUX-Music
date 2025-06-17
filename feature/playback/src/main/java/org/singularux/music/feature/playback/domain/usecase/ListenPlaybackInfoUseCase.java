@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.domain;
+package org.singularux.music.feature.playback.domain.usecase;
 
 import android.net.Uri;
 import android.util.Log;
@@ -9,8 +9,8 @@ import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackInfo;
+import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
 
 import java.time.Duration;
 import java.util.Optional;
