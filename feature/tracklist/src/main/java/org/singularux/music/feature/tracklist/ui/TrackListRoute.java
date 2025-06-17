@@ -31,7 +31,7 @@ import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.list.TrackListAdapter;
 import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;
-import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener;
+import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionObserver;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListSearchBarInsetListener;
@@ -52,7 +52,7 @@ public class TrackListRoute extends Fragment {
     @Inject public TrackListInsetListener trackListInsetListener;
 
     @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
-    @Inject public SearchViewTransitionListener searchViewTransitionListener;
+    @Inject public SearchViewTransitionObserver searchViewTransitionObserver;
 
     @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public TrackListAdapter trackListAdapter;
@@ -85,7 +85,7 @@ public class TrackListRoute extends Fragment {
                 binding.trackListRecyclerview, trackListInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
-        binding.trackListSearchView.addTransitionListener(searchViewTransitionListener);
+        binding.trackListSearchView.addTransitionListener(searchViewTransitionObserver);
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
         // Request permission to read music
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(

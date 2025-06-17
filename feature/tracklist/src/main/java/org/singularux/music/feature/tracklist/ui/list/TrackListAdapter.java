@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.squareup.picasso.Picasso;
@@ -17,8 +16,6 @@ import com.squareup.picasso.Picasso;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 import org.singularux.music.feature.tracklist.ui.component.TrackItemOnClickListener;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 

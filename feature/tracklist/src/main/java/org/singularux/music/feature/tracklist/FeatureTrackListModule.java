@@ -3,9 +3,7 @@ package org.singularux.music.feature.tracklist;
 import android.os.Build;
 
 import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;
-import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener;
-import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener26;
-import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener34;
+import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionObserver;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,13 +23,13 @@ public class FeatureTrackListModule {
 
     @Provides
     @FragmentScoped
-    public SearchViewTransitionListener providesSearchViewTransitionListener(
+    public SearchViewTransitionObserver providesSearchViewTransitionListener(
             SearchViewOnBackPressedCallback onBackPressedCallback
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            return new SearchViewTransitionListener34();
+            return new SearchViewTransitionObserver.Disabled();
         } else {
-            return new SearchViewTransitionListener26(onBackPressedCallback);
+            return new SearchViewTransitionObserver.Enabled(onBackPressedCallback);
         }
     }
 
