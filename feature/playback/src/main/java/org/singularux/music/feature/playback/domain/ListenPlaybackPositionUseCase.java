@@ -28,7 +28,8 @@ public class ListenPlaybackPositionUseCase {
 
     public Flowable<PlaybackPosition> get() {
         // Must be watched on main thread because MediaController can be queried only there
-        return Flowable.interval(250, TimeUnit.MILLISECONDS, Schedulers.computation())
+        return Flowable.interval(0, 250, TimeUnit.MILLISECONDS,
+                        Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new PlaybackPositionMapper(musicControllerFacade));
     }
@@ -43,13 +44,11 @@ public class ListenPlaybackPositionUseCase {
             MediaController maybeMediaController = musicControllerFacade.getMediaController();
             if (maybeMediaController != null) {
                 Log.v(TAG, "MediaController is ok, reading position");
-                long currentPositionMs = Math
-                        .clamp(maybeMediaController.getCurrentPosition(), 0, Long.MAX_VALUE);
-                long totalDurationMs = Math
-                        .clamp(maybeMediaController.getContentDuration(), 0, Long.MAX_VALUE);
+                long currentPositionMs = maybeMediaController.getCurrentPosition();
+                long totalDurationMs = maybeMediaController.getContentDuration();
                 float position = (float) (((double) currentPositionMs) / ((double) totalDurationMs));
                 Duration current = Duration.ofMillis(currentPositionMs);
-                return new PlaybackPosition(position, current);
+                return new PlaybackPosition(Math.clamp(position, 0.0F, 1.0F), current);
             } else {
                 Log.v(TAG, "MediaController is null, setting progress to zero");
                 return new PlaybackPosition(0.0F, Duration.ZERO);

@@ -31,6 +31,7 @@ dependencies {
     // Project
     api(project ':feature:playback')
     api(project ':feature:tracklist')
+    api(project ':feature:nowplaying')
     // AndroidX
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen

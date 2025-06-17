@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.viewmodel;
+package org.singularux.music.feature.nowplaying.ui;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

@@ -28,14 +28,27 @@ android {
 dependencies {
     // Project
     api(project ':core:ui')
+    api(project ':feature:playback')
     // AndroidX
     implementation libs.androidx.core
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
-    // Material 3
-    implementation libs.google.material
+    // Lifecycle
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.reactivestreams
+    implementation libs.lifecycle.viewmodel
     // Lombok
     implementation libs.lombok
     annotationProcessor libs.lombok
+    // Material 3
+    implementation libs.google.material
+    // Media3
+    implementation libs.media3.session
+    // Navigation
+    implementation libs.navigation.fragment
+    // Picasso
+    implementation libs.picasso
+    // RxJava
+    implementation libs.rxjava
 }

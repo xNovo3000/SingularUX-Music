@@ -15,7 +15,7 @@
     </fragment>
 
     <fragment android:id="@+id/now_playing"
-        android:name="org.singularux.music.feature.playback.ui.NowPlayingRoute"
+        android:name="org.singularux.music.feature.nowplaying.ui.NowPlayingRoute"
         android:label="@string/route_now_playing"
         tools:layout="@layout/route_now_playing">
         <deepLink app:uri="nav://org.singularux.music/now_playing"/>
