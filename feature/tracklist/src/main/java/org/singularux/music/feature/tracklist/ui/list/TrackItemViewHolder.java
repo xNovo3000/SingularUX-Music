@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.component;
+package org.singularux.music.feature.tracklist.ui.list;
 
 import android.view.View;
 

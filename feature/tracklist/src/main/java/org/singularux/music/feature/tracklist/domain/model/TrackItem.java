@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.model;
+package org.singularux.music.feature.tracklist.domain.model;
 
 import android.net.Uri;
 

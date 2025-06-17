@@ -1,7 +1,9 @@
-package org.singularux.music.feature.tracklist.model;
+package org.singularux.music.feature.tracklist.ui.list;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+
+import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.Objects;
 

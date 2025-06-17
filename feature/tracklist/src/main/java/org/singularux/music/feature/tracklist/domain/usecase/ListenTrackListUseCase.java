@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.domain;
+package org.singularux.music.feature.tracklist.domain.usecase;
 
 import android.content.Context;
 import android.database.ContentObserver;
@@ -17,7 +17,7 @@ import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
 import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
-import org.singularux.music.feature.tracklist.model.TrackItem;
+import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.Collection;
 import java.util.List;

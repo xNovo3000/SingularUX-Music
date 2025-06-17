@@ -29,12 +29,12 @@ import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
+import org.singularux.music.feature.tracklist.ui.list.TrackListAdapter;
 import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;
 import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionListener;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListSearchBarInsetListener;
-import org.singularux.music.feature.tracklist.viewmodel.TrackListViewModel;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui;
+package org.singularux.music.feature.tracklist.ui.list;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,15 +9,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
-import org.singularux.music.feature.tracklist.model.TrackItem;
-import org.singularux.music.feature.tracklist.model.TrackItemDiffCallback;
+import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 import org.singularux.music.feature.tracklist.ui.component.TrackItemOnClickListener;
-import org.singularux.music.feature.tracklist.ui.component.TrackItemViewHolder;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 

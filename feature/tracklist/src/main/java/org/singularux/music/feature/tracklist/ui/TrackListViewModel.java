@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.viewmodel;
+package org.singularux.music.feature.tracklist.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUs
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
 import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
-import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
-import org.singularux.music.feature.tracklist.model.TrackItem;
+import org.singularux.music.feature.tracklist.domain.usecase.ListenTrackListUseCase;
+import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.List;
 import java.util.Optional;
