@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.component;
+package org.singularux.music.feature.tracklist.ui.observer;
 
 import androidx.annotation.NonNull;
 

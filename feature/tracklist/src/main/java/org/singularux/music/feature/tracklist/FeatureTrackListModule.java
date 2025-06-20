@@ -2,8 +2,8 @@ package org.singularux.music.feature.tracklist;
 
 import android.os.Build;
 
-import org.singularux.music.feature.tracklist.ui.component.SearchViewOnBackPressedCallback;
-import org.singularux.music.feature.tracklist.ui.component.SearchViewTransitionObserver;
+import org.singularux.music.feature.tracklist.ui.observer.SearchViewOnBackPressedCallback;
+import org.singularux.music.feature.tracklist.ui.observer.SearchViewTransitionObserver;
 
 import dagger.Module;
 import dagger.Provides;

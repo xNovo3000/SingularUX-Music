@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.domain.model.TrackItem;
-import org.singularux.music.feature.tracklist.ui.component.TrackItemOnClickListener;
 
 import javax.inject.Inject;
 
