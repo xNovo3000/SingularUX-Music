@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import java.time.Duration;
@@ -23,12 +23,13 @@ import lombok.RequiredArgsConstructor;
 public class ListenPlaybackPositionUseCase {
 
     private static final String TAG = "ListenPlaybackPositionUseCase";
+    private static final int UPDATE_PERIOD_MS = 350;
 
     private final MusicControllerFacade musicControllerFacade;
 
     public Flowable<PlaybackPosition> get() {
         // Must be watched on main thread because MediaController can be queried only there
-        return Flowable.interval(0, 250, TimeUnit.MILLISECONDS,
+        return Flowable.interval(0, UPDATE_PERIOD_MS, TimeUnit.MILLISECONDS,
                         Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new PlaybackPositionMapper(musicControllerFacade));

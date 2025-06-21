@@ -20,10 +20,10 @@ public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
     @Override
     public void onChanged(@NonNull PlaybackPosition playbackPosition) {
         // Update slider value
-        binding.nowPlayingProgress.setValue(playbackPosition.getPosition());
+        binding.nowPlayingProgress.setValue(playbackPosition.getCurrentPosition());
         // Update current time label
-        long currentMinutes = playbackPosition.getCurrent().getSeconds() / 60;
-        long currentSeconds = playbackPosition.getCurrent().getSeconds() % 60;
+        long currentMinutes = playbackPosition.getContentDuration().getSeconds() / 60;
+        long currentSeconds = playbackPosition.getContentDuration().getSeconds() % 60;
         String currentString = context.getString(R.string.now_playing_duration,
                 currentMinutes, currentSeconds);
         binding.nowPlayingCurrentTime.setText(currentString);

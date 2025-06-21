@@ -12,10 +12,10 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.MusicControllerFacade;
-import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
-import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.domain.usecase.ListenTrackListUseCase;
 import org.singularux.music.feature.tracklist.domain.model.TrackItem;
@@ -35,7 +35,7 @@ public class TrackListViewModel extends ViewModel {
 
     private final @Getter LiveData<List<TrackItem>> trackList;
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
-    private final @Getter LiveData<Optional<PlaybackInfo>> playbackInfo;
+    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackInfo;
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -43,13 +43,13 @@ public class TrackListViewModel extends ViewModel {
     public TrackListViewModel(
             @NonNull ListenTrackListUseCase listenTrackListUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,
-            @NonNull ListenPlaybackInfoUseCase listenPlaybackInfoUseCase,
+            @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
         this.trackList = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
-        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackInfoUseCase.get());
+        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackItemInfoUseCase.get());
         this.musicControllerFacade = musicControllerFacade;
     }
 

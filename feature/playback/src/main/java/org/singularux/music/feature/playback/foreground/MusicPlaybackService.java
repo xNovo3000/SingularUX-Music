@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback;
+package org.singularux.music.feature.playback.foreground;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -20,8 +20,7 @@ public class MusicPlaybackService extends MediaSessionService {
     public void onCreate() {
         super.onCreate();
         // Set the activity to open when clicking on the notification
-        Intent intent = getPackageManager()
-                .getLaunchIntentForPackage("org.singularux.music");
+        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         // Create the player

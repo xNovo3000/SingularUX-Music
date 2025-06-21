@@ -15,8 +15,8 @@ import org.singularux.music.core.permission.MusicPermissionManager;
 import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
-import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
-import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
+import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.Collection;
@@ -45,19 +45,19 @@ public class ListenTrackListUseCase {
     private final TrackRepository trackRepository;
     private final MusicPermissionManager musicPermissionManager;
 
-    private final ListenPlaybackInfoUseCase listenPlaybackInfoUseCase;
+    private final ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase;
 
     @Inject
     public ListenTrackListUseCase(
             @ApplicationContext Context context,
             TrackRepository trackRepository,
             MusicPermissionManager musicPermissionManager,
-            ListenPlaybackInfoUseCase listenPlaybackInfoUseCase
+            ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase
     ) {
         this.context = context;
         this.trackRepository = trackRepository;
         this.musicPermissionManager = musicPermissionManager;
-        this.listenPlaybackInfoUseCase = listenPlaybackInfoUseCase;
+        this.listenPlaybackItemInfoUseCase = listenPlaybackItemInfoUseCase;
     }
 
     public @NonNull Flowable<List<TrackItem>> get() {
@@ -69,7 +69,7 @@ public class ListenTrackListUseCase {
                 .observeOn(Schedulers.io())  // Read on IO thread
                 .map(o -> trackRepository.getAll());
         // Merge with playbackInfo
-        return Flowable.combineLatest(tracksEntityFlowable, listenPlaybackInfoUseCase.get(),
+        return Flowable.combineLatest(tracksEntityFlowable, listenPlaybackItemInfoUseCase.get(),
                         new TrackEntityWithPlaybackInfoToTrackItemMapper())
                 .subscribeOn(Schedulers.computation());
     }
@@ -137,15 +137,15 @@ public class ListenTrackListUseCase {
     }
 
     private static class TrackEntityWithPlaybackInfoToTrackItemMapper
-            implements BiFunction<List<TrackEntity>, Optional<PlaybackInfo>, List<TrackItem>> {
+            implements BiFunction<List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackItem>> {
 
         @Override
         public @NonNull List<TrackItem> apply(
                 @NonNull List<TrackEntity> trackEntityList,
-                @NotNull Optional<PlaybackInfo> playbackInfo
+                @NotNull Optional<PlaybackItemInfo> playbackInfo
         ) {
             // Get current id playing
-            final long currentIdPlaying = playbackInfo.map(PlaybackInfo::getId).orElse(-1L);
+            final long currentIdPlaying = playbackInfo.map(PlaybackItemInfo::getId).orElse(-1L);
             return trackEntityList.stream()
                     .map(new TrackEntityToTrackItemMapper(currentIdPlaying))
                     .collect(Collectors.toList());

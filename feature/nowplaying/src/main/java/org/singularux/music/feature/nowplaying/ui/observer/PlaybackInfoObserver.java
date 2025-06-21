@@ -11,7 +11,7 @@ import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
 import org.singularux.music.feature.nowplaying.ui.NowPlayingViewModel;
 import org.singularux.music.feature.nowplaying.ui.utils.SliderDurationLabelFormatter;
-import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 
 import java.time.Duration;
 import java.util.Objects;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
+public class PlaybackInfoObserver implements Observer<Optional<PlaybackItemInfo>> {
 
     private final Context context;
     private final RouteNowPlayingBinding binding;
@@ -32,17 +32,17 @@ public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
     private final SliderDurationLabelFormatter sliderDurationLabelFormatter;
 
     @Override
-    public void onChanged(@NonNull Optional<PlaybackInfo> maybePlaybackInfo) {
+    public void onChanged(@NonNull Optional<PlaybackItemInfo> maybePlaybackInfo) {
         if (maybePlaybackInfo.isPresent()) {
-            PlaybackInfo playbackInfo = maybePlaybackInfo.get();
+            PlaybackItemInfo playbackItemInfo = maybePlaybackInfo.get();
             // Title
-            binding.nowPlayingTitle.setText(playbackInfo.getTitle());
+            binding.nowPlayingTitle.setText(playbackItemInfo.getTitle());
             // Artist
-            String artist = Objects.requireNonNullElseGet(playbackInfo.getArtistName(),
+            String artist = Objects.requireNonNullElseGet(playbackItemInfo.getArtistName(),
                     () -> context.getText(R.string.now_playing_artist_placeholder).toString());
             binding.nowPlayingArtist.setText(artist);
             // Duration
-            Duration duration = playbackInfo.getDuration();
+            Duration duration = playbackItemInfo.getDuration();
             long durationMinutesPart = duration.getSeconds() / 60;
             long durationSecondsPart = duration.getSeconds() % 60;
             String durationString = context.getString(R.string.now_playing_duration,
@@ -55,7 +55,7 @@ public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
             binding.nowPlayingPrev.setOnClickListener(v -> viewModel.skipPrev());
             // Play/Pause
             binding.nowPlayingPlayPause.setEnabled(true);
-            if (playbackInfo.isPlaying()) {
+            if (playbackItemInfo.isPlaying()) {
                 binding.nowPlayingPlayPause.setContentDescription(context.getText(R.string.now_playing_pause));
                 binding.nowPlayingPlayPause.setIconResource(R.drawable.round_pause_24);
                 binding.nowPlayingPlayPause.setOnClickListener(v -> viewModel.pause());
@@ -65,11 +65,11 @@ public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
                 binding.nowPlayingPlayPause.setOnClickListener(v -> viewModel.play());
             }
             // Skip next
-            binding.nowPlayingNext.setEnabled(playbackInfo.isHasNext());
+            binding.nowPlayingNext.setEnabled(playbackItemInfo.isHasNext());
             binding.nowPlayingNext.setOnClickListener(v -> viewModel.skipNext());
             // Artwork
-            if (playbackInfo.getArtworkUri() != null) {
-                picasso.load(playbackInfo.getArtworkUri())
+            if (playbackItemInfo.getArtworkUri() != null) {
+                picasso.load(playbackItemInfo.getArtworkUri())
                         .into(binding.nowPlayingArtwork);
             } else {
                 binding.nowPlayingArtwork.setImageDrawable(null);

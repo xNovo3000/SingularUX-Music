@@ -10,7 +10,7 @@ import java.time.Duration;
 import lombok.Data;
 
 @Data
-public class PlaybackInfo {
+public class PlaybackItemInfo {
     private final long id;
     private final @NonNull String title;
     private final @Nullable Long artistId;
@@ -19,6 +19,4 @@ public class PlaybackInfo {
     private final @Nullable String albumTitle;
     private final @Nullable Uri artworkUri;
     private final @NonNull Duration duration;
-    private final boolean isPlaying;
-    private final boolean hasNext;
 }

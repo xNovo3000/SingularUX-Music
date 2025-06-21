@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackInfoUseCase;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
-import org.singularux.music.feature.playback.MusicControllerFacade;
-import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import java.util.Optional;
@@ -22,18 +22,18 @@ import lombok.Getter;
 @HiltViewModel
 public class NowPlayingViewModel extends ViewModel {
 
-    private final @Getter LiveData<Optional<PlaybackInfo>> playbackInfo;
+    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackInfo;
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
 
     private final MusicControllerFacade musicControllerFacade;
 
     @Inject
     public NowPlayingViewModel(
-            @NonNull ListenPlaybackInfoUseCase listenPlaybackInfoUseCase,
+            @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
-        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackInfoUseCase.get());
+        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackItemInfoUseCase.get());
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
         this.musicControllerFacade = musicControllerFacade;

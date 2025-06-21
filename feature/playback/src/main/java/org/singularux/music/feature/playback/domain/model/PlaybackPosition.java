@@ -9,6 +9,6 @@ import lombok.Data;
 
 @Data
 public class PlaybackPosition {
-    @FloatRange(from = 0.0, to = 1.0) private final float position;
-    private final @NonNull Duration current;
+    private final @FloatRange(from = 0.0, to = 1.0) float currentPosition;
+    private final @NonNull Duration contentDuration;
 }

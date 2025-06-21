@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer;
 
 import com.squareup.picasso.Picasso;
 
-import org.singularux.music.feature.playback.domain.model.PlaybackInfo;
+import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.TrackListViewModel;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
+public class PlaybackInfoObserver implements Observer<Optional<PlaybackItemInfo>> {
 
     private final Context context;
     private final RouteTrackListBinding binding;
@@ -27,7 +27,7 @@ public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
     private final TrackListViewModel viewModel;
 
     @Override
-    public void onChanged(Optional<PlaybackInfo> maybePlaybackInfo) {
+    public void onChanged(Optional<PlaybackItemInfo> maybePlaybackInfo) {
         // Extract data
         String title;
         String artist;
@@ -37,21 +37,21 @@ public class PlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
         Uri artworkUri = null;
         // Apply data
         if (maybePlaybackInfo.isPresent()) {
-            PlaybackInfo playbackInfo = maybePlaybackInfo.get();
-            title = playbackInfo.getTitle();
-            if (playbackInfo.getArtistName() != null) {
-                artist = playbackInfo.getArtistName();
+            PlaybackItemInfo playbackItemInfo = maybePlaybackInfo.get();
+            title = playbackItemInfo.getTitle();
+            if (playbackItemInfo.getArtistName() != null) {
+                artist = playbackItemInfo.getArtistName();
             } else {
                 artist = context.getString(R.string.track_item_unknown_artist);
             }
-            isPlaying = playbackInfo.isPlaying();
-            if (playbackInfo.isPlaying()) {
+            isPlaying = playbackItemInfo.isPlaying();
+            if (playbackItemInfo.isPlaying()) {
                 icon = ContextCompat.getDrawable(context, R.drawable.round_pause_24);
             } else {
                 icon = ContextCompat.getDrawable(context, R.drawable.round_play_arrow_24);
             }
             enabled = true;
-            artworkUri = playbackInfo.getArtworkUri();
+            artworkUri = playbackItemInfo.getArtworkUri();
         } else {
             title = context.getString(R.string.track_item_unknown_track);
             artist = context.getString(R.string.track_item_unknown_artist);
