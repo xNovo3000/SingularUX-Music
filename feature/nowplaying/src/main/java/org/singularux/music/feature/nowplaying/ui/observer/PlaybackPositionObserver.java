@@ -11,6 +11,7 @@ import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBindin
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
@@ -20,11 +21,15 @@ public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
     private final Context context;
     private final RouteNowPlayingBinding binding;
 
+    private @Setter boolean shouldUpdateSlider = true;
+
     @Override
     public void onChanged(@NonNull PlaybackPosition playbackPosition) {
         Log.d(TAG, "Received PlaybackPosition: " + playbackPosition);
         // Update slider value
-        binding.nowPlayingProgress.setValue(playbackPosition.getCurrentPosition());
+        if (shouldUpdateSlider) {
+            binding.nowPlayingProgress.setValue(playbackPosition.getCurrentPosition());
+        }
         // Extract the duration for that percentage of the track
         long totalSeconds = (long) (playbackPosition.getContentDuration().getSeconds()
                 * playbackPosition.getCurrentPosition());

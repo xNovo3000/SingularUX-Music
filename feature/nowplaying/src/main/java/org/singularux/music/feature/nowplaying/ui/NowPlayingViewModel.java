@@ -66,8 +66,8 @@ public class NowPlayingViewModel extends ViewModel {
         mediaController.play();
     }
 
-    public void seekTo(long positionSeconds) {
-        musicControllerFacade.requireMediaController().seekTo(positionSeconds * 1000);
+    public void seekTo(long positionMs) {
+        musicControllerFacade.requireMediaController().seekTo(positionMs);
     }
 
 }

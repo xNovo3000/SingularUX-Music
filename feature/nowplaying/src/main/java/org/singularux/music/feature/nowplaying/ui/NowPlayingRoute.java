@@ -51,8 +51,8 @@ public class NowPlayingRoute extends Fragment {
         // Listeners - Action
         PlaybackPositionObserver playbackPositionObserver = new PlaybackPositionObserver(
                 ContextCompat.getContextForLanguage(requireContext()), binding);
-        ProgressSliderListener progressSliderListener = new ProgressSliderListener(viewModel,
-                getViewLifecycleOwner(), playbackPositionObserver);
+        ProgressSliderListener progressSliderListener = new ProgressSliderListener(
+                viewModel, playbackPositionObserver);
         PlaybackItemInfoObserver playbackItemInfoObserver = new PlaybackItemInfoObserver(
                 ContextCompat.getContextForLanguage(requireContext()), binding, picasso,
                 progressSliderListener, sliderDurationLabelFormatter);

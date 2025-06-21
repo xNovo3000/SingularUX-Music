@@ -1,5 +1,6 @@
 package org.singularux.music.feature.tracklist.ui.observer;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
@@ -13,9 +14,9 @@ public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
     private final RouteTrackListBinding binding;
 
     @Override
-    public void onChanged(PlaybackPosition playbackPosition) {
+    public void onChanged(@NonNull PlaybackPosition playbackPosition) {
         int position = (int) (playbackPosition.getCurrentPosition() * 1000.0F);
-        binding.playbackBar.playbackBarProgress.setProgressCompat(position, false);
+        binding.playbackBar.playbackBarProgress.setProgressCompat(position, true);
     }
 
 }
