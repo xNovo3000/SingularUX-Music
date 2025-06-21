@@ -1,5 +1,6 @@
 package org.singularux.music.feature.tracklist.ui.observer;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.search.SearchView;
@@ -11,7 +12,7 @@ public abstract class SearchViewTransitionObserver implements SearchView.Transit
     @RequiredArgsConstructor
     public static class Enabled extends SearchViewTransitionObserver {
 
-        private final SearchViewOnBackPressedCallback onBackPressedCallback;
+        private final OnBackPressedCallback onBackPressedCallback;
 
         @Override
         public void onStateChanged(

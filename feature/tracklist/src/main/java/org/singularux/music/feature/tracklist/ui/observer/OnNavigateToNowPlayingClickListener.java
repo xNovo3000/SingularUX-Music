@@ -9,7 +9,7 @@ import androidx.navigation.NavDeepLinkRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class OnBackClickListener implements View.OnClickListener {
+public class OnNavigateToNowPlayingClickListener implements View.OnClickListener {
 
     private final NavController navController;
 

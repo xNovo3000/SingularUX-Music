@@ -102,7 +102,7 @@ public class ListenTrackListUseCase {
     private static class RemoveListenerCancellable implements Cancellable {
 
         private final Context context;
-        private final TrackListObserver observer;
+        private final ContentObserver observer;
 
         @Override
         public void cancel() {

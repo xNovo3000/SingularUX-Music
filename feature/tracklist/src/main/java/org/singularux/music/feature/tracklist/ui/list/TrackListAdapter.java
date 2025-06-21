@@ -43,28 +43,36 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TrackItemViewHolder holder, int position) {
+        String title;
+        String artists;
+        long durationMinutesMs;
+        long durationSecondsMs;
+        String durationArtists;
+        Uri artwork;
+        // Extract data
         Context context = ContextCompat.getContextForLanguage(holder.itemView.getContext());
         TrackItem trackItem = getItem(position);
-        // Extract data
-        String title = trackItem.getTitle();
-        String artistsName = trackItem.getArtistName();
-        if (artistsName == null) {
-            artistsName = context.getString(R.string.track_item_unknown_artist);
+        title = trackItem.getTitle();
+        if (trackItem.getArtistName() != null) {
+            artists = trackItem.getArtistName();
+        } else {
+            artists = context.getString(R.string.track_item_unknown_artist);
         }
-        long durationMinutes = trackItem.getDuration().getSeconds() / 60;
-        long durationSeconds = trackItem.getDuration().getSeconds() % 60;
-        boolean isCurrentlyPlaying = trackItem.isCurrentlyPlaying();
-        Uri artworkUri = trackItem.getArtworkUri();
+        durationMinutesMs = trackItem.getDuration().getSeconds() / 60;
+        durationSecondsMs = trackItem.getDuration().getSeconds() % 60;
+        durationArtists = context.getString(R.string.track_item_duration_artists,
+                durationMinutesMs, durationSecondsMs, artists);
+        artwork = trackItem.getArtworkUri();
         // Apply
-        holder.itemView.setSelected(isCurrentlyPlaying);
         holder.getTitle().setText(title);
-        String durationArtistsName = context.getString(R.string.track_item_duration_artists,
-                durationMinutes, durationSeconds, artistsName);
-        holder.getDurationArtists().setText(durationArtistsName);
-        picasso.load(artworkUri)
-                .resizeDimen(R.dimen.track_item_artwork_size, R.dimen.track_item_artwork_size)
-                .into(holder.getArtwork());
-        // Click
+        holder.getDurationArtists().setText(durationArtists);
+        if (artwork != null) {
+            picasso.load(artwork)
+                    .resizeDimen(R.dimen.track_item_artwork_size, R.dimen.track_item_artwork_size)
+                    .into(holder.getArtwork());
+        } else {
+            holder.getArtwork().setImageDrawable(null);
+        }
         holder.itemView.setOnClickListener(new TrackOnClickListenerCompat(onItemClickListener, position));
     }
 

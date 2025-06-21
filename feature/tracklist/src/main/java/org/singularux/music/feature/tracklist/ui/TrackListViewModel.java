@@ -12,6 +12,8 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.session.MediaController;
 
+import org.singularux.music.feature.playback.domain.model.PlaybackState;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackStateUseCase;
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
@@ -34,8 +36,10 @@ import lombok.Getter;
 public class TrackListViewModel extends ViewModel {
 
     private final @Getter LiveData<List<TrackItem>> trackList;
+
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
-    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackInfo;
+    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackItemInfo;
+    private final @Getter LiveData<PlaybackState> playbackState;
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -44,12 +48,16 @@ public class TrackListViewModel extends ViewModel {
             @NonNull ListenTrackListUseCase listenTrackListUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,
             @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
+            @NonNull ListenPlaybackStateUseCase listenPlaybackStateUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
         this.trackList = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
-        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackItemInfoUseCase.get());
+        this.playbackItemInfo = LiveDataReactiveStreams
+                .fromPublisher(listenPlaybackItemInfoUseCase.get());
+        this.playbackState = LiveDataReactiveStreams
+                .fromPublisher(listenPlaybackStateUseCase.get());
         this.musicControllerFacade = musicControllerFacade;
     }
 
@@ -86,7 +94,7 @@ public class TrackListViewModel extends ViewModel {
                     String.valueOf(trackItem.getId()));
             // Extras that does not fit the mediaMetadata
             Bundle extras = new Bundle();
-            extras.putLong("playback_id", trackItem.getId());
+            extras.putString("playback_id", "track_list/" + trackItem.getId());
             if (trackItem.getArtistId() != null) {
                 extras.putLong("artist_id", trackItem.getArtistId());
             }

@@ -7,7 +7,7 @@ import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.Objects;
 
-public class TrackItemDiffCallback extends DiffUtil.ItemCallback<TrackItem> {
+class TrackItemDiffCallback extends DiffUtil.ItemCallback<TrackItem> {
 
     @Override
     public boolean areItemsTheSame(@NonNull TrackItem oldItem, @NonNull TrackItem newItem) {
