@@ -25,9 +25,8 @@ public class ListenPlaybackPositionUseCase {
 
     private static final String TAG = "ListenPlaybackPositionUseCase";
 
-    private static final int UPDATE_PERIOD_MS = 500;
-    private static final PlaybackPosition INVALID_PLAYBACK_POSITION =
-            new PlaybackPosition(-1.0F, Duration.ofMillis(0));
+    private static final int INITIAL_DELAY_MS = 0;
+    private static final int UPDATE_PERIOD_MS = 250;
     private static final PlaybackPosition EMPTY_PLAYBACK_POSITION =
             new PlaybackPosition(0.0F, Duration.ofMillis(1));
 
@@ -35,11 +34,11 @@ public class ListenPlaybackPositionUseCase {
 
     public Flowable<PlaybackPosition> get() {
         // Must be watched on main thread because MediaController can be queried only there
-        return Flowable.interval(0, UPDATE_PERIOD_MS, TimeUnit.MILLISECONDS,
+        return Flowable.interval(INITIAL_DELAY_MS, UPDATE_PERIOD_MS, TimeUnit.MILLISECONDS,
                         Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new PlaybackPositionMapper(musicControllerFacade))
-                .filter(new PlaybackPositionInvalidFilter());
+                .filter(new PlaybackPositionFilter());
     }
 
     @RequiredArgsConstructor
@@ -52,28 +51,20 @@ public class ListenPlaybackPositionUseCase {
             // Send the current position when all this conditions are met:
             // 1. MediaController is present
             // 2. There is a current MediaItem
-            // 3. MediaController is READY
-            // Send an invalid playback position when all this conditions are met:
-            // 1. MediaController is present
-            // 2. There is a current MediaItem
-            // 3. MediaController is not READY
             // Send an empty playback position when one of this conditions are met:
             // 1. MediaController is not present
             // 2. There is not a current MediaItem
             MediaController mediaController = musicControllerFacade.getMediaController();
             if (mediaController != null && mediaController.getCurrentMediaItem() != null) {
-                if (mediaController.getPlayWhenReady()) {
-                    double currentPositionMs = mediaController.getCurrentPosition();
-                    long contentDurationMs = Math.max(1L, mediaController.getContentDuration());
-                    float progress = (float) (currentPositionMs / contentDurationMs);
-                    Duration contentDuration = Duration.ofMillis(contentDurationMs);
-                    return new PlaybackPosition(progress, contentDuration);
-                } else {
-                    Log.v(TAG, "Updating PlaybackPosition with invalid one since MediaController is null");
-                    return INVALID_PLAYBACK_POSITION;
-                }
+                double currentPositionMs = mediaController.getCurrentPosition();
+                long contentDurationMs = Math.max(1L, mediaController.getContentDuration());
+                float progress = (float) (currentPositionMs / contentDurationMs);
+                Duration contentDuration = Duration.ofMillis(contentDurationMs);
+                PlaybackPosition playbackPosition = new PlaybackPosition(progress, contentDuration);
+                Log.v(TAG, "Updating PlaybackPosition with value " + playbackPosition);
+                return playbackPosition;
             } else {
-                Log.v(TAG, "Updating PlaybackPosition with empty one since MediaController is null");
+                Log.v(TAG, "Updating PlaybackPosition with empty one since there is no MediaItem");
                 return EMPTY_PLAYBACK_POSITION;
             }
         }
@@ -81,7 +72,7 @@ public class ListenPlaybackPositionUseCase {
     }
 
     @RequiredArgsConstructor
-    private static final class PlaybackPositionInvalidFilter implements Predicate<PlaybackPosition> {
+    private static final class PlaybackPositionFilter implements Predicate<PlaybackPosition> {
 
         @Override
         public boolean test(@NonNull PlaybackPosition playbackPosition) {

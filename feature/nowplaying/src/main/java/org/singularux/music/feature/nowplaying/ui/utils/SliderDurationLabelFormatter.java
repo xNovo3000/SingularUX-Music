@@ -17,15 +17,15 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SliderDurationLabelFormatter implements LabelFormatter {
 
-    private @Setter @Nullable Duration contentDuration = null;
+    private @Setter @Nullable Duration duration = null;
     private final Context context;
 
     @Override
     public @NonNull String getFormattedValue(float value) {
         // Extract the duration for that percentage of the track
-        long contentDurationTotalSeconds = 0;
-        if (contentDuration != null) {
-            contentDurationTotalSeconds = contentDuration.getSeconds();
+        long contentDurationTotalSeconds = 0L;
+        if (duration != null) {
+            contentDurationTotalSeconds = duration.getSeconds();
         }
         long sliderLabelTotalSeconds = (long) (contentDurationTotalSeconds * value);
         // Extract minutes and seconds part

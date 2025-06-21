@@ -1,5 +1,7 @@
 package org.singularux.music.feature.nowplaying.ui.observer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
@@ -16,14 +18,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RequiredArgsConstructor
-public class ProgressSliderListener implements Slider.OnChangeListener, Slider.OnSliderTouchListener {
+public class ProgressSliderListener
+        implements Slider.OnChangeListener, Slider.OnSliderTouchListener {
+
+    private static final String TAG = "ProgressSliderListener";
 
     private final NowPlayingViewModel viewModel;
     private final LifecycleOwner lifecycleOwner;
     private final Observer<PlaybackPosition> playbackPositionObserver;
 
     private float newValue = 0.0F;
-    private @Setter @Nullable Duration contentDuration = null;
+    private @Setter @Nullable Duration duration = null;
 
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
@@ -42,8 +47,9 @@ public class ProgressSliderListener implements Slider.OnChangeListener, Slider.O
     @Override
     public void onStopTrackingTouch(@NonNull Slider slider) {
         // Seek to where the user wants and restart observing
-        if (contentDuration != null) {
-            viewModel.seekTo((long) (contentDuration.getSeconds() * newValue));
+        if (duration != null) {
+            Log.d(TAG, "Seeking to " + newValue * duration.getSeconds() + " seconds");
+            viewModel.seekTo((long) (newValue * duration.getSeconds()));
         }
         viewModel.getPlaybackPosition().observe(lifecycleOwner, playbackPositionObserver);
     }

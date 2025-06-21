@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,8 +17,9 @@ import com.squareup.picasso.Picasso;
 import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
 import org.singularux.music.feature.nowplaying.ui.inset.ContainerInsetListener;
-import org.singularux.music.feature.nowplaying.ui.observer.PlaybackInfoObserver;
+import org.singularux.music.feature.nowplaying.ui.observer.PlaybackItemInfoObserver;
 import org.singularux.music.feature.nowplaying.ui.observer.PlaybackPositionObserver;
+import org.singularux.music.feature.nowplaying.ui.observer.PlaybackStateObserver;
 import org.singularux.music.feature.nowplaying.ui.observer.ProgressSliderListener;
 import org.singularux.music.feature.nowplaying.ui.utils.SliderDurationLabelFormatter;
 
@@ -41,25 +43,28 @@ public class NowPlayingRoute extends Fragment {
         RouteNowPlayingBinding binding = RouteNowPlayingBinding.bind(view);
         NowPlayingViewModel viewModel = new ViewModelProvider(this)
                 .get(NowPlayingViewModel.class);
-        // Create observers and listeners
-        PlaybackPositionObserver playbackPositionObserver =
-                new PlaybackPositionObserver(requireContext(), binding);
+        NavController navController = NavHostFragment.findNavController(this);
+        // Navigation - Back
+        binding.nowPlayingClose.setOnClickListener(v -> navController.navigateUp());
+        // Listeners - Insects
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), containerInsetListener);
+        // Listeners - Action
+        PlaybackPositionObserver playbackPositionObserver = new PlaybackPositionObserver(
+                ContextCompat.getContextForLanguage(requireContext()), binding);
         ProgressSliderListener progressSliderListener = new ProgressSliderListener(viewModel,
                 getViewLifecycleOwner(), playbackPositionObserver);
-        PlaybackInfoObserver playbackInfoObserver = new PlaybackInfoObserver(requireContext(),
-                binding, viewModel, picasso, progressSliderListener, sliderDurationLabelFormatter);
-        // Add inset listeners
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), containerInsetListener);
-        // Add custom formatters
-        binding.nowPlayingProgress.setLabelFormatter(sliderDurationLabelFormatter);
-        // Listen for navigation actions
-        NavController navController = NavHostFragment.findNavController(this);
-        binding.nowPlayingClose.setOnClickListener(v -> navController.navigateUp());
+        PlaybackItemInfoObserver playbackItemInfoObserver = new PlaybackItemInfoObserver(
+                ContextCompat.getContextForLanguage(requireContext()), binding, picasso,
+                progressSliderListener, sliderDurationLabelFormatter);
+        PlaybackStateObserver playbackStateObserver = new PlaybackStateObserver(
+                ContextCompat.getContextForLanguage(requireContext()), binding, viewModel);
         // Listen for data
-        viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(), playbackPositionObserver);
-        viewModel.getPlaybackInfo().observe(getViewLifecycleOwner(), playbackInfoObserver);
+        binding.nowPlayingProgress.setLabelFormatter(sliderDurationLabelFormatter);
         binding.nowPlayingProgress.addOnChangeListener(progressSliderListener);
         binding.nowPlayingProgress.addOnSliderTouchListener(progressSliderListener);
+        viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(), playbackPositionObserver);
+        viewModel.getPlaybackItemInfo().observe(getViewLifecycleOwner(), playbackItemInfoObserver);
+        viewModel.getPlaybackState().observe(getViewLifecycleOwner(), playbackStateObserver);
     }
 
 }

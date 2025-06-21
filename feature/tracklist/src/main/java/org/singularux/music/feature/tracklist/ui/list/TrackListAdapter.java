@@ -18,7 +18,6 @@ import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import javax.inject.Inject;
 
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder> {
@@ -73,25 +72,16 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
         } else {
             holder.getArtwork().setImageDrawable(null);
         }
-        holder.itemView.setOnClickListener(new TrackOnClickListenerCompat(onItemClickListener, position));
+        if (onItemClickListener != null) {
+            holder.itemView.setOnClickListener(v -> onItemClickListener.onClick(position));
+        } else {
+            holder.itemView.setOnClickListener(null);
+        }
     }
 
     @Override
     public long getItemId(int position) {
         return getItem(position).getId();
-    }
-
-    @RequiredArgsConstructor
-    private static final class TrackOnClickListenerCompat implements View.OnClickListener {
-
-        private final TrackItemOnClickListener onItemClickListener;
-        private final int index;
-
-        @Override
-        public void onClick(View v) {
-            onItemClickListener.onClick(index);
-        }
-
     }
 
 }

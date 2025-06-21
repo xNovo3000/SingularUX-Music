@@ -4,5 +4,5 @@
         <item name="cornerSize">28dp</item>
         <item name="cornerFamily">rounded</item>
     </style>
-    <dimen name="now_playing_artwork">280dp</dimen>
+    <dimen name="now_playing_artwork_size">280dp</dimen>
 </resources>

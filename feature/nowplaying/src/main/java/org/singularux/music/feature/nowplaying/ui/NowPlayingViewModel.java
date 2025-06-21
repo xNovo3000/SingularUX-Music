@@ -6,8 +6,10 @@ import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
 import androidx.media3.session.MediaController;
 
+import org.singularux.music.feature.playback.domain.model.PlaybackState;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
+import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackStateUseCase;
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
@@ -22,8 +24,9 @@ import lombok.Getter;
 @HiltViewModel
 public class NowPlayingViewModel extends ViewModel {
 
-    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackInfo;
+    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackItemInfo;
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
+    private final @Getter LiveData<PlaybackState> playbackState;
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -31,11 +34,15 @@ public class NowPlayingViewModel extends ViewModel {
     public NowPlayingViewModel(
             @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,
+            @NonNull ListenPlaybackStateUseCase listenPlaybackStateUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
-        this.playbackInfo = LiveDataReactiveStreams.fromPublisher(listenPlaybackItemInfoUseCase.get());
+        this.playbackItemInfo = LiveDataReactiveStreams
+                .fromPublisher(listenPlaybackItemInfoUseCase.get());
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
+        this.playbackState = LiveDataReactiveStreams
+                .fromPublisher(listenPlaybackStateUseCase.get());
         this.musicControllerFacade = musicControllerFacade;
     }
 
@@ -59,8 +66,8 @@ public class NowPlayingViewModel extends ViewModel {
         mediaController.play();
     }
 
-    public void seekTo(long newPosition) {
-        musicControllerFacade.requireMediaController().seekTo(newPosition * 1000);
+    public void seekTo(long positionSeconds) {
+        musicControllerFacade.requireMediaController().seekTo(positionSeconds * 1000);
     }
 
 }

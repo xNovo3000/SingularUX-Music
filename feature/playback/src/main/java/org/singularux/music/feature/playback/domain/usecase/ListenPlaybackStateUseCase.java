@@ -102,7 +102,7 @@ public class ListenPlaybackStateUseCase {
         }
 
         public void update() {
-            boolean isReady = mediaController.getPlayWhenReady();
+            boolean isReady = mediaController.getCurrentMediaItem() != null;
             boolean isPlaying = mediaController.isPlaying();
             boolean hasNextItem = mediaController.hasNextMediaItem();
             PlaybackState playbackState = new PlaybackState(isReady, isPlaying, hasNextItem);
