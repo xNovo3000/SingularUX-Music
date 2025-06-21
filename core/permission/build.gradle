@@ -29,6 +29,6 @@ dependencies {
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
     // Lombok
-    implementation libs.lombok
+    compileOnly libs.lombok
     annotationProcessor libs.lombok
 }

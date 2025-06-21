@@ -32,7 +32,7 @@ dependencies {
     implementation libs.media3.exoplayer
     implementation libs.media3.session
     // Lombok
-    implementation libs.lombok
+    compileOnly libs.lombok
     annotationProcessor libs.lombok
     // RxJava
     implementation libs.rxjava

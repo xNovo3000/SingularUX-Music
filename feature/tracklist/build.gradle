@@ -43,7 +43,7 @@ dependencies {
     implementation libs.lifecycle.reactivestreams
     implementation libs.lifecycle.viewmodel
     // Lombok
-    implementation libs.lombok
+    compileOnly libs.lombok
     annotationProcessor libs.lombok
     // Material 3
     implementation libs.google.material
