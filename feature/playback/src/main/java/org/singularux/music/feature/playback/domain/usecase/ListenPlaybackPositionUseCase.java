@@ -16,14 +16,20 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ListenPlaybackPositionUseCase {
 
     private static final String TAG = "ListenPlaybackPositionUseCase";
-    private static final int UPDATE_PERIOD_MS = 350;
+
+    private static final int UPDATE_PERIOD_MS = 500;
+    private static final PlaybackPosition INVALID_PLAYBACK_POSITION =
+            new PlaybackPosition(-1.0F, Duration.ofMillis(0));
+    private static final PlaybackPosition EMPTY_PLAYBACK_POSITION =
+            new PlaybackPosition(0.0F, Duration.ofMillis(1));
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -32,28 +38,55 @@ public class ListenPlaybackPositionUseCase {
         return Flowable.interval(0, UPDATE_PERIOD_MS, TimeUnit.MILLISECONDS,
                         Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new PlaybackPositionMapper(musicControllerFacade));
+                .map(new PlaybackPositionMapper(musicControllerFacade))
+                .filter(new PlaybackPositionInvalidFilter());
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackPositionMapper implements Function<Long, PlaybackPosition> {
+    private static final class PlaybackPositionMapper implements Function<Long, PlaybackPosition> {
 
         private final MusicControllerFacade musicControllerFacade;
 
         @Override
         public @NonNull PlaybackPosition apply(@NonNull Long value) {
-            MediaController maybeMediaController = musicControllerFacade.getMediaController();
-            if (maybeMediaController != null) {
-                Log.v(TAG, "MediaController is ok, reading position");
-                long currentPositionMs = maybeMediaController.getCurrentPosition();
-                long totalDurationMs = maybeMediaController.getContentDuration();
-                float position = (float) (((double) currentPositionMs) / ((double) totalDurationMs));
-                Duration current = Duration.ofMillis(currentPositionMs);
-                return new PlaybackPosition(Math.clamp(position, 0.0F, 1.0F), current);
+            // Send the current position when all this conditions are met:
+            // 1. MediaController is present
+            // 2. There is a current MediaItem
+            // 3. MediaController is READY
+            // Send an invalid playback position when all this conditions are met:
+            // 1. MediaController is present
+            // 2. There is a current MediaItem
+            // 3. MediaController is not READY
+            // Send an empty playback position when one of this conditions are met:
+            // 1. MediaController is not present
+            // 2. There is not a current MediaItem
+            MediaController mediaController = musicControllerFacade.getMediaController();
+            if (mediaController != null && mediaController.getCurrentMediaItem() != null) {
+                if (mediaController.getPlayWhenReady()) {
+                    double currentPositionMs = mediaController.getCurrentPosition();
+                    long contentDurationMs = Math.max(1L, mediaController.getContentDuration());
+                    float progress = (float) (currentPositionMs / contentDurationMs);
+                    Duration contentDuration = Duration.ofMillis(contentDurationMs);
+                    return new PlaybackPosition(progress, contentDuration);
+                } else {
+                    Log.v(TAG, "Updating PlaybackPosition with invalid one since MediaController is null");
+                    return INVALID_PLAYBACK_POSITION;
+                }
             } else {
-                Log.v(TAG, "MediaController is null, setting progress to zero");
-                return new PlaybackPosition(0.0F, Duration.ZERO);
+                Log.v(TAG, "Updating PlaybackPosition with empty one since MediaController is null");
+                return EMPTY_PLAYBACK_POSITION;
             }
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    private static final class PlaybackPositionInvalidFilter implements Predicate<PlaybackPosition> {
+
+        @Override
+        public boolean test(@NonNull PlaybackPosition playbackPosition) {
+            float currentPosition = playbackPosition.getCurrentPosition();
+            return currentPosition >= 0.0F && currentPosition <= 1.0F;
         }
 
     }
