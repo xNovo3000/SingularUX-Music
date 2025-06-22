@@ -21,6 +21,7 @@ import org.singularux.music.feature.tracklist.domain.model.TrackItem;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class ListenTrackListUseCase {
         this.listenPlaybackItemInfoUseCase = listenPlaybackItemInfoUseCase;
     }
 
-    public @NonNull Flowable<List<TrackItem>> get() {
+    public @NonNull Flowable<List<TrackItem>> get(@NonNull String nowPlayingToken) {
         // Get list of EntityTrack
         Flowable<List<TrackEntity>> tracksEntityFlowable = Flowable
                 .create(new TrackItemListOnSubscribe(context, musicPermissionManager),
@@ -70,7 +71,7 @@ public class ListenTrackListUseCase {
                 .map(o -> trackRepository.getAll());
         // Merge with playbackInfo
         return Flowable.combineLatest(tracksEntityFlowable, listenPlaybackItemInfoUseCase.get(),
-                        new TrackEntityWithPlaybackInfoToTrackItemMapper())
+                        new TrackEntityWithPlaybackInfoToTrackItemMapper(nowPlayingToken))
                 .subscribeOn(Schedulers.computation());
     }
 
@@ -136,16 +137,22 @@ public class ListenTrackListUseCase {
 
     }
 
+    @RequiredArgsConstructor
     private static class TrackEntityWithPlaybackInfoToTrackItemMapper
             implements BiFunction<List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackItem>> {
+
+        private final String nowPlayingToken;
 
         @Override
         public @NonNull List<TrackItem> apply(
                 @NonNull List<TrackEntity> trackEntityList,
                 @NotNull Optional<PlaybackItemInfo> playbackInfo
         ) {
-            // Get current id playing
-            final long currentIdPlaying = playbackInfo.map(PlaybackItemInfo::getId).orElse(-1L);
+            // Get current id playing only if token matches
+            final long currentIdPlaying = playbackInfo
+                    .filter(i -> Objects.equals(i.getPlayingFrom(), nowPlayingToken))
+                    .map(PlaybackItemInfo::getId)
+                    .orElse(-1L);
             return trackEntityList.stream()
                     .map(new TrackEntityToTrackItemMapper(currentIdPlaying))
                     .collect(Collectors.toList());

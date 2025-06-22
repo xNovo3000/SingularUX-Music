@@ -51,7 +51,8 @@ public class TrackListViewModel extends ViewModel {
             @NonNull ListenPlaybackStateUseCase listenPlaybackStateUseCase,
             @NonNull MusicControllerFacade musicControllerFacade
     ) {
-        this.trackList = LiveDataReactiveStreams.fromPublisher(listenTrackListUseCase.get());
+        this.trackList = LiveDataReactiveStreams
+                .fromPublisher(listenTrackListUseCase.get("track_list"));
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
         this.playbackItemInfo = LiveDataReactiveStreams
@@ -62,19 +63,17 @@ public class TrackListViewModel extends ViewModel {
     }
 
     public void playFromSpecificTrackListIndex(int index) {
-        // Get list of current tracks, and take from that index onwards,
-        // map it to MediaItems and feed them in the MediaController
         List<TrackItem> currentList = trackList.getValue();
         if (currentList == null) {
             return;
         }
         List<MediaItem> mediaItems = currentList.stream()
-                .skip(index)
                 .map(new TrackItemToMediaItemMapper())
                 .collect(Collectors.toList());
         MediaController mediaController = musicControllerFacade.requireMediaController();
         mediaController.clearMediaItems();
         mediaController.addMediaItems(mediaItems);
+        mediaController.seekTo(index, 0);
         mediaController.play();
     }
 
@@ -94,7 +93,7 @@ public class TrackListViewModel extends ViewModel {
                     String.valueOf(trackItem.getId()));
             // Extras that does not fit the mediaMetadata
             Bundle extras = new Bundle();
-            extras.putString("playback_id", "track_list/" + trackItem.getId());
+            extras.putString("playing_from", "track_list");
             if (trackItem.getArtistId() != null) {
                 extras.putLong("artist_id", trackItem.getArtistId());
             }

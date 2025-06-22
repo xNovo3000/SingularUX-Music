@@ -19,4 +19,5 @@ public class PlaybackItemInfo {
     private final @Nullable String albumTitle;
     private final @Nullable Uri artworkUri;
     private final @NonNull Duration duration;
+    private final @Nullable String playingFrom;
 }

@@ -27,6 +27,13 @@
             app:defaultMarginsEnabled="false"/>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <org.singularux.music.feature.tracklist.ui.view.ScrimView
+        android:id="@+id/track_list_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:alpha="0.8"/>
+
     <include layout="@layout/component_playback_bar"
         android:id="@+id/playback_bar"
         android:layout_width="match_parent"

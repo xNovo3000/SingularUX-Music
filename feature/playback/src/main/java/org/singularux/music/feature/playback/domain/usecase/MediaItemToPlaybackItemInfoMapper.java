@@ -54,11 +54,17 @@ final class MediaItemToPlaybackItemInfoMapper
         if (mediaItem.mediaMetadata.durationMs != null) {
             duration = Duration.ofMillis(mediaItem.mediaMetadata.durationMs);
         }
+        // Playback token
+        String playingFrom = null;
+        if (mediaItem.mediaMetadata.extras != null &&
+                mediaItem.mediaMetadata.extras.containsKey("playing_from")) {
+            playingFrom = mediaItem.mediaMetadata.extras.getString("playing_from");
+        }
         // Artwork
         Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
         // Create PlaybackItemInfo
         return new PlaybackItemInfo(id, title, artistId, artistName,
-                albumId, albumTitle, artworkUri, duration);
+                albumId, albumTitle, artworkUri, duration, playingFrom);
     }
 
 }
