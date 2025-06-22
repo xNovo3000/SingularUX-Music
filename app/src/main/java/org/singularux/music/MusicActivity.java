@@ -41,7 +41,7 @@ public class MusicActivity extends FragmentActivity {
             if (Objects.equals(intent.getStringExtra("origin"), "system_ui_notification")) {
                 NavController navController = Navigation
                         .findNavController(this, R.id.navigation_root);
-                if (Objects.requireNonNull(navController.getCurrentDestination()).getId() != R.id.now_playing) {
+                if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.track_list) {
                     navController.navigate(R.id.track_list_go_to_now_playing);
                 }
             }
