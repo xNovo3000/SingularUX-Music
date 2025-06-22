@@ -63,6 +63,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder
                 durationMinutesMs, durationSecondsMs, artists);
         artwork = trackItem.getArtworkUri();
         // Apply
+        holder.itemView.setSelected(trackItem.isCurrentlyPlaying());
         holder.getTitle().setText(title);
         holder.getDurationArtists().setText(durationArtists);
         if (artwork != null) {

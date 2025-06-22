@@ -88,6 +88,11 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     @Override
     public @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String title) {
+        // Title must contain at least one character
+        if (title.isEmpty()) {
+            Log.d(TAG, "Title is empty");
+            return Collections.emptyList();
+        }
         // Check for permission
         if (!musicPermissionManager.hasPermission(MusicPermission.READ_MUSIC)) {
             Log.d(TAG, "Cannot load tracks, missing READ_MUSIC permission");

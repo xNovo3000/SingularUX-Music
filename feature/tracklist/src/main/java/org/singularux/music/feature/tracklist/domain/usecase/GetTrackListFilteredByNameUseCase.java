@@ -1,7 +1,5 @@
 package org.singularux.music.feature.tracklist.domain.usecase;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import org.singularux.music.data.library.repository.TrackRepository;
@@ -22,15 +20,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class GetTrackListFilteredByNameUseCase {
 
-    private static final String TAG = "GetTrackListFilteredByNameUseCase";
-
     private final TrackRepository trackRepository;
 
     public Flowable<List<TrackItem>> get(@NonNull FlowableOnSubscribe<String> queryEmitter) {
-        Log.d(TAG, "Creating flowable with emitter " + queryEmitter);
         return Flowable.create(queryEmitter, BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation())
-                .debounce(500, TimeUnit.MILLISECONDS)
+                .debounce(250, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .map(trackRepository::getAllByTitleLike)
                 .observeOn(Schedulers.computation())
