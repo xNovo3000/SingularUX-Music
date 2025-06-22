@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -156,22 +155,6 @@ public class ListenTrackListUseCase {
             return trackEntityList.stream()
                     .map(new TrackEntityToTrackItemMapper(currentIdPlaying))
                     .collect(Collectors.toList());
-        }
-
-    }
-
-    @RequiredArgsConstructor
-    private static class TrackEntityToTrackItemMapper implements Function<TrackEntity, TrackItem> {
-
-        private final long currentPlayingId;
-
-        @Override
-        public @NonNull TrackItem apply(@NonNull TrackEntity trackEntity) {
-            return new TrackItem(trackEntity.getId(), trackEntity.getTitle(),
-                    trackEntity.getArtistId(), trackEntity.getArtistName(),
-                    trackEntity.getAlbumId(), trackEntity.getAlbumTitle(),
-                    trackEntity.getArtworkUri(), trackEntity.getDuration(),
-                    trackEntity.getId() == currentPlayingId);
         }
 
     }

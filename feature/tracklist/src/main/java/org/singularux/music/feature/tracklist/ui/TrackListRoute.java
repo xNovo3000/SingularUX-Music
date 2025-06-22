@@ -24,6 +24,7 @@ import org.singularux.music.feature.tracklist.ui.list.TrackListAdapter;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackItemInfoObserver;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackStateObserver;
 import org.singularux.music.feature.tracklist.ui.observer.SearchViewOnBackPressedCallback;
+import org.singularux.music.feature.tracklist.ui.observer.SearchViewTextChangedListener;
 import org.singularux.music.feature.tracklist.ui.observer.SearchViewTransitionObserver;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
@@ -44,9 +45,11 @@ public class TrackListRoute extends Fragment {
 
     @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
     @Inject public SearchViewTransitionObserver searchViewTransitionObserver;
+    public @Inject SearchViewTextChangedListener searchViewTextChangedListener;
 
     @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public TrackListAdapter trackListAdapter;
+    public @Inject TrackListAdapter searchTrackListAdapter;
     @Inject public Picasso picasso;
 
     public TrackListRoute() {
@@ -86,7 +89,12 @@ public class TrackListRoute extends Fragment {
         // Adapters
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
-        // Listen for data
+        searchTrackListAdapter.setOnItemClickListener(viewModel::playSpecificTrackListIndex);
+        binding.trackListSearchRecyclerview.setAdapter(searchTrackListAdapter);
+        // Callbacks
+        binding.trackListSearchView.getEditText()
+                .addTextChangedListener(searchViewTextChangedListener);
+        // Listen data
         readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
                 new PlaybackPositionObserver(binding));
@@ -96,6 +104,8 @@ public class TrackListRoute extends Fragment {
         viewModel.getPlaybackState().observe(getViewLifecycleOwner(),
                 new PlaybackStateObserver(ContextCompat.getContextForLanguage(requireContext()),
                         binding, viewModel));
+        viewModel.getSearchTrackList().observe(getViewLifecycleOwner(),
+                trackItems -> searchTrackListAdapter.submitList(trackItems));
     }
 
 }

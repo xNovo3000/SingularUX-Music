@@ -45,6 +45,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/track_list_search_bar"
-        app:layout_anchor="@id/track_list_search_bar"/>
+        app:layout_anchor="@id/track_list_search_bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/track_list_search_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/searchbar_scrolling_view_behavior"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
