@@ -3,7 +3,7 @@ package org.singularux.music.feature.tracklist.ui.search;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
 
 import java.util.Objects;
 

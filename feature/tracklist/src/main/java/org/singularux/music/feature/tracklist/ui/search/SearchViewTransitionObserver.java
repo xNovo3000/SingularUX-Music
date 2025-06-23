@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.observer;
+package org.singularux.music.feature.tracklist.ui.search;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;

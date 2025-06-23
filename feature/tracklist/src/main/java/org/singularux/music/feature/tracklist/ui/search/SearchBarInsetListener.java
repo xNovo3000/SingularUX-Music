@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.inset;
+package org.singularux.music.feature.tracklist.ui.search;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class TrackListSearchBarInsetListener implements OnApplyWindowInsetsListener {
+public class SearchBarInsetListener implements OnApplyWindowInsetsListener {
 
     private static final int INSETS_TOP_DP = 8;
 

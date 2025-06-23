@@ -2,8 +2,8 @@ package org.singularux.music.feature.tracklist;
 
 import android.os.Build;
 
-import org.singularux.music.feature.tracklist.ui.observer.SearchViewOnBackPressedCallback;
-import org.singularux.music.feature.tracklist.ui.observer.SearchViewTransitionObserver;
+import org.singularux.music.feature.tracklist.ui.search.SearchViewOnBackPressedCallback;
+import org.singularux.music.feature.tracklist.ui.search.SearchViewTransitionObserver;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,7 +27,7 @@ public class FeatureTrackListModule {
             SearchViewOnBackPressedCallback onBackPressedCallback
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            return new SearchViewTransitionObserver.Disabled();
+            return new SearchViewTransitionObserver.Disabled();  // Using predictive back
         } else {
             return new SearchViewTransitionObserver.Enabled(onBackPressedCallback);
         }

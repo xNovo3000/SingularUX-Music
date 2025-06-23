@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.search.model;
+package org.singularux.music.feature.tracklist.ui.search.item;
 
 import android.net.Uri;
 
@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import java.time.Duration;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +24,4 @@ public class SearchListItemTrack extends SearchListItem {
     private final @Nullable String albumTitle;
     private final @Nullable Uri artworkUri;
     private final @NonNull Duration duration;
-    private final boolean isCurrentlyPlaying;
 }

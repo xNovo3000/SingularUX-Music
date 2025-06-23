@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.search.model;
+package org.singularux.music.feature.tracklist.ui.search.item;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

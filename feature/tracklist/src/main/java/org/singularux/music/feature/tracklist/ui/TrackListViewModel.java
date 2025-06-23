@@ -108,6 +108,10 @@ public class TrackListViewModel extends ViewModel {
         musicControllerFacade.requireMediaController().pause();
     }
 
+    public void onSearchQueryChanged(@NonNull String query) {
+
+    }
+
     @RequiredArgsConstructor
     public static class TrackItemToMediaItemMapper implements Function<TrackItem, MediaItem> {
 

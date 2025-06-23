@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.ui.search.SearchListOnClickListener;
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
 
 public abstract class SearchListViewHolder extends RecyclerView.ViewHolder {
 

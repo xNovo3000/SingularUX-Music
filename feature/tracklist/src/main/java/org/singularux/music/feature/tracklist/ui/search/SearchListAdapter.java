@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItem;
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItemTrack;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItemTrack;
 import org.singularux.music.feature.tracklist.ui.search.viewholder.SearchListViewHolder;
 import org.singularux.music.feature.tracklist.ui.search.viewholder.SearchListViewHolderTrack;
 
@@ -23,8 +23,7 @@ import lombok.Setter;
 public class SearchListAdapter extends ListAdapter<SearchListItem, SearchListViewHolder> {
 
     private final Picasso picasso;
-    private @Setter
-    @Nullable SearchListOnClickListener onItemClickListener = null;
+    private @Setter @Nullable SearchListOnClickListener onItemClickListener = null;
 
     @Inject
     public SearchListAdapter(Picasso picasso) {

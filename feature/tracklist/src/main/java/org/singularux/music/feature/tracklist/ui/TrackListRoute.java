@@ -23,12 +23,12 @@ import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.list.TrackListAdapter;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackItemInfoObserver;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackStateObserver;
-import org.singularux.music.feature.tracklist.ui.observer.SearchViewOnBackPressedCallback;
+import org.singularux.music.feature.tracklist.ui.search.SearchViewOnBackPressedCallback;
 import org.singularux.music.feature.tracklist.ui.observer.SearchViewTextChangedListener;
-import org.singularux.music.feature.tracklist.ui.observer.SearchViewTransitionObserver;
+import org.singularux.music.feature.tracklist.ui.search.SearchViewTransitionObserver;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
-import org.singularux.music.feature.tracklist.ui.inset.TrackListSearchBarInsetListener;
+import org.singularux.music.feature.tracklist.ui.search.SearchBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.observer.OnNavigateToNowPlayingClickListener;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackPositionObserver;
 
@@ -40,7 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class TrackListRoute extends Fragment {
 
     @Inject public PlaybackBarInsetListener playbackBarInsetListener;
-    @Inject public TrackListSearchBarInsetListener trackListSearchBarInsetListener;
+    @Inject public SearchBarInsetListener searchBarInsetListener;
     @Inject public TrackListInsetListener trackListInsetListener;
 
     @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
@@ -72,7 +72,7 @@ public class TrackListRoute extends Fragment {
                 .setOnClickListener(new OnNavigateToNowPlayingClickListener(navController));
         // Inset listeners
         ViewCompat.setOnApplyWindowInsetsListener(
-                binding.trackListSearchBar, trackListSearchBarInsetListener);
+                binding.trackListSearchBar, searchBarInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListRecyclerview, trackListInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(

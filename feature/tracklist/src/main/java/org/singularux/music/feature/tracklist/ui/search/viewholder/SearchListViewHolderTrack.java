@@ -15,8 +15,8 @@ import com.squareup.picasso.Picasso;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.ComponentSearchItemTrackBinding;
 import org.singularux.music.feature.tracklist.ui.search.SearchListOnClickListener;
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItem;
-import org.singularux.music.feature.tracklist.ui.search.model.SearchListItemTrack;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItemTrack;
 
 import lombok.Getter;
 
