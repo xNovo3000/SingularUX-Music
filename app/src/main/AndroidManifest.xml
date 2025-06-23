@@ -16,7 +16,8 @@
         <activity android:name=".MusicActivity"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.Music.Splash">
+            android:theme="@style/Theme.Music.Splash"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="android.intent.action.MAIN"/>

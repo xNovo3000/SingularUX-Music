@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="search_item_track_artwork_size">56dp</dimen>
+    <string name="search_item_track_duration_artists" formatted="false">%d:%02d &#183; %s</string>
+    <string name="search_item_track_unknown_artist">Unknown artist</string>
+</resources>

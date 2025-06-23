@@ -28,12 +28,9 @@ public class MusicActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // Splash screen until service is ready
         SplashScreen.installSplashScreen(this)
                 .setKeepOnScreenCondition(() -> !musicControllerFacade.isReady());
-        // Edge-to-edge always
         EdgeToEdge.enable(this);
-        // System
         super.onCreate(savedInstanceState);
         // Add listener for notification click listener
         // TODO: Works with duct tape, should be refactored better
