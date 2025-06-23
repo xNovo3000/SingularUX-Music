@@ -15,34 +15,34 @@ import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.domain.model.TrackItem;
-import org.singularux.music.feature.tracklist.util.TrackItemDiffCallback;
+import org.singularux.music.feature.tracklist.ui.list.viewholder.TrackListViewHolder;
 
 import javax.inject.Inject;
 
 import lombok.Setter;
 
-public class TrackListAdapter extends ListAdapter<TrackItem, TrackItemViewHolder> {
+public class TrackListAdapter extends ListAdapter<TrackItem, TrackListViewHolder> {
 
     private final Picasso picasso;
-    private @Setter @Nullable TrackItemOnClickListener onItemClickListener = null;
+    private @Setter @Nullable TrackListOnClickListener onItemClickListener = null;
 
     @Inject
     public TrackListAdapter(Picasso picasso) {
-        super(new TrackItemDiffCallback());
+        super(new TrackListItemDiffCallback());
         setHasStableIds(true);
         this.picasso = picasso;
     }
 
     @NonNull
     @Override
-    public TrackItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TrackListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.component_track_item, parent, false);
-        return new TrackItemViewHolder(view);
+        return new TrackListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrackItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TrackListViewHolder holder, int position) {
         String title;
         String artists;
         long durationMinutesMs;

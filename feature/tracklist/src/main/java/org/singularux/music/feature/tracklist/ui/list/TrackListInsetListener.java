@@ -1,7 +1,6 @@
-package org.singularux.music.feature.tracklist.ui.inset;
+package org.singularux.music.feature.tracklist.ui.list;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;

@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.list;
+package org.singularux.music.feature.tracklist.ui.list.viewholder;
 
 import android.view.View;
 
@@ -13,13 +13,13 @@ import org.singularux.music.feature.tracklist.databinding.ComponentTrackItemBind
 import lombok.Getter;
 
 @Getter
-public class TrackItemViewHolder extends RecyclerView.ViewHolder {
+public class TrackListViewHolder extends RecyclerView.ViewHolder {
 
     private final ShapeableImageView artwork;
     private final MaterialTextView title;
     private final MaterialTextView durationArtists;
 
-    public TrackItemViewHolder(@NonNull View itemView) {
+    public TrackListViewHolder(@NonNull View itemView) {
         super(itemView);
         ComponentTrackItemBinding binding = ComponentTrackItemBinding.bind(itemView);
         this.artwork = binding.trackItemArtwork;

@@ -27,7 +27,7 @@ import org.singularux.music.feature.tracklist.ui.search.SearchViewOnBackPressedC
 import org.singularux.music.feature.tracklist.ui.observer.SearchViewTextChangedListener;
 import org.singularux.music.feature.tracklist.ui.search.SearchViewTransitionObserver;
 import org.singularux.music.feature.tracklist.ui.inset.PlaybackBarInsetListener;
-import org.singularux.music.feature.tracklist.ui.inset.TrackListInsetListener;
+import org.singularux.music.feature.tracklist.ui.list.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.search.SearchBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.observer.OnNavigateToNowPlayingClickListener;
 import org.singularux.music.feature.tracklist.ui.observer.PlaybackPositionObserver;
