@@ -2,6 +2,7 @@ package org.singularux.music.feature.tracklist.ui.search.viewholder;
 
 import android.content.Context;
 import android.net.Uri;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;

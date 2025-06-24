@@ -4,9 +4,9 @@
     android:id="@+id/track_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="72dp"
     android:background="@color/track_item_background"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="72dp"
     android:paddingHorizontal="16dp"
     android:paddingVertical="8dp">
 

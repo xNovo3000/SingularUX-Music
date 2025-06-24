@@ -46,7 +46,6 @@ public class TrackListRoute extends Fragment {
 
     @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
     @Inject public SearchViewTransitionObserver searchViewTransitionObserver;
-    public @Inject SearchViewTextWatcher searchViewTextWatcher;
 
     @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public TrackListAdapter trackListAdapter;
@@ -93,7 +92,8 @@ public class TrackListRoute extends Fragment {
         searchListAdapter.setOnItemClickListener(viewModel::playSpecificTrackListIndex);
         binding.trackListSearchRecyclerview.setAdapter(searchListAdapter);
         // Callbacks
-        binding.trackListSearchView.getEditText().addTextChangedListener(searchViewTextWatcher);
+        binding.trackListSearchView.getEditText()
+                .addTextChangedListener(new SearchViewTextWatcher(viewModel));
         // Listen data
         readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),

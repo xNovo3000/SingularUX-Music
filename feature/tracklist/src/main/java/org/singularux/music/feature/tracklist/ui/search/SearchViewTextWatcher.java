@@ -7,11 +7,9 @@ import androidx.annotation.NonNull;
 
 import org.singularux.music.feature.tracklist.ui.TrackListViewModel;
 
-import javax.inject.Inject;
-
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
+@RequiredArgsConstructor
 public class SearchViewTextWatcher implements TextWatcher {
 
     private final TrackListViewModel viewModel;

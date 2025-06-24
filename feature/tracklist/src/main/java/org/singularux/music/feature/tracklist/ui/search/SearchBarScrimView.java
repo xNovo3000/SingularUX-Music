@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.view;
+package org.singularux.music.feature.tracklist.ui.search;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,21 +9,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class ScrimView extends View {
+public class SearchBarScrimView extends View {
 
     private int statusBarHeight = 0;
 
-    public ScrimView(Context context) {
+    public SearchBarScrimView(Context context) {
         super(context);
         init();
     }
 
-    public ScrimView(Context context, @Nullable AttributeSet attrs) {
+    public SearchBarScrimView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ScrimView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SearchBarScrimView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
