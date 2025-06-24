@@ -1,8 +1,7 @@
 package org.singularux.music.feature.tracklist.ui;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.ViewModel;
@@ -16,11 +15,11 @@ import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemIn
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
 import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
 import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
-import org.singularux.music.feature.tracklist.domain.usecase.GetTrackListFilteredByNameUseCase;
-import org.singularux.music.feature.tracklist.domain.usecase.ListenTrackListUseCase;
-import org.singularux.music.feature.tracklist.domain.model.TrackItem;
-import org.singularux.music.feature.tracklist.ui.observer.SearchViewTextChangedListener;
-import org.singularux.music.feature.tracklist.util.TrackItemToMediaItemMapper;
+import org.singularux.music.feature.tracklist.domain.GetTrackListFilteredByNameUseCase;
+import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
+import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
+import org.singularux.music.feature.tracklist.util.TrackListItemToMediaItemMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,51 +28,53 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.reactivex.rxjava3.core.FlowableEmitter;
+import io.reactivex.rxjava3.core.FlowableOnSubscribe;
 import lombok.Getter;
 
 @HiltViewModel
 public class TrackListViewModel extends ViewModel {
 
-    private static final String TAG = "TrackListViewModel";
+    private final MusicControllerFacade musicControllerFacade;
+    private final QueryEmitter queryEmitter;
 
-    private final @Getter LiveData<List<TrackItem>> trackList;
-    private final @Getter LiveData<List<TrackItem>> searchTrackList;
+    private final @Getter LiveData<List<TrackListItem>> trackList;
+    private final @Getter LiveData<List<SearchListItem>> searchTrackList;
 
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
     private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackItemInfo;
     private final @Getter LiveData<PlaybackState> playbackState;
 
-    private final MusicControllerFacade musicControllerFacade;
-
     @Inject
     public TrackListViewModel(
+            @NonNull MusicControllerFacade musicControllerFacade,
             @NonNull ListenTrackListUseCase listenTrackListUseCase,
             @NonNull GetTrackListFilteredByNameUseCase getTrackListFilteredByNameUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,
             @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
-            @NonNull ListenPlaybackStateUseCase listenPlaybackStateUseCase,
-            @NonNull SearchViewTextChangedListener searchViewTextChangedListener,
-            @NonNull MusicControllerFacade musicControllerFacade
+            @NonNull ListenPlaybackStateUseCase listenPlaybackStateUseCase
     ) {
-        Log.d(TAG, "Emitter here is " + searchViewTextChangedListener);
+        this.musicControllerFacade = musicControllerFacade;
+        this.queryEmitter = new QueryEmitter();
+        // Lists
         this.trackList = LiveDataReactiveStreams
                 .fromPublisher(listenTrackListUseCase.get("track_list"));
         this.searchTrackList = LiveDataReactiveStreams
-                .fromPublisher(getTrackListFilteredByNameUseCase.get(searchViewTextChangedListener));
+                .fromPublisher(getTrackListFilteredByNameUseCase.get(queryEmitter));
+        // Playback
         this.playbackPosition = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackPositionUseCase.get());
         this.playbackItemInfo = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackItemInfoUseCase.get());
         this.playbackState = LiveDataReactiveStreams
                 .fromPublisher(listenPlaybackStateUseCase.get());
-        this.musicControllerFacade = musicControllerFacade;
     }
 
     public void playFromSpecificTrackListIndex(int index) {
-        List<TrackItem> currentList = trackList.getValue();
+        List<TrackListItem> currentList = trackList.getValue();
         if (currentList != null && index < currentList.size()) {
             List<MediaItem> mediaItems = currentList.stream()
-                    .map(new TrackItemToMediaItemMapper("track_list"))
+                    .map(new TrackListItemToMediaItemMapper("track_list"))
                     .collect(Collectors.toList());
             MediaController mediaController = musicControllerFacade.requireMediaController();
             mediaController.clearMediaItems();
@@ -84,9 +85,9 @@ public class TrackListViewModel extends ViewModel {
     }
 
     public void playSpecificTrackListIndex(int index) {
-        List<TrackItem> currentList = trackList.getValue();
+        List<TrackListItem> currentList = trackList.getValue();
         if (currentList != null && index < currentList.size()) {
-            TrackItemToMediaItemMapper mapper = new TrackItemToMediaItemMapper("search");
+            TrackListItemToMediaItemMapper mapper = new TrackListItemToMediaItemMapper("search");
             MediaItem mediaItem = mapper.apply(currentList.get(index));
             MediaController mediaController = musicControllerFacade.requireMediaController();
             mediaController.clearMediaItems();
@@ -104,6 +105,19 @@ public class TrackListViewModel extends ViewModel {
     }
 
     public void onSearchQueryChanged(@NonNull String query) {
+        if (queryEmitter.emitter != null) {
+            queryEmitter.emitter.onNext(query);
+        }
+    }
+
+    private static final class QueryEmitter implements FlowableOnSubscribe<String> {
+
+        private @Nullable FlowableEmitter<String> emitter = null;
+
+        @Override
+        public void subscribe(@NonNull FlowableEmitter<String> emitter) {
+            this.emitter = emitter;
+        }
 
     }
 

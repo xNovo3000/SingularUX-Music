@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 
-import org.singularux.music.feature.tracklist.databinding.ComponentTrackItemBinding;
+import org.singularux.music.feature.tracklist.databinding.ComponentTrackListItemBinding;
 
 import lombok.Getter;
 
@@ -21,7 +21,7 @@ public class TrackListViewHolder extends RecyclerView.ViewHolder {
 
     public TrackListViewHolder(@NonNull View itemView) {
         super(itemView);
-        ComponentTrackItemBinding binding = ComponentTrackItemBinding.bind(itemView);
+        ComponentTrackListItemBinding binding = ComponentTrackListItemBinding.bind(itemView);
         this.artwork = binding.trackItemArtwork;
         this.title = binding.trackItemTitle;
         this.durationArtists = binding.trackItemDurationArtists;

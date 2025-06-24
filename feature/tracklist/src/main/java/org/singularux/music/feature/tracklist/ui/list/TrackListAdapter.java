@@ -14,14 +14,14 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.tracklist.R;
-import org.singularux.music.feature.tracklist.domain.model.TrackItem;
+import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
 import org.singularux.music.feature.tracklist.ui.list.viewholder.TrackListViewHolder;
 
 import javax.inject.Inject;
 
 import lombok.Setter;
 
-public class TrackListAdapter extends ListAdapter<TrackItem, TrackListViewHolder> {
+public class TrackListAdapter extends ListAdapter<TrackListItem, TrackListViewHolder> {
 
     private final Picasso picasso;
     private @Setter @Nullable TrackListOnClickListener onItemClickListener = null;
@@ -37,7 +37,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackListViewHolder
     @Override
     public TrackListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.component_track_item, parent, false);
+                .inflate(R.layout.component_track_list_item, parent, false);
         return new TrackListViewHolder(view);
     }
 
@@ -51,7 +51,7 @@ public class TrackListAdapter extends ListAdapter<TrackItem, TrackListViewHolder
         Uri artwork;
         // Extract data
         Context context = ContextCompat.getContextForLanguage(holder.itemView.getContext());
-        TrackItem trackItem = getItem(position);
+        TrackListItem trackItem = getItem(position);
         title = trackItem.getTitle();
         if (trackItem.getArtistName() != null) {
             artists = trackItem.getArtistName();

@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.observer;
+package org.singularux.music.feature.tracklist.ui.playback;
 
 import android.net.Uri;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.navigation.NavDeepLinkRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class OnNavigateToNowPlayingClickListener implements View.OnClickListener {
+public class PlaybackBarOnClickListener implements View.OnClickListener {
 
     private final NavController navController;
 

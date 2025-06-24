@@ -1,9 +1,10 @@
-package org.singularux.music.feature.tracklist.domain.usecase;
+package org.singularux.music.feature.tracklist.domain;
 
 import androidx.annotation.NonNull;
 
 import org.singularux.music.data.library.repository.TrackRepository;
-import org.singularux.music.feature.tracklist.domain.model.TrackItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
+import org.singularux.music.feature.tracklist.util.TrackEntityToSearchListItemMapper;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +23,9 @@ public class GetTrackListFilteredByNameUseCase {
 
     private final TrackRepository trackRepository;
 
-    public Flowable<List<TrackItem>> get(@NonNull FlowableOnSubscribe<String> queryEmitter) {
+    public Flowable<List<SearchListItem>> get(@NonNull FlowableOnSubscribe<String> queryEmitter) {
+        // TODO: In the future the query must give results about artists and albums
+        // For now, we are giving only tracks
         return Flowable.create(queryEmitter, BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation())
                 .debounce(250, TimeUnit.MILLISECONDS)
@@ -30,7 +33,7 @@ public class GetTrackListFilteredByNameUseCase {
                 .map(trackRepository::getAllByTitleLike)
                 .observeOn(Schedulers.computation())
                 .map(trackEntities -> trackEntities.stream()
-                        .map(new TrackEntityToTrackItemMapper(-1L))
+                        .map(new TrackEntityToSearchListItemMapper())
                         .collect(Collectors.toList()));
     }
 

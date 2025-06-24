@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.domain.usecase;
+package org.singularux.music.feature.tracklist.domain;
 
 import android.content.Context;
 import android.database.ContentObserver;
@@ -17,7 +17,8 @@ import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
-import org.singularux.music.feature.tracklist.domain.model.TrackItem;
+import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
+import org.singularux.music.feature.tracklist.util.TrackEntityToTrackListItemMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -60,22 +61,22 @@ public class ListenTrackListUseCase {
         this.listenPlaybackItemInfoUseCase = listenPlaybackItemInfoUseCase;
     }
 
-    public @NonNull Flowable<List<TrackItem>> get(@NonNull String nowPlayingToken) {
+    public @NonNull Flowable<List<TrackListItem>> get(@NonNull String nowPlayingToken) {
         // Get list of EntityTrack
         Flowable<List<TrackEntity>> tracksEntityFlowable = Flowable
-                .create(new TrackItemListOnSubscribe(context, musicPermissionManager),
+                .create(new TrackEntityEmitter(context, musicPermissionManager),
                         BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation())  // Execute flowable on computation thread
                 .observeOn(Schedulers.io())  // Read on IO thread
                 .map(o -> trackRepository.getAll());
         // Merge with playbackInfo
         return Flowable.combineLatest(tracksEntityFlowable, listenPlaybackItemInfoUseCase.get(),
-                        new TrackEntityWithPlaybackInfoToTrackItemMapper(nowPlayingToken))
+                        new TrackEntityWithPlaybackInfoToTrackListItemMapper(nowPlayingToken))
                 .subscribeOn(Schedulers.computation());
     }
 
     @RequiredArgsConstructor
-    private static class TrackItemListOnSubscribe implements FlowableOnSubscribe<Object> {
+    private static final class TrackEntityEmitter implements FlowableOnSubscribe<Object> {
 
         private final Context context;
         private final MusicPermissionManager musicPermissionManager;
@@ -99,7 +100,7 @@ public class ListenTrackListUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class RemoveListenerCancellable implements Cancellable {
+    private static final class RemoveListenerCancellable implements Cancellable {
 
         private final Context context;
         private final ContentObserver observer;
@@ -112,7 +113,7 @@ public class ListenTrackListUseCase {
 
     }
 
-    private static class TrackListObserver extends ContentObserver {
+    private static final class TrackListObserver extends ContentObserver {
 
         private final FlowableEmitter<Object> emitter;
         private final Object dummy = new Object();
@@ -137,13 +138,13 @@ public class ListenTrackListUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class TrackEntityWithPlaybackInfoToTrackItemMapper
-            implements BiFunction<List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackItem>> {
+    private static final class TrackEntityWithPlaybackInfoToTrackListItemMapper
+            implements BiFunction<List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackListItem>> {
 
         private final String nowPlayingToken;
 
         @Override
-        public @NonNull List<TrackItem> apply(
+        public @NonNull List<TrackListItem> apply(
                 @NonNull List<TrackEntity> trackEntityList,
                 @NotNull Optional<PlaybackItemInfo> playbackInfo
         ) {
@@ -153,7 +154,7 @@ public class ListenTrackListUseCase {
                     .map(PlaybackItemInfo::getId)
                     .orElse(-1L);
             return trackEntityList.stream()
-                    .map(new TrackEntityToTrackItemMapper(currentIdPlaying))
+                    .map(new TrackEntityToTrackListItemMapper(currentIdPlaying))
                     .collect(Collectors.toList());
         }
 

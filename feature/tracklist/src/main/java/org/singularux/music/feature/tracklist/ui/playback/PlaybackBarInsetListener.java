@@ -1,4 +1,4 @@
-package org.singularux.music.feature.tracklist.ui.inset;
+package org.singularux.music.feature.tracklist.ui.playback;
 
 import android.view.View;
 
