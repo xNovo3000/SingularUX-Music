@@ -2,6 +2,7 @@ package org.singularux.music.feature.tracklist.ui.search.viewholder;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -75,7 +76,7 @@ public class SearchListViewHolderTrack extends SearchListViewHolder {
             this.artwork.setImageDrawable(null);
         }
         if (onClickListener != null) {
-            itemView.setOnClickListener(v -> onClickListener.onClick(position));
+            itemView.setOnClickListener(v -> onClickListener.onClick(trackItem));
         } else {
             itemView.setOnClickListener(null);
         }

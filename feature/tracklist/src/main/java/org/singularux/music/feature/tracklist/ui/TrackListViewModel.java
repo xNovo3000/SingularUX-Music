@@ -19,6 +19,8 @@ import org.singularux.music.feature.tracklist.domain.GetTrackListFilteredByNameU
 import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
 import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
 import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
+import org.singularux.music.feature.tracklist.ui.search.item.SearchListItemTrack;
+import org.singularux.music.feature.tracklist.util.SearchListItemTrackToMediaItemMapper;
 import org.singularux.music.feature.tracklist.util.TrackListItemToMediaItemMapper;
 
 import java.util.List;
@@ -84,16 +86,14 @@ public class TrackListViewModel extends ViewModel {
         }
     }
 
-    public void playSpecificTrackListIndex(int index) {
-        List<TrackListItem> currentList = trackList.getValue();
-        if (currentList != null && index < currentList.size()) {
-            TrackListItemToMediaItemMapper mapper = new TrackListItemToMediaItemMapper("search");
-            MediaItem mediaItem = mapper.apply(currentList.get(index));
-            MediaController mediaController = musicControllerFacade.requireMediaController();
-            mediaController.clearMediaItems();
-            mediaController.addMediaItem(mediaItem);
-            mediaController.play();
-        }
+    public void playSpecificSearchListItemTrack(SearchListItemTrack item) {
+        SearchListItemTrackToMediaItemMapper mapper =
+                new SearchListItemTrackToMediaItemMapper();
+        MediaItem mediaItem = mapper.apply(item);
+        MediaController mediaController = musicControllerFacade.requireMediaController();
+        mediaController.clearMediaItems();
+        mediaController.addMediaItem(mediaItem);
+        mediaController.play();
     }
 
     public void play() {

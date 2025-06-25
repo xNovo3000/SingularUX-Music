@@ -89,7 +89,7 @@ public class TrackListRoute extends Fragment {
         // Adapters
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
-        searchListAdapter.setOnItemClickListener(viewModel::playSpecificTrackListIndex);
+        searchListAdapter.setOnItemClickListener(viewModel::playSpecificSearchListItemTrack);
         binding.trackListSearchRecyclerview.setAdapter(searchListAdapter);
         // Callbacks
         binding.trackListSearchView.getEditText()

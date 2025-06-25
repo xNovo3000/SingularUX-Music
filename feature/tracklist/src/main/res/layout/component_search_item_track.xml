@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="72dp"
+    android:background="?attr/colorSurfaceContainerHigh"
     android:foreground="?attr/selectableItemBackground"
     android:paddingHorizontal="16dp"
     android:paddingVertical="8dp">
