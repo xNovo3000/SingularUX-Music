@@ -6,6 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
+import androidx.media3.session.MediaController;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -43,6 +44,16 @@ public class MusicActivity extends FragmentActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Release MediaController if present
+        MediaController mediaController = musicControllerFacade.getMediaController();
+        if (mediaController != null) {
+            mediaController.release();
+        }
     }
 
 }

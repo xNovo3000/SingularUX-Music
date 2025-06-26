@@ -40,6 +40,8 @@ dependencies {
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // Media3
+    implementation libs.media3.session
     // Navigation
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
