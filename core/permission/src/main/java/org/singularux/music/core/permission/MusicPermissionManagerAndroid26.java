@@ -11,10 +11,14 @@ public class MusicPermissionManagerAndroid26 extends MusicPermissionManagerAndro
 
     @Override
     public @NonNull String getPermissionString(@NonNull MusicPermission permission) {
-        if (permission == MusicPermission.READ_MUSIC) {
-            return Manifest.permission.READ_EXTERNAL_STORAGE;
+        switch (permission) {
+            case READ_PHONE_STATE:
+                return Manifest.permission.READ_PHONE_STATE;
+            case READ_MUSIC:
+                return Manifest.permission.READ_EXTERNAL_STORAGE;
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + permission);
         }
-        return "";
     }
 
 }

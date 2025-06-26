@@ -1,5 +1,5 @@
 [versions]
-agp = "8.10.1"
+agp = "8.11.0"
 hilt = "2.56.2"
 androidx-core = "1.16.0"
 androidx-core-splashscreen = "1.0.1"
@@ -11,6 +11,7 @@ lifecycle = "2.9.1"
 lombok = "1.18.38"
 media3 = "1.7.1"
 navigation = "2.9.0"
+#noinspection NewerVersionAvailable 2.71828 is not a version
 picasso = "2.8"
 rxjava = "3.1.10"
 

@@ -14,10 +14,14 @@ public class MusicPermissionManagerAndroid33 extends MusicPermissionManagerAndro
 
     @Override
     public @NonNull String getPermissionString(@NonNull MusicPermission permission) {
-        if (permission == MusicPermission.READ_MUSIC) {
-            return Manifest.permission.READ_MEDIA_AUDIO;
+        switch (permission) {
+            case READ_PHONE_STATE:
+                return Manifest.permission.READ_PHONE_STATE;
+            case READ_MUSIC:
+                return Manifest.permission.READ_MEDIA_AUDIO;
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + permission);
         }
-        return "";
     }
 
 }

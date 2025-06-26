@@ -24,6 +24,7 @@ import org.singularux.music.feature.tracklist.ui.list.TrackListAdapter;
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackItemInfoObserver;
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackStateObserver;
 import org.singularux.music.feature.tracklist.ui.search.SearchListAdapter;
+import org.singularux.music.feature.tracklist.ui.search.SearchListInsetListener;
 import org.singularux.music.feature.tracklist.ui.search.SearchViewOnBackPressedCallback;
 import org.singularux.music.feature.tracklist.ui.search.SearchViewTextWatcher;
 import org.singularux.music.feature.tracklist.ui.search.SearchViewTransitionObserver;
@@ -46,6 +47,7 @@ public class TrackListRoute extends Fragment {
 
     @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
     @Inject public SearchViewTransitionObserver searchViewTransitionObserver;
+    public @Inject SearchListInsetListener searchListInsetListener;
 
     @Inject public MusicPermissionManager musicPermissionManager;
     @Inject public TrackListAdapter trackListAdapter;
@@ -77,6 +79,8 @@ public class TrackListRoute extends Fragment {
                 binding.trackListRecyclerview, trackListInsetListener);
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.playbackBar.playbackBarContainer, playbackBarInsetListener);
+        ViewCompat.setOnApplyWindowInsetsListener(
+                binding.trackListSearchRecyclerview, searchListInsetListener);
         // Permission
         ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
