@@ -2,6 +2,7 @@ package org.singularux.music.core.permission;
 
 import androidx.annotation.NonNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,12 @@ public interface MusicPermissionManager {
         return permissions.stream()
                 .map(this::getPermissionString)
                 .collect(Collectors.toList());
+    }
+
+    default @NonNull String[] getPermissionStrings(@NonNull MusicPermission... permissions) {
+        return Arrays.stream(permissions)
+                .map(this::getPermissionString)
+                .toArray(String[]::new);
     }
 
 }

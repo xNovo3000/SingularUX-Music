@@ -34,6 +34,8 @@ import org.singularux.music.feature.tracklist.ui.search.SearchBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackBarOnClickListener;
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackPositionObserver;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -82,13 +84,16 @@ public class TrackListRoute extends Fragment {
         ViewCompat.setOnApplyWindowInsetsListener(
                 binding.trackListSearchRecyclerview, searchListInsetListener);
         // Permission
-        ActivityResultLauncher<String> readMusicPermissionRequest = registerForActivityResult(
-                new ActivityResultContracts.RequestPermission(),
+        ActivityResultLauncher<String[]> readMusicPermissionRequest = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
                 result -> {
-                    if (result) {
-                        viewModel.getTrackList().observe(getViewLifecycleOwner(),
-                                trackItems -> trackListAdapter.submitList(trackItems));
-                    }
+                    result.forEach((permission, value) -> {
+                        if (Objects.equals(permission, musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC)) &&
+                                value) {
+                            viewModel.getTrackList().observe(getViewLifecycleOwner(),
+                                    trackItems -> trackListAdapter.submitList(trackItems));
+                        }
+                    });
                 });
         // Adapters
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
@@ -99,7 +104,8 @@ public class TrackListRoute extends Fragment {
         binding.trackListSearchView.getEditText()
                 .addTextChangedListener(new SearchViewTextWatcher(viewModel));
         // Listen data
-        readMusicPermissionRequest.launch(musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC));
+        readMusicPermissionRequest.launch(musicPermissionManager
+                .getPermissionStrings(MusicPermission.READ_MUSIC, MusicPermission.READ_PHONE_STATE));
         viewModel.getPlaybackPosition().observe(getViewLifecycleOwner(),
                 new PlaybackPositionObserver(binding));
         viewModel.getPlaybackItemInfo().observe(getViewLifecycleOwner(),

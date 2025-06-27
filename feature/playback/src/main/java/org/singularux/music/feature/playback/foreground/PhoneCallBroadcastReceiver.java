@@ -7,22 +7,18 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.media3.session.MediaController;
+import androidx.media3.session.MediaSession;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
 import lombok.RequiredArgsConstructor;
 
-@AndroidEntryPoint
-@RequiredArgsConstructor(onConstructor_ = @Inject)
+@RequiredArgsConstructor
 public class PhoneCallBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "PhoneCallBroadcastReceiver";
 
-    public @Inject MusicControllerFacade musicControllerFacade;
+    private final MediaSession mediaSession;
 
     private boolean wasPlayingBeforeCallStarted = false;
 
@@ -39,22 +35,21 @@ public class PhoneCallBroadcastReceiver extends BroadcastReceiver {
             Log.w(TAG, "Received empty TelephonyManager.EXTRA_STATE");
             return;
         }
-        // Check if mediaController exists
-        MediaController mediaController = musicControllerFacade.getMediaController();
-        if (mediaController == null) {
-            Log.w(TAG, "MediaController is null");
-            return;
-        }
         // Act accordingly
         if (Objects.equals(state, TelephonyManager.EXTRA_STATE_RINGING) ||
                 Objects.equals(state, TelephonyManager.EXTRA_STATE_OFFHOOK)) {
             // Phone is ringing, call is answered or outgoing call started
             // Register last state
-            wasPlayingBeforeCallStarted = mediaController.isPlaying();
+            wasPlayingBeforeCallStarted = mediaSession.getPlayer().isPlaying();
+            Log.d(TAG, "Phone calling or ringing, saving playback state: " + wasPlayingBeforeCallStarted);
+            if (wasPlayingBeforeCallStarted) {
+                mediaSession.getPlayer().pause();
+            }
         } else if (Objects.equals(state, TelephonyManager.EXTRA_STATE_IDLE)) {
             // Call ended or idle
             // Restore last state
-            mediaController.setPlayWhenReady(wasPlayingBeforeCallStarted);
+            Log.d(TAG, "Phone idle, restoring playback state: " + wasPlayingBeforeCallStarted);
+            mediaSession.getPlayer().setPlayWhenReady(wasPlayingBeforeCallStarted);
         }
     }
 
