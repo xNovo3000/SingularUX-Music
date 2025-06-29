@@ -17,8 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MusicPlaybackService extends MediaSessionService {
 
-    private static final String TAG = "PhoneCallBroadcastReceiver";
-
     private @Nullable MediaSession mediaSession = null;
     private @Nullable PhoneCallBroadcastReceiver phoneCallBroadcastReceiver = null;
 

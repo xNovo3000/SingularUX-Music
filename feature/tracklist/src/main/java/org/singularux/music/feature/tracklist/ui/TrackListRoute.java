@@ -86,15 +86,13 @@ public class TrackListRoute extends Fragment {
         // Permission
         ActivityResultLauncher<String[]> readMusicPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
-                result -> {
-                    result.forEach((permission, value) -> {
-                        if (Objects.equals(permission, musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC)) &&
-                                value) {
-                            viewModel.getTrackList().observe(getViewLifecycleOwner(),
-                                    trackItems -> trackListAdapter.submitList(trackItems));
-                        }
-                    });
-                });
+                result -> result.forEach((permission, value) -> {
+                    if (Objects.equals(permission, musicPermissionManager.getPermissionString(MusicPermission.READ_MUSIC)) &&
+                            value) {
+                        viewModel.getTrackList().observe(getViewLifecycleOwner(),
+                                trackItems -> trackListAdapter.submitList(trackItems));
+                    }
+                }));
         // Adapters
         trackListAdapter.setOnItemClickListener(viewModel::playFromSpecificTrackListIndex);
         binding.trackListRecyclerview.setAdapter(trackListAdapter);
