@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -32,6 +33,9 @@ dependencies {
     api(project ':feature:playback')
     api(project ':feature:tracklist')
     api(project ':feature:nowplaying')
+    // Baseline
+    implementation libs.androidx.profileinstaller
+    baselineProfile(project ':baseline')
     // AndroidX
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
