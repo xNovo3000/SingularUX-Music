@@ -1,16 +1,17 @@
 [versions]
-agp = "8.11.1"
+#noinspection AndroidGradlePluginVersion 8.12.1 has not been released
+agp = "8.12.0"
 hilt = "2.57"
-androidx-core = "1.16.0"
+androidx-core = "1.17.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-activity = "1.10.1"
-androidx-fragment = "1.8.8"
+androidx-fragment = "1.8.9"
 androidx-recyclerview = "1.4.0"
 google-material = "1.12.0"
 lifecycle = "2.9.2"
 lombok = "1.18.38"
-media3 = "1.7.1"
-navigation = "2.9.2"
+media3 = "1.8.0"
+navigation = "2.9.3"
 #noinspection NewerVersionAvailable 2.71828 is not a version
 picasso = "2.8"
 rxjava = "3.1.11"
