@@ -7,6 +7,7 @@ plugins {
 
 android {
     namespace = 'org.singularux.music.baseline'
+    compileSdk = 36
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
