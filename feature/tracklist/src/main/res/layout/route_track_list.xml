@@ -34,11 +34,27 @@
         android:background="?attr/colorSurface"
         android:alpha="0.85"/>
 
-    <include layout="@layout/component_playback_bar"
-        android:id="@+id/playback_bar"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"
+            android:text="@string/track_list_shuffle"
+            app:icon="@drawable/round_shuffle_24"/>
+
+        <include layout="@layout/component_playback_bar"
+            android:id="@+id/playback_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.search.SearchView
         android:id="@+id/track_list_search_view"
