@@ -23,6 +23,7 @@ import org.singularux.music.feature.tracklist.ui.search.item.SearchListItemTrack
 import org.singularux.music.feature.tracklist.util.SearchListItemTrackToMediaItemMapper;
 import org.singularux.music.feature.tracklist.util.TrackListItemToMediaItemMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,6 +95,21 @@ public class TrackListViewModel extends ViewModel {
         mediaController.clearMediaItems();
         mediaController.addMediaItem(mediaItem);
         mediaController.play();
+    }
+
+    public void playShuffled() {
+        List<TrackListItem> currentList = trackList.getValue();
+        if (currentList != null) {
+            List<MediaItem> mediaItems = currentList.stream()
+                    .map(new TrackListItemToMediaItemMapper("track_list"))
+                    .collect(Collectors.toList());
+            Collections.shuffle(mediaItems);
+            MediaController mediaController = musicControllerFacade.requireMediaController();
+            mediaController.clearMediaItems();
+            mediaController.addMediaItems(mediaItems);
+            mediaController.seekTo(0, 0);
+            mediaController.play();
+        }
     }
 
     public void play() {

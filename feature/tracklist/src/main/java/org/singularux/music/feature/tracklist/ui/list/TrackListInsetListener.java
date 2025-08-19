@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class TrackListInsetListener implements OnApplyWindowInsetsListener {
 
     private static final int INSETS_TOP_DP = 64 + 8;
-    private static final int INSETS_BOTTOM_DP = 8 + 76;
+    private static final int INSETS_BOTTOM_DP = 8 + 76 + 16 + 64 + 16;
 
     @Override
     public @NonNull WindowInsetsCompat onApplyWindowInsets(
