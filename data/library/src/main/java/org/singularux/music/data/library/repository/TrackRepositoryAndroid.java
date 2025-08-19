@@ -17,10 +17,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
+import lombok.RequiredArgsConstructor;
 
-import dagger.hilt.android.qualifiers.ApplicationContext;
-
+@RequiredArgsConstructor
 public class TrackRepositoryAndroid implements TrackRepository {
 
     private static final String TAG = "TrackRepositoryAndroid";
@@ -49,15 +48,6 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
     private final CursorToTrackEntityMapper mapper = new CursorToTrackEntityMapper();
-
-    @Inject
-    public TrackRepositoryAndroid(
-            @ApplicationContext Context context,
-            MusicPermissionManager musicPermissionManager
-    ) {
-        this.context = context;
-        this.musicPermissionManager = musicPermissionManager;
-    }
 
     @Override
     public @NonNull List<TrackEntity> getAll() {
