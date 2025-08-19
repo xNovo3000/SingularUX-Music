@@ -40,6 +40,8 @@ dependencies {
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // Lombok
+    compileOnly libs.lombok
     // Media3
     implementation libs.media3.session
     // Navigation

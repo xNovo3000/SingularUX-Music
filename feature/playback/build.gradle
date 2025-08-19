@@ -23,6 +23,8 @@ android {
 }
 
 dependencies {
+    // Project
+    api(project ':core:playback')
     // AndroidX
     implementation libs.androidx.core
     // Hilt
