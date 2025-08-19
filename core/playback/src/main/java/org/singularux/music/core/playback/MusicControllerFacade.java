@@ -67,19 +67,9 @@ public class MusicControllerFacade {
     }
 
     public void release() {
-        this.mediaControllerSingle.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {}
-                    @Override
-                    public void onSuccess(@NonNull MediaController result) {
-                        result.release();
-                    }
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e(TAG, "Failed to load MediaController", e);
-                    }
-                });
+        if (mediaController != null) {
+            mediaController.release();
+        }
     }
 
     public @NonNull MediaController requireMediaController() {
