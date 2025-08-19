@@ -1,0 +1,40 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace = 'org.singularux.music.core.playback'
+    compileSdk = 36
+    defaultConfig {
+        minSdk = 26
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    // AndroidX
+    implementation libs.androidx.core
+    // Hilt
+    implementation libs.hilt.android
+    annotationProcessor libs.hilt.compiler
+    // Media3
+    implementation libs.media3.exoplayer
+    implementation libs.media3.session
+    // Lombok
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    // RxJava
+    implementation libs.rxjava
+    implementation libs.rxjava.android
+}

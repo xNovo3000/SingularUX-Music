@@ -37,8 +37,7 @@ public class ListenPlaybackStateUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackStateSource
-            implements FlowableOnSubscribe<PlaybackState> {
+    private static class PlaybackStateSource implements FlowableOnSubscribe<PlaybackState> {
 
         private final MusicControllerFacade musicControllerFacade;
 
