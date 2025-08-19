@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 android {
@@ -21,6 +22,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    baselineProfile {
+        automaticGenerationDuringBuild = true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -32,6 +36,9 @@ dependencies {
     api(project ':feature:playback')
     api(project ':feature:tracklist')
     api(project ':feature:nowplaying')
+    // Baseline
+    implementation libs.androidx.profileinstaller
+    baselineProfile(project ':baseline')
     // AndroidX
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen

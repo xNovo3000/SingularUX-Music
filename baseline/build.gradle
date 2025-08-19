@@ -1,0 +1,40 @@
+import com.android.build.api.dsl.ManagedVirtualDevice
+
+plugins {
+    alias(libs.plugins.android.test)
+    alias(libs.plugins.androidx.baselineprofile)
+}
+
+android {
+    namespace = 'org.singularux.music.baseline'
+    compileSdk = 36
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    defaultConfig {
+        minSdk 30
+        targetSdk 36
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    targetProjectPath = ":app"
+    testOptions.managedDevices.devices {
+        pixel9Api35(ManagedVirtualDevice) {
+            device = "Pixel 9"
+            apiLevel = 35
+            systemImageSource = "aosp"
+        }
+    }
+}
+
+baselineProfile {
+    managedDevices += "pixel9Api35"
+    useConnectedDevices = false
+}
+
+dependencies {
+    implementation libs.test.espresso.core
+    implementation libs.test.ext.junit
+    implementation libs.test.macrobenchmark
+    implementation libs.test.uiautomator
+}
