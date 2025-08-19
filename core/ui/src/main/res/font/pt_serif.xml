@@ -2,6 +2,6 @@
 <font-family xmlns:app="http://schemas.android.com/apk/res-auto">
     <font app:fontStyle="normal" app:fontWeight="400" app:font="@font/pt_serif_regular"/>
     <font app:fontStyle="italic" app:fontWeight="400" app:font="@font/pt_serif_regular_italic"/>
-    <font app:fontStyle="normal" app:fontWeight="500" app:font="@font/pt_serif_bold"/>
-    <font app:fontStyle="italic" app:fontWeight="500" app:font="@font/pt_serif_bold_italic"/>
+    <font app:fontStyle="normal" app:fontWeight="500" app:font="@font/pt_serif_medium"/>
+    <font app:fontStyle="italic" app:fontWeight="500" app:font="@font/pt_serif_medium_italic"/>
 </font-family>
