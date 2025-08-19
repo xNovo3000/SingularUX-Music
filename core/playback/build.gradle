@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'org.singularux.music.feature.playback'
+    namespace = 'org.singularux.music.core.playback'
     compileSdk = 36
     defaultConfig {
         minSdk = 26
@@ -23,8 +23,6 @@ android {
 }
 
 dependencies {
-    // Project
-    api(project ':core:playback')
     // AndroidX
     implementation libs.androidx.core
     // Hilt

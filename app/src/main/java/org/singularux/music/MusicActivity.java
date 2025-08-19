@@ -6,11 +6,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
-import androidx.media3.session.MediaController;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.core.playback.MusicPlaybackService;
 
 import java.util.Objects;
 
@@ -36,7 +36,7 @@ public class MusicActivity extends FragmentActivity {
         // Add listener for notification click listener
         // TODO: Works with duct tape, should be refactored better
         addOnNewIntentListener(intent -> {
-            if (Objects.equals(intent.getStringExtra("origin"), "system_ui_notification")) {
+            if (Objects.equals(intent.getStringExtra("origin"), MusicPlaybackService.INTENT_ORIGIN)) {
                 NavController navController = Navigation
                         .findNavController(this, R.id.navigation_root);
                 if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.track_list) {
@@ -48,12 +48,9 @@ public class MusicActivity extends FragmentActivity {
 
     @Override
     protected void onDestroy() {
+        // Release MediaController
+        musicControllerFacade.release();
         super.onDestroy();
-        // Release MediaController if present
-        MediaController mediaController = musicControllerFacade.getMediaController();
-        if (mediaController != null) {
-            mediaController.release();
-        }
     }
 
 }

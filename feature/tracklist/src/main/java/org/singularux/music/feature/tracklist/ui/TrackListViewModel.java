@@ -10,7 +10,7 @@ import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.domain.model.PlaybackState;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackStateUseCase;
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.usecase.ListenPlaybackPositionUseCase;
 import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;

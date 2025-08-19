@@ -1,8 +1,6 @@
-package org.singularux.music.feature.playback;
+package org.singularux.music.core.playback;
 
 import android.content.Context;
-
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,11 +11,12 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @Module
 @InstallIn(ActivityRetainedComponent.class)
-public class FeaturePlaybackModule {
+public class CorePlaybackModule {
 
     @Provides
     @ActivityRetainedScoped
-    public MusicControllerFacade getMusicControllerFacade(@ApplicationContext Context context) {
+    public MusicControllerFacade providesMusicControllerFacade(
+            @ApplicationContext Context context) {
         return new MusicControllerFacade(context);
     }
 

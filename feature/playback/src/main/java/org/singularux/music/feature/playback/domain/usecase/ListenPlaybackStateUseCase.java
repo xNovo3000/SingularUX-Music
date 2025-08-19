@@ -8,7 +8,7 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.playback.domain.model.PlaybackState;
 
 import javax.inject.Inject;
@@ -37,8 +37,7 @@ public class ListenPlaybackStateUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackStateSource
-            implements FlowableOnSubscribe<PlaybackState> {
+    private static class PlaybackStateSource implements FlowableOnSubscribe<PlaybackState> {
 
         private final MusicControllerFacade musicControllerFacade;
 

@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.foreground;
+package org.singularux.music.core.playback;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -64,6 +64,12 @@ public class MusicControllerFacade {
                         Log.e(TAG, "Failed to load MediaController", e);
                     }
                 });
+    }
+
+    public void release() {
+        if (mediaController != null) {
+            mediaController.release();
+        }
     }
 
     public @NonNull MediaController requireMediaController() {
