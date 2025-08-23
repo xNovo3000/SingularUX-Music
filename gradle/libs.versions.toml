@@ -1,6 +1,5 @@
 [versions]
-#noinspection AndroidGradlePluginVersion 8.12.1 has not been released
-agp = "8.12.0"
+agp = "8.12.1"
 baseline = "1.4.0"
 hilt = "2.57"
 androidx-core = "1.17.0"

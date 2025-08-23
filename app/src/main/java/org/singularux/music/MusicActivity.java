@@ -6,6 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -29,10 +30,18 @@ public class MusicActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        // Setup splash screen and edge-to-edge
         SplashScreen.installSplashScreen(this)
                 .setKeepOnScreenCondition(() -> !musicControllerFacade.isReady());
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
+
+        // This VM is required because when the activity is being killed for the last time
+        // the controller resources are released
+        //noinspection unused
+        MusicViewModel viewModel = new ViewModelProvider(this).get(MusicViewModel.class);
+
         // Add listener for notification click listener
         // TODO: Works with duct tape, should be refactored better
         addOnNewIntentListener(intent -> {
@@ -44,13 +53,7 @@ public class MusicActivity extends FragmentActivity {
                 }
             }
         });
-    }
 
-    @Override
-    protected void onDestroy() {
-        // Release MediaController
-        musicControllerFacade.release();
-        super.onDestroy();
     }
 
 }
