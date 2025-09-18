@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import java.util.concurrent.ThreadFactory;
 
-public final class PicassoThreadFactory implements ThreadFactory {
+public class PicassoThreadFactory implements ThreadFactory {
 
     private static final String TAG = "PicassoThreadFactory";
 

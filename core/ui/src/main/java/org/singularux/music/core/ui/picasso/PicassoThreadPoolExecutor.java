@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PicassoThreadPoolExecutor extends ThreadPoolExecutor {
 
-    private static final int MAX_POOL_SIZE = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
+    private static final int MAX_POOL_SIZE = Runtime.getRuntime().availableProcessors();
     private static final int KEEP_ALIVE_SECONDS = 10;
 
     public PicassoThreadPoolExecutor() {

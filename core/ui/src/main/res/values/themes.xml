@@ -44,6 +44,12 @@
     <style name="TextAppearance.Music.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
         <item name="fontFamily">@font/inter</item>
     </style>
+    <style name="TextAppearance.Music.SearchBar" parent="TextAppearance.Material3.SearchBar">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.SearchView" parent="TextAppearance.Material3.SearchView">
+        <item name="fontFamily">@font/inter</item>
+    </style>
     <style name="Theme.Music" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>

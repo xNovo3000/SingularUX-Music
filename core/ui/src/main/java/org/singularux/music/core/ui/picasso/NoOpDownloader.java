@@ -9,11 +9,10 @@ import java.io.IOException;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PicassoNoOpDownloader implements Downloader {
+public class NoOpDownloader implements Downloader {
 
-    @NonNull
     @Override
-    public Response load(@NonNull Request request) throws IOException {
+    public @NonNull Response load(@NonNull Request request) throws IOException {
         throw new IOException("Downloading images from internet is disabled");
     }
 

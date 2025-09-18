@@ -5,7 +5,7 @@ import android.content.Context;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
-import org.singularux.music.core.ui.picasso.PicassoNoOpDownloader;
+import org.singularux.music.core.ui.picasso.NoOpDownloader;
 import org.singularux.music.core.ui.picasso.PicassoThreadPoolExecutor;
 
 import dagger.Module;
@@ -23,7 +23,7 @@ public class CoreUiModule {
     @ActivityRetainedScoped
     public Picasso providesPicasso(@ApplicationContext Context context) {
         return new Picasso.Builder(context)
-                .downloader(new PicassoNoOpDownloader())
+                .downloader(new NoOpDownloader())
                 .executor(new PicassoThreadPoolExecutor())
                 .memoryCache(new LruCache(context))
                 .build();
