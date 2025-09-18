@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
 import org.singularux.music.feature.nowplaying.ui.utils.SliderDurationLabelFormatter;
-import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.model.PlaybackItemInfo;
 
 import java.time.Duration;
 import java.util.Optional;

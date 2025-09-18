@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer;
 import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
 import org.singularux.music.feature.nowplaying.ui.NowPlayingViewModel;
-import org.singularux.music.feature.playback.domain.model.PlaybackState;
+import org.singularux.music.feature.playback.model.PlaybackState;
 
 import lombok.RequiredArgsConstructor;
 

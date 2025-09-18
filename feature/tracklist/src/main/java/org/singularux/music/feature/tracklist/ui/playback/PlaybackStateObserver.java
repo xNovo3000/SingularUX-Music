@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 
-import org.singularux.music.feature.playback.domain.model.PlaybackState;
+import org.singularux.music.feature.playback.model.PlaybackState;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 import org.singularux.music.feature.tracklist.ui.TrackListViewModel;

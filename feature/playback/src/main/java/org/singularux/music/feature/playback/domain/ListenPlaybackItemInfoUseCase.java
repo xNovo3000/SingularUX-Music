@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.domain.usecase;
+package org.singularux.music.feature.playback.domain;
 
 import android.util.Log;
 
@@ -9,7 +9,9 @@ import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
-import org.singularux.music.feature.playback.domain.model.PlaybackState;
+import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -24,25 +26,26 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ListenPlaybackStateUseCase {
+public class ListenPlaybackItemInfoUseCase {
 
-    private static final String TAG = "ListenPlaybackStateUseCase";
+    private static final String TAG = "ListenPlaybackInfoUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
-    public Flowable<PlaybackState> get() {
-        return Flowable.create(new PlaybackStateSource(musicControllerFacade),
+    public Flowable<Optional<PlaybackItemInfo>> get() {
+        return Flowable.create(new PlaybackInfoSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation());
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackStateSource implements FlowableOnSubscribe<PlaybackState> {
+    private static class PlaybackInfoSource
+            implements FlowableOnSubscribe<Optional<PlaybackItemInfo>> {
 
         private final MusicControllerFacade musicControllerFacade;
 
         @Override
-        public void subscribe(@NonNull FlowableEmitter<PlaybackState> emitter) {
+        public void subscribe(@NonNull FlowableEmitter<Optional<PlaybackItemInfo>> emitter) {
             // Only start emitting when MediaController is ready
             musicControllerFacade.getMediaControllerSingle()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -54,7 +57,7 @@ public class ListenPlaybackStateUseCase {
     @RequiredArgsConstructor
     private static class MediaControllerObserver implements SingleObserver<MediaController> {
 
-        private final FlowableEmitter<PlaybackState> emitter;
+        private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
 
         @Override
         public void onSubscribe(@NonNull Disposable d) {}
@@ -62,7 +65,7 @@ public class ListenPlaybackStateUseCase {
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
             Log.i(TAG, "Adding MediaController listener");
-            PlaybackStateListener listener = new PlaybackStateListener(mediaController, emitter);
+            PlaybackInfoListener listener = new PlaybackInfoListener(mediaController, emitter);
             // Add listener, force first update and remove when flowable is cancelled
             mediaController.addListener(listener);
             listener.update();
@@ -80,20 +83,12 @@ public class ListenPlaybackStateUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackStateListener implements Player.Listener {
+    private static class PlaybackInfoListener implements Player.Listener {
 
         private final MediaController mediaController;
-        private final FlowableEmitter<PlaybackState> emitter;
-
-        @Override
-        public void onPlaybackStateChanged(int playbackState) {
-            update();
-        }
-
-        @Override
-        public void onIsPlayingChanged(boolean isPlaying) {
-            update();
-        }
+        private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
+        private final MediaItemToPlaybackItemInfoMapper mapper =
+                new MediaItemToPlaybackItemInfoMapper();
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
@@ -101,12 +96,14 @@ public class ListenPlaybackStateUseCase {
         }
 
         public void update() {
-            boolean isReady = mediaController.getCurrentMediaItem() != null;
-            boolean isPlaying = mediaController.isPlaying();
-            boolean hasNextItem = mediaController.hasNextMediaItem();
-            PlaybackState playbackState = new PlaybackState(isReady, isPlaying, hasNextItem);
-            Log.d(TAG, "Updating with values " + playbackState);
-            emitter.onNext(playbackState);
+            MediaItem mediaItem = mediaController.getCurrentMediaItem();
+            if (mediaItem != null) {
+                Log.d(TAG, "Current MediaItem is not null, updating accordingly " + mediaItem);
+                emitter.onNext(Optional.of(mapper.apply(mediaItem)));
+            } else {
+                Log.d(TAG, "Current MediaItem is null");
+                emitter.onNext(Optional.empty());
+            }
         }
 
     }

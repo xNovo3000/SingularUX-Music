@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.domain.model;
+package org.singularux.music.feature.playback.model;
 
 import androidx.annotation.NonNull;
 

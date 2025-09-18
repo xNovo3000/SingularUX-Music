@@ -1,11 +1,11 @@
-package org.singularux.music.feature.playback.domain.usecase;
+package org.singularux.music.feature.playback.domain;
 
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
 
-import org.singularux.music.feature.playback.domain.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.model.PlaybackItemInfo;
 
 import java.time.Duration;
 import java.util.function.Function;

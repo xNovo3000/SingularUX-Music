@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.domain.usecase;
+package org.singularux.music.feature.playback.domain;
 
 import android.util.Log;
 

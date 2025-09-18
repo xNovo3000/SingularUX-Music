@@ -3,7 +3,7 @@ package org.singularux.music.feature.tracklist.ui.playback;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 
-import org.singularux.music.feature.playback.domain.model.PlaybackPosition;
+import org.singularux.music.feature.playback.model.PlaybackPosition;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 
 import lombok.RequiredArgsConstructor;
