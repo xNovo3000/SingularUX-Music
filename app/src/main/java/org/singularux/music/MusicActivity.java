@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import org.singularux.music.core.playback.MusicControllerFacade;
-import org.singularux.music.core.playback.MusicPlaybackService;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
+import org.singularux.music.feature.playback.foreground.MusicPlaybackService;
 
 import java.util.Objects;
 
@@ -30,17 +30,11 @@ public class MusicActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-
         // Setup splash screen and edge-to-edge
         SplashScreen.installSplashScreen(this)
                 .setKeepOnScreenCondition(() -> !musicControllerFacade.isReady());
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-
-        // This VM is required because when the activity is being killed for the last time
-        // the controller resources are released
-        //noinspection unused
-        MusicViewModel viewModel = new ViewModelProvider(this).get(MusicViewModel.class);
 
         // Add listener for notification click listener
         // TODO: Works with duct tape, should be refactored better
@@ -53,7 +47,15 @@ public class MusicActivity extends FragmentActivity {
                 }
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        // Destroy MediaController connection when the activity is stopping
+        if (isFinishing()) {
+            musicControllerFacade.release();
+        }
+        super.onDestroy();
     }
 
 }

@@ -8,7 +8,7 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
-import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
 import org.singularux.music.feature.playback.model.PlaybackItemInfo;
 
 import java.util.Optional;
