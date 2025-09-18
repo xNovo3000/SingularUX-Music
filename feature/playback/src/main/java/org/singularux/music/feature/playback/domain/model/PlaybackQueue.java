@@ -4,11 +4,10 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class PlaybackQueue {
-    private final @NonNull List<PlaybackItemInfo> items;
-    private final int currentlyPlayingIndex;
-    // Maybe??
+    @NonNull List<PlaybackItemInfo> items;
+    int currentlyPlayingIndex;
 }

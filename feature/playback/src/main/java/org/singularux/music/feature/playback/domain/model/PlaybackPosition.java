@@ -5,10 +5,11 @@ import androidx.annotation.NonNull;
 
 import java.time.Duration;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class PlaybackPosition {
-    private final @FloatRange(from = 0.0, to = 1.0) float currentPosition;
-    private final @NonNull Duration contentDuration;
+    @FloatRange(from = 0.0, to = 1.0) float progress;
+    @NonNull Duration currentPosition;
+    @NonNull Duration contentDuration;
 }

@@ -28,11 +28,11 @@ public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
         Log.d(TAG, "Received PlaybackPosition: " + playbackPosition);
         // Update slider value
         if (shouldUpdateSlider) {
-            binding.nowPlayingProgress.setValue(playbackPosition.getCurrentPosition());
+            binding.nowPlayingProgress.setValue(playbackPosition.getProgress());
         }
         // Extract the duration for that percentage of the track
         long totalSeconds = (long) (playbackPosition.getContentDuration().getSeconds()
-                * playbackPosition.getCurrentPosition());
+                * playbackPosition.getProgress());
         // Extract minutes and seconds part
         long currentMinutes = totalSeconds / 60;
         long currentSeconds = totalSeconds % 60;

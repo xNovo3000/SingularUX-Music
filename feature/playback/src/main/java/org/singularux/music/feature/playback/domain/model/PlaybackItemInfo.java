@@ -7,17 +7,17 @@ import androidx.annotation.Nullable;
 
 import java.time.Duration;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class PlaybackItemInfo {
-    private final long id;
-    private final @NonNull String title;
-    private final @Nullable Long artistId;
-    private final @Nullable String artistName;
-    private final @Nullable Long albumId;
-    private final @Nullable String albumTitle;
-    private final @Nullable Uri artworkUri;
-    private final @NonNull Duration duration;
-    private final @Nullable String playingFrom;
+    long id;
+    @NonNull String title;
+    @Nullable Long artistId;
+    @Nullable String artistName;
+    @Nullable Long albumId;
+    @Nullable String albumTitle;
+    @Nullable Uri artworkUri;
+    @NonNull Duration duration;
+    @Nullable String playingFrom;
 }

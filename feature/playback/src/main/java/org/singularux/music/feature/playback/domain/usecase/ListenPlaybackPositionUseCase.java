@@ -28,7 +28,7 @@ public class ListenPlaybackPositionUseCase {
     private static final int INITIAL_DELAY_MS = 0;
     private static final int UPDATE_PERIOD_MS = 250;
     private static final PlaybackPosition EMPTY_PLAYBACK_POSITION =
-            new PlaybackPosition(0.0F, Duration.ofMillis(1));
+            new PlaybackPosition(0.0F, Duration.ofMillis(0), Duration.ofMillis(1));
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -56,11 +56,12 @@ public class ListenPlaybackPositionUseCase {
             // 2. There is not a current MediaItem
             MediaController mediaController = musicControllerFacade.getMediaController();
             if (mediaController != null && mediaController.getCurrentMediaItem() != null) {
-                double currentPositionMs = mediaController.getCurrentPosition();
+                long currentPositionMs = mediaController.getCurrentPosition();
                 long contentDurationMs = Math.max(1L, mediaController.getContentDuration());
-                float progress = (float) (currentPositionMs / contentDurationMs);
+                float progress = (float) ((double) currentPositionMs / (double) contentDurationMs);
+                Duration currentPosition = Duration.ofMillis(currentPositionMs);
                 Duration contentDuration = Duration.ofMillis(contentDurationMs);
-                PlaybackPosition playbackPosition = new PlaybackPosition(progress, contentDuration);
+                PlaybackPosition playbackPosition = new PlaybackPosition(progress, currentPosition, contentDuration);
                 Log.v(TAG, "Updating PlaybackPosition with value " + playbackPosition);
                 return playbackPosition;
             } else {
@@ -76,8 +77,8 @@ public class ListenPlaybackPositionUseCase {
 
         @Override
         public boolean test(@NonNull PlaybackPosition playbackPosition) {
-            float currentPosition = playbackPosition.getCurrentPosition();
-            return currentPosition >= 0.0F && currentPosition <= 1.0F;
+            float progress = playbackPosition.getProgress();
+            return progress >= 0.0F && progress <= 1.0F;
         }
 
     }
