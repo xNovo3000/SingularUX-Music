@@ -16,7 +16,7 @@ public class PlaybackPositionObserver implements Observer<PlaybackPosition> {
     @Override
     public void onChanged(@NonNull PlaybackPosition playbackPosition) {
         int position = (int) (playbackPosition.getProgress() * 1000.0F);
-        binding.playbackBar.playbackBarProgress.setProgressCompat(position, true);
+        binding.playbackBar.playbackBarProgress.setProgressCompat(position, false);
     }
 
 }

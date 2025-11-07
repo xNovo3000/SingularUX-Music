@@ -25,9 +25,7 @@ import org.singularux.music.feature.tracklist.ui.playback.PlaybackItemInfoObserv
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackStateObserver;
 import org.singularux.music.feature.tracklist.ui.search.SearchListAdapter;
 import org.singularux.music.feature.tracklist.ui.search.SearchListInsetListener;
-import org.singularux.music.feature.tracklist.ui.search.SearchViewOnBackPressedCallback;
 import org.singularux.music.feature.tracklist.ui.search.SearchViewTextWatcher;
-import org.singularux.music.feature.tracklist.ui.search.SearchViewTransitionObserver;
 import org.singularux.music.feature.tracklist.ui.playback.PlaybackBarInsetListener;
 import org.singularux.music.feature.tracklist.ui.list.TrackListInsetListener;
 import org.singularux.music.feature.tracklist.ui.search.SearchBarInsetListener;
@@ -47,8 +45,6 @@ public class TrackListRoute extends Fragment {
     @Inject public SearchBarInsetListener searchBarInsetListener;
     @Inject public TrackListInsetListener trackListInsetListener;
 
-    @Inject public SearchViewOnBackPressedCallback searchViewOnBackPressedCallback;
-    @Inject public SearchViewTransitionObserver searchViewTransitionObserver;
     public @Inject SearchListInsetListener searchListInsetListener;
 
     @Inject public MusicPermissionManager musicPermissionManager;
@@ -66,11 +62,6 @@ public class TrackListRoute extends Fragment {
         TrackListViewModel viewModel = new ViewModelProvider(this)
                 .get(TrackListViewModel.class);
         NavController navController = NavHostFragment.findNavController(this);
-        // Navigation - Search View
-        searchViewOnBackPressedCallback.setSearchView(binding.trackListSearchView);
-        binding.trackListSearchView.addTransitionListener(searchViewTransitionObserver);
-        requireActivity().getOnBackPressedDispatcher()
-                .addCallback(getViewLifecycleOwner(), searchViewOnBackPressedCallback);
         // Navigation - Now Playing
         binding.playbackBar.playbackBarContainer
                 .setOnClickListener(new PlaybackBarOnClickListener(navController));
