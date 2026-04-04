@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- AndroidManifest.xml -->
     <string name="manifest_app_name">Music</string>
+
+    <!-- Activity: Home -->
+    <string name="activity_home_search_hint">Search tracks</string>
+
 </resources>
