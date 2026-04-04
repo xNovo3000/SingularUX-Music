@@ -23,6 +23,17 @@
         android:theme="@style/Theme.Music"
         tools:targetApi="37">
 
+        <activity android:name=".presentation.HomeActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Music.Splash"
+            android:windowSoftInputMode="adjustNothing">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
         <service android:name=".presentation.MusicPlaybackService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback"
