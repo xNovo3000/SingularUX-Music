@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace = 'org.singularux.music'
+    buildToolsVersion = '37.0.0'
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
