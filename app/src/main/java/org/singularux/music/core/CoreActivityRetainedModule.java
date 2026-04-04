@@ -47,4 +47,11 @@ public class CoreActivityRetainedModule {
                 .build();
     }
 
+    @Provides
+    @ActivityRetainedScoped
+    public MusicControllerFacade providesMusicControllerFacade(
+            @ApplicationContext Context context) {
+        return new MusicControllerFacade(context);
+    }
+
 }
