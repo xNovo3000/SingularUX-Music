@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-public class MusicPermissionManagerAndroid26 extends MusicPermissionManagerAndroid {
+public class MusicPermissionManagerAndroid30 extends MusicPermissionManagerAndroid {
 
     @Override
     public @NonNull String getPermissionName(@NonNull MusicPermission permission) {

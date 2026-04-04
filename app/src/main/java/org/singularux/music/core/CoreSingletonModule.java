@@ -34,7 +34,7 @@ public class CoreSingletonModule {
     @Singleton
     @IOExecutorService
     public ExecutorService providesIOExecutorService() {
-        return new ThreadPoolExecutor(0, IO_MAX_THREADS,
+        return new ThreadPoolExecutor(0, Math.max(NUMBER_OF_CPU_CORES, IO_MAX_THREADS),
                 IO_KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
                 new SynchronousQueue<>(), new BackgroundThreadFactory("IO"));
     }
