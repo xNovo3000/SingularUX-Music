@@ -2,8 +2,8 @@ package org.singularux.music;
 
 import android.app.Application;
 
-import org.singularux.music.core.ComputationExecutorService;
-import org.singularux.music.core.IOExecutorService;
+import org.singularux.music.core.threading.ComputationExecutorService;
+import org.singularux.music.core.threading.IOExecutorService;
 
 import java.util.concurrent.ExecutorService;
 

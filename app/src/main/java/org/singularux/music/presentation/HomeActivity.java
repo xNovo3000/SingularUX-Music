@@ -6,9 +6,12 @@ import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
 
-import org.singularux.music.core.MusicControllerFacade;
+import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.databinding.ActivityHomeBinding;
+import org.singularux.music.presentation.inset.HomeTrackListInsetListener;
+import org.singularux.music.presentation.inset.HomeSearchBarInsetListener;
 
 import javax.inject.Inject;
 
@@ -30,6 +33,11 @@ public class HomeActivity extends ComponentActivity {
         // Populate view
         ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Install inset listeners
+        ViewCompat.setOnApplyWindowInsetsListener(binding.activityHomeSearchBar,
+                new HomeSearchBarInsetListener());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.activityHomeTrackList,
+                new HomeTrackListInsetListener());
     }
 
     @Override

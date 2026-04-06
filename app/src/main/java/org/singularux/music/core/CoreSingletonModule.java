@@ -1,5 +1,9 @@
 package org.singularux.music.core;
 
+import org.singularux.music.core.threading.BackgroundThreadFactory;
+import org.singularux.music.core.threading.ComputationExecutorService;
+import org.singularux.music.core.threading.IOExecutorService;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.SynchronousQueue;

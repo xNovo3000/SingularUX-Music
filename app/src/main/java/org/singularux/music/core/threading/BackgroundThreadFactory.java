@@ -1,4 +1,4 @@
-package org.singularux.music.core;
+package org.singularux.music.core.threading;
 
 import android.util.Log;
 

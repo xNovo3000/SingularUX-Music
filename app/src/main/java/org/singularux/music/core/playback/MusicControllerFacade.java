@@ -1,4 +1,4 @@
-package org.singularux.music.core;
+package org.singularux.music.core.playback;
 
 import android.content.ComponentName;
 import android.content.Context;

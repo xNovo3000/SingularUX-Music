@@ -6,6 +6,13 @@ import android.os.Build;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
+import org.singularux.music.core.permission.MusicPermissionManager;
+import org.singularux.music.core.permission.MusicPermissionManagerAndroid26;
+import org.singularux.music.core.permission.MusicPermissionManagerAndroid33;
+import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.core.threading.IOExecutorService;
+import org.singularux.music.core.thumbnail.PicassoNoOpDownloader;
+
 import java.util.concurrent.ExecutorService;
 
 import dagger.Module;
@@ -30,7 +37,7 @@ public class CoreActivityRetainedModule {
                     .context(context)
                     .build();
         } else {
-            return MusicPermissionManagerAndroid30.builder()
+            return MusicPermissionManagerAndroid26.builder()
                     .context(context)
                     .build();
         }

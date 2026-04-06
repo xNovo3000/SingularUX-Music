@@ -1,4 +1,4 @@
-package org.singularux.music.core;
+package org.singularux.music.core.permission;
 
 import android.Manifest;
 
@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-public class MusicPermissionManagerAndroid30 extends MusicPermissionManagerAndroid {
+public class MusicPermissionManagerAndroid26 extends MusicPermissionManagerAndroid {
 
     @Override
     public @NonNull String getPermissionName(@NonNull MusicPermission permission) {

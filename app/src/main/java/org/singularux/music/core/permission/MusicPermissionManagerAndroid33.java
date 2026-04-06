@@ -1,4 +1,4 @@
-package org.singularux.music.core;
+package org.singularux.music.core.permission;
 
 import android.Manifest;
 import android.os.Build;
