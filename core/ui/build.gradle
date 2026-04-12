@@ -1,0 +1,43 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace 'org.singularux.music.core.ui'
+    buildToolsVersion = '37.0.0'
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
+    defaultConfig {
+        minSdk 26
+        consumerProguardFiles "consumer-rules.pro"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    // Project
+    api(project ':core:threading')
+    // AndroidX
+    implementation libs.androidx.core
+    implementation libs.androidx.core.splashscreen
+    // Google Material
+    implementation libs.google.material
+    // Hilt
+    implementation libs.hilt.android
+    annotationProcessor libs.hilt.compiler
+    // Picasso
+    implementation libs.picasso
+}

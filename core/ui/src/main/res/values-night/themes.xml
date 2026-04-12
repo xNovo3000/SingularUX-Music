@@ -1,0 +1,123 @@
+<resources>
+    <!-- TODO: Add emphasized styles, not used at the moment -->
+    <style name="TextAppearance.Music.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.SearchBar" parent="TextAppearance.Material3.SearchBar">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.SearchView" parent="TextAppearance.Material3.SearchView">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="Theme.Music" parent="Theme.Material3Expressive.Dark.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/md_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/md_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/md_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/md_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/md_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/md_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/md_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/md_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/md_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/md_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/md_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.Music.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.Music.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Music.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.Music.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.Music.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Music.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Music.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Music.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Music.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Music.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Music.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Music.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Music.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Music.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Music.LabelSmall</item>
+    </style>
+    <style name="Theme.Music.Splash" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/seed</item>
+        <item name="windowSplashScreenBackground">@color/md_theme_surface</item>
+        <item name="postSplashScreenTheme">@style/Theme.Music</item>
+    </style>
+</resources>

@@ -35,6 +35,10 @@ android {
 }
 
 dependencies {
+    api(project ':core:permission')
+    api(project ':core:playback')
+    api(project ':core:threading')
+    api(project ':core:ui')
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
     implementation libs.androidx.activity
