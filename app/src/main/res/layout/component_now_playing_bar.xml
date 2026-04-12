@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSurfaceContainer"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/component_now_playing_bar_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="1000"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/component_now_playing_bar_artwork"
+            android:layout_width="@dimen/component_now_playing_bar_artwork"
+            android:layout_height="@dimen/component_now_playing_bar_artwork"
+            android:layout_marginStart="12dp"
+            android:background="?attr/colorSurfaceContainerHighest"
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraSmall"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="12dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="?attr/textAppearanceTitleMedium"
+                android:id="@+id/now_playing_bar_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/component_now_playing_bar_no_track"
+                android:textColor="?attr/colorOnSurfaceVariant"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="?attr/textAppearanceLabelMedium"
+                android:id="@+id/now_playing_bar_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/component_now_playing_bar_no_artist"
+                android:textColor="?attr/colorOnSurfaceVariant"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledStyle"
+            android:id="@+id/now_playing_bar_play_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:paddingHorizontal="14dp"
+            android:enabled="false"
+            android:contentDescription="@string/component_now_playing_bar_action_play"
+            app:icon="@drawable/more_vert_24"
+            app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
