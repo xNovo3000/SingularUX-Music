@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="playback_no_track">No track</string>
+    <string name="playback_no_artist">No artist</string>
+    <string name="playback_unknown_artist">Unknown artist</string>
+</resources>

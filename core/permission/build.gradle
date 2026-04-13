@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'org.singularux.music.core.permission'
+    namespace = 'org.singularux.music.core.permission'
     buildToolsVersion = '37.0.0'
     compileSdk {
         version = release(36) {

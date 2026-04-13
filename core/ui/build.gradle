@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'org.singularux.music.core.ui'
+    namespace = 'org.singularux.music.core.ui'
     buildToolsVersion = '37.0.0'
     compileSdk {
         version = release(36) {

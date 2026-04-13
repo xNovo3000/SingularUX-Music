@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'org.singularux.music.feature.library'
+    namespace = 'org.singularux.music.feature.library'
     buildToolsVersion = '37.0.0'
     compileSdk {
         version = release(36) {
@@ -32,12 +32,20 @@ dependencies {
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
     implementation libs.androidx.activity
+    // Google Material
+    implementation libs.google.material
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // Lifecycle
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.reactivestreams
+    implementation libs.lifecycle.viewmodel
     // Lombok
     compileOnly libs.lombok
     annotationProcessor libs.lombok
+    // RecyclerView
+    implementation libs.recyclerview
     // RxJava
     implementation libs.rxjava
     implementation libs.rxjava.android
