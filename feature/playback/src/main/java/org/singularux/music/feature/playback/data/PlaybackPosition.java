@@ -7,7 +7,7 @@ import java.time.Duration;
 import lombok.Value;
 
 @Value
-public class PlaybackDuration {
+public class PlaybackPosition {
     @FloatRange(from = 0.0, to = 1.0) float progress;
     Duration position;
 }

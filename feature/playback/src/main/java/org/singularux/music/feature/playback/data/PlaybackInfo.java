@@ -1,5 +1,7 @@
 package org.singularux.music.feature.playback.data;
 
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 
 import java.time.Duration;
@@ -15,4 +17,6 @@ public class PlaybackInfo {
     @Nullable Long albumId;
     @Nullable String albumName;
     Duration duration;
+    @Nullable Uri artworkUri;
+    @Nullable String playbackToken;
 }

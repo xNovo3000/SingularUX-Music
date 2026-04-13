@@ -29,8 +29,8 @@ public class MusicControllerFacade {
     private static final String PLAYBACK_SERVICE_CLASS =
             "org.singularux.music.feature.playback.presentation.MusicPlaybackService";
 
-    private final Single<MediaController> mediaControllerSingle;
-    private @Nullable @Getter MediaController maybeMediaController = null;
+    private final @Getter Single<MediaController> mediaControllerSingle;
+    private @Nullable @Getter MediaController mediaController = null;
 
     public MusicControllerFacade(Context context) {
         // Create MediaController future
@@ -58,8 +58,8 @@ public class MusicControllerFacade {
     }
 
     public void release() {
-        if (maybeMediaController != null) {
-            maybeMediaController.release();
+        if (mediaController != null) {
+            mediaController.release();
         } else {
             mediaControllerSingle.observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new MediaControllerReleaser());
@@ -67,11 +67,11 @@ public class MusicControllerFacade {
     }
 
     public @NonNull MediaController requireMediaController() {
-        return Objects.requireNonNull(maybeMediaController);
+        return Objects.requireNonNull(mediaController);
     }
 
     public boolean isReady() {
-        return maybeMediaController != null && maybeMediaController.isConnected();
+        return mediaController != null && mediaController.isConnected();
     }
 
     private class MediaControllerObserver implements SingleObserver<MediaController> {
@@ -82,7 +82,7 @@ public class MusicControllerFacade {
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
             Log.d(TAG, "Loading MediaController");
-            maybeMediaController = mediaController;
+            MusicControllerFacade.this.mediaController = mediaController;
         }
 
         @Override
