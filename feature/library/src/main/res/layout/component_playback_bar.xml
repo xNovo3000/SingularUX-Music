@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/component_now_playing_bar_progress"
+        android:id="@+id/now_playing_bar_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="1000"/>
@@ -21,9 +21,9 @@
         android:gravity="center_vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/component_now_playing_bar_artwork"
-            android:layout_width="@dimen/component_now_playing_bar_artwork"
-            android:layout_height="@dimen/component_now_playing_bar_artwork"
+            android:id="@+id/now_playing_bar_artwork"
+            android:layout_width="@dimen/now_playing_bar_artwork"
+            android:layout_height="@dimen/now_playing_bar_artwork"
             android:layout_marginStart="12dp"
             android:background="?attr/colorSurfaceContainerHighest"
             app:shapeAppearance="?attr/shapeAppearanceCornerExtraSmall"/>
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@string/component_now_playing_bar_no_track"
+                android:text="@string/playback_no_track"
                 android:textColor="?attr/colorOnSurfaceVariant"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@string/component_now_playing_bar_no_artist"
+                android:text="@string/playback_no_artist"
                 android:textColor="?attr/colorOnSurfaceVariant"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -65,8 +65,8 @@
             android:layout_marginEnd="8dp"
             android:paddingHorizontal="14dp"
             android:enabled="false"
-            android:contentDescription="@string/component_now_playing_bar_action_play"
-            app:icon="@drawable/more_vert_24"
+            android:contentDescription="@string/playback_action_play"
+            app:icon="@drawable/play_24"
             app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

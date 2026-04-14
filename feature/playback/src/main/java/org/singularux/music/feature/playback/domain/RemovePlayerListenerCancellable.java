@@ -17,7 +17,7 @@ class RemovePlayerListenerCancellable implements Cancellable {
 
     @Override
     public void cancel() {
-        Log.d(who, "Removing listener");
+        Log.d(who, "Removing listener " + listener);
         mediaController.removeListener(listener);
     }
 

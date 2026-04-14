@@ -7,9 +7,7 @@ android {
     namespace = 'org.singularux.music'
     buildToolsVersion = '37.0.0'
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
     defaultConfig {
         applicationId 'org.singularux.music'
@@ -35,10 +33,8 @@ android {
 }
 
 dependencies {
-    api(project ':core:permission')
-    api(project ':core:playback')
-    api(project ':core:threading')
-    api(project ':core:ui')
+    api(project ':feature:library')
+    api(project ':feature:playback')
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
     implementation libs.androidx.activity

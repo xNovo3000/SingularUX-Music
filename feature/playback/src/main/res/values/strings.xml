@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="playback_action_play">Play</string>
+    <string name="playback_action_pause">Pause</string>
+    <string name="playback_action_skip_prev">Skip previous</string>
+    <string name="playback_action_skip_next">Skip next</string>
     <string name="playback_no_track">No track</string>
     <string name="playback_no_artist">No artist</string>
     <string name="playback_unknown_artist">Unknown artist</string>

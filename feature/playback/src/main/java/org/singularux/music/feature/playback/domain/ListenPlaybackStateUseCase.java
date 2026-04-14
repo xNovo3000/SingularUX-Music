@@ -66,7 +66,7 @@ public class ListenPlaybackStateUseCase {
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
             PlaybackStateListener listener = new PlaybackStateListener(emitter, mediaController);
-            Log.d(TAG, "Adding listener");
+            Log.d(TAG, "Adding listener " + listener);
             mediaController.addListener(listener);
             listener.update();
             emitter.setCancellable(new RemovePlayerListenerCancellable(

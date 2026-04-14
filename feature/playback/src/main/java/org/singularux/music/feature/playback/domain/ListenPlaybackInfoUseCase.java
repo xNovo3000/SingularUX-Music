@@ -69,7 +69,7 @@ public class ListenPlaybackInfoUseCase {
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
             PlaybackInfoListener listener = new PlaybackInfoListener(emitter, mediaController);
-            Log.d(TAG, "Adding listener");
+            Log.d(TAG, "Adding listener " + listener);
             mediaController.addListener(listener);
             listener.update();
             emitter.setCancellable(new RemovePlayerListenerCancellable(

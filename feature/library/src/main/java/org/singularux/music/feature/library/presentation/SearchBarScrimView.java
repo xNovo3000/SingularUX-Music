@@ -1,4 +1,4 @@
-package org.singularux.music.presentation;
+package org.singularux.music.feature.library.presentation;
 
 import android.content.Context;
 import android.util.AttributeSet;

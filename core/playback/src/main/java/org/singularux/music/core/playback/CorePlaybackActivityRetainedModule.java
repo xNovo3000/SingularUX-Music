@@ -20,11 +20,4 @@ public class CorePlaybackActivityRetainedModule {
         return new MusicControllerFacade(context);
     }
 
-    @Provides
-    @ActivityRetainedScoped
-    public MusicControllerLifecycleObserver providesMusicControllerLifecycleObserver(
-            MusicControllerFacade musicControllerFacade) {
-        return new MusicControllerLifecycleObserver(musicControllerFacade);
-    }
-
 }

@@ -1,15 +1,17 @@
 [versions]
 # Plugins
-agp = "9.1.0"
+agp = "9.1.1"
 hilt = "2.59.2"
 # Libraries
 androidx-core = "1.18.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-activity = "1.13.0"
+androidx-fragment = "1.8.9"
 google-material = "1.14.0-beta01"
 lifecycle = "2.10.0"
 lombok = "1.18.44"
 media3 = "1.10.0"
+navigation = "2.9.7"
 #noinspection NewerVersionAvailable 2.71828 is not a version
 picasso = "2.8"
 recyclerview = "1.4.0"
@@ -19,6 +21,7 @@ rxjava = "3.1.12"
 androidx-core = { group = "androidx.core", name = "core", version.ref = "androidx-core" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-core-splashscreen" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "androidx-activity" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "androidx-fragment" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -28,6 +31,8 @@ lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmode
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "media3" }
 media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "media3" }
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 rxjava = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxjava" }

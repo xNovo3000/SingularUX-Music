@@ -1,24 +1,21 @@
-package org.singularux.music.presentation;
+package org.singularux.music.feature.library.presentation;
 
 import android.os.Bundle;
 
-import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
-import androidx.core.view.ViewCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
-import org.singularux.music.databinding.ActivityHomeBinding;
-import org.singularux.music.presentation.inset.HomeTrackListInsetListener;
-import org.singularux.music.presentation.inset.HomeSearchBarInsetListener;
+import org.singularux.music.feature.library.databinding.ActivityLibraryBinding;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class HomeActivity extends ComponentActivity {
+public class LibraryActivity extends FragmentActivity {
 
     public @Inject MusicControllerFacade musicControllerFacade;
 
@@ -31,13 +28,8 @@ public class HomeActivity extends ComponentActivity {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         // Populate view
-        ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        ActivityLibraryBinding binding = ActivityLibraryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // Install inset listeners
-        ViewCompat.setOnApplyWindowInsetsListener(binding.activityHomeSearchBar,
-                new HomeSearchBarInsetListener());
-        ViewCompat.setOnApplyWindowInsetsListener(binding.activityHomeTrackList,
-                new HomeTrackListInsetListener());
     }
 
     @Override
