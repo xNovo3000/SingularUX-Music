@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="media3_notification_play">@drawable/play_24</drawable>
-    <drawable name="media3_notification_pause">@drawable/pause_24</drawable>
-    <drawable name="media3_notification_seek_to_previous">@drawable/skip_prev_24</drawable>
-    <drawable name="media3_notification_seek_to_next">@drawable/skip_next_24</drawable>
-    <drawable name="media3_notification_small_icon">@mipmap/ic_launcher_foreground</drawable>
+    <drawable name="media3_notification_small_icon">@drawable/music_note_24</drawable>
 </resources>
