@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Component: Playback Bar -->
+    <string name="playback_bar_action_play">Play</string>
+    <string name="playback_bar_action_pause">Pause</string>
+    <string name="playback_bar_no_track">No track</string>
+    <string name="playback_bar_no_artist">No artist</string>
+    <string name="playback_bar_unknown_artist">Unknown artist</string>
+    
     <!-- Component: Search -->
+    <string name="search_action_clear">Clear</string>
     <string name="search_hint">Search music library</string>
+
+    <!-- Navigation -->
+    <string name="navigation_tracks">Tracks</string>
 
     <!-- Route: Tracks -->
     <string name="tracks_shuffle">Shuffle</string>

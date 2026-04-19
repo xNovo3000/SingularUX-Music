@@ -3,12 +3,21 @@ package org.singularux.music.feature.library.presentation;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.feature.library.R;
 import org.singularux.music.feature.library.databinding.ActivityLibraryBinding;
+import org.singularux.music.feature.playback.data.PlaybackInfo;
+import org.singularux.music.feature.playback.data.PlaybackPosition;
+import org.singularux.music.feature.playback.data.PlaybackState;
+
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -19,6 +28,9 @@ public class LibraryActivity extends FragmentActivity {
 
     public @Inject MusicControllerFacade musicControllerFacade;
 
+    private ActivityLibraryBinding binding;
+    private LibraryViewModel viewModel;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // Start activity with splash screen and edge-to-edge enabled
@@ -28,8 +40,17 @@ public class LibraryActivity extends FragmentActivity {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         // Populate view
-        ActivityLibraryBinding binding = ActivityLibraryBinding.inflate(getLayoutInflater());
+        binding = ActivityLibraryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Get ViewModel
+        viewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
+        // Observe Playback Bar changes
+        viewModel.getPlaybackStateLiveData()
+                .observe(this, new PlaybackStateObserver());
+        viewModel.getPlaybackPositionLiveData()
+                .observe(this, new PlaybackPositionObserver());
+        viewModel.getMaybePlaybackInfoLiveData()
+                .observe(this, new MaybePlaybackInfoObserver());
     }
 
     @Override
@@ -37,6 +58,46 @@ public class LibraryActivity extends FragmentActivity {
         // Release current session before destroying
         musicControllerFacade.release();
         super.onDestroy();
+    }
+
+    private class PlaybackStateObserver implements Observer<PlaybackState> {
+
+        @Override
+        public void onChanged(@NonNull PlaybackState playbackState) {
+            // Enable play/pause button logic
+            binding.playbackBar.playPause.setEnabled(playbackState.isReady());
+            // Show play/pause logic
+            if (playbackState.isPlaying()) {
+                binding.playbackBar.playPause.setIconResource(R.drawable.pause_24);
+                String contentDescription = getString(R.string.playback_bar_action_pause);
+                binding.playbackBar.playPause.setContentDescription(contentDescription);
+                binding.playbackBar.playPause.setOnClickListener(v -> viewModel.pause());
+            } else {
+                binding.playbackBar.playPause.setIconResource(R.drawable.play_24);
+                String contentDescription = getString(R.string.playback_bar_action_play);
+                binding.playbackBar.playPause.setContentDescription(contentDescription);
+                binding.playbackBar.playPause.setOnClickListener(v -> viewModel.play());
+            }
+        }
+
+    }
+
+    private class PlaybackPositionObserver implements Observer<PlaybackPosition> {
+
+        @Override
+        public void onChanged(@NonNull PlaybackPosition playbackPosition) {
+
+        }
+
+    }
+
+    private class MaybePlaybackInfoObserver implements Observer<Optional<PlaybackInfo>> {
+
+        @Override
+        public void onChanged(@NonNull Optional<PlaybackInfo> maybePlaybackInfo) {
+
+        }
+
     }
 
 }
