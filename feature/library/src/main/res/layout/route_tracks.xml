@@ -21,6 +21,11 @@
         android:hint="@string/search_hint"
         app:defaultMarginsEnabled="false"/>
 
+    <org.singularux.music.feature.library.presentation.SearchBarScrimView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"/>
+
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/play_shuffled"
         android:layout_width="wrap_content"

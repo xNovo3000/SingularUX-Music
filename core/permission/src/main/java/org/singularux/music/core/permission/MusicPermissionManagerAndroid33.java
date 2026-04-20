@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class MusicPermissionManagerAndroid33 extends MusicPermissionManagerAndroid {
 
     @Override
-    public @NonNull String getPermissionName(@NonNull MusicPermission permission) {
+    public @NonNull String getStringPermission(@NonNull MusicPermission permission) {
         switch (permission) {
             case READ_MEDIA_AUDIO:
                 return Manifest.permission.READ_MEDIA_AUDIO;

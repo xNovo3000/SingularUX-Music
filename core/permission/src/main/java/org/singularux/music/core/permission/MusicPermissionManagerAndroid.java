@@ -15,7 +15,7 @@ public abstract class MusicPermissionManagerAndroid implements MusicPermissionMa
 
     @Override
     public boolean hasPermission(@NonNull MusicPermission permission) {
-        return ContextCompat.checkSelfPermission(context, getPermissionName(permission)) ==
+        return ContextCompat.checkSelfPermission(context, getStringPermission(permission)) ==
                 PackageManager.PERMISSION_GRANTED;
     }
 
