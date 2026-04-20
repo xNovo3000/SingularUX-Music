@@ -10,7 +10,7 @@ import lombok.Value;
 
 @Value
 public class TrackItemData {
-    Long id;
+    long id;
     String title;
     @Nullable Long artistId;
     @Nullable String artistName;
