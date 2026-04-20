@@ -36,6 +36,7 @@ public class ListenPlaybackPositionUseCase {
     public Flowable<PlaybackPosition> get() {
         return Flowable.interval(INITIAL_DELAY_MS, PERIOD_MS, TimeUnit.MILLISECONDS,
                         Schedulers.computation())
+                .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new PlaybackPositionRetriever(musicControllerFacade));
     }

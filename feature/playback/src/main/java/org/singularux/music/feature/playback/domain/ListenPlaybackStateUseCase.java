@@ -37,6 +37,7 @@ public class ListenPlaybackStateUseCase {
     public Flowable<PlaybackState> get() {
         return Flowable.create(new PlaybackStateSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
+                .distinctUntilChanged()
                 .subscribeOn(Schedulers.computation(), false);
     }
 

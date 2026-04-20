@@ -1,12 +1,16 @@
 package org.singularux.music.feature.library.presentation;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -51,7 +55,7 @@ public class LibraryActivity extends FragmentActivity {
                 new PlaybackBarComponentInsetListener());
         // Get ViewModel
         viewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
-        // Observe Playback Bar changes
+        // Observe changes
         viewModel.getPlaybackStateLiveData()
                 .observe(this, new PlaybackStateObserver());
         viewModel.getPlaybackPositionLiveData()
@@ -136,5 +140,21 @@ public class LibraryActivity extends FragmentActivity {
         }
 
     }
+
+    private static class PlaybackBarComponentInsetListener implements OnApplyWindowInsetsListener {
+
+        @Override
+        public @NonNull WindowInsetsCompat onApplyWindowInsets(
+                @NonNull View view, @NonNull WindowInsetsCompat windowInsets) {
+            // Retrieve required insets
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            // Apply padding
+            view.setPadding(insets.left, 0, insets.right, insets.bottom);
+            // Last element of the view
+            return WindowInsetsCompat.CONSUMED;
+        }
+
+    }
+
 
 }

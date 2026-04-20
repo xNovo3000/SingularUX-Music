@@ -41,6 +41,7 @@ public class ListenPlaybackInfoUseCase {
     public Flowable<Optional<PlaybackInfo>> get() {
         return Flowable.create(new PlaybackInfoSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
+                .distinctUntilChanged()
                 .subscribeOn(Schedulers.computation(), false);
     }
 
