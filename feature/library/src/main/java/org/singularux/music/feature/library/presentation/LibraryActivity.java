@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.squareup.picasso.Picasso;
+
 import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.library.R;
 import org.singularux.music.feature.library.databinding.ActivityLibraryBinding;
@@ -27,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class LibraryActivity extends FragmentActivity {
 
     public @Inject MusicControllerFacade musicControllerFacade;
+    public @Inject Picasso picasso;
 
     private ActivityLibraryBinding binding;
     private LibraryViewModel viewModel;
@@ -86,7 +89,10 @@ public class LibraryActivity extends FragmentActivity {
 
         @Override
         public void onChanged(@NonNull PlaybackPosition playbackPosition) {
-
+            // Update progress bar
+            float max = binding.playbackBar.progress.getMax();
+            int progress = (int) (playbackPosition.getProgress() * max);
+            binding.playbackBar.progress.setProgressCompat(progress, false);
         }
 
     }
@@ -95,7 +101,34 @@ public class LibraryActivity extends FragmentActivity {
 
         @Override
         public void onChanged(@NonNull Optional<PlaybackInfo> maybePlaybackInfo) {
-
+            if (maybePlaybackInfo.isPresent()) {
+                PlaybackInfo playbackInfo = maybePlaybackInfo.get();
+                // Set track and artist data
+                String artist = playbackInfo.getArtistName();
+                if (artist == null) {
+                    artist = getString(R.string.playback_bar_no_artist);
+                }
+                binding.playbackBar.title.setText(playbackInfo.getTitle());
+                binding.playbackBar.artist.setText(artist);
+                // Load thumbnail
+                if (playbackInfo.getArtworkUri() != null) {
+                    picasso.load(playbackInfo.getArtworkUri())
+                            .resizeDimen(R.dimen.playback_bar_artwork, R.dimen.playback_bar_artwork)
+                            .into(binding.playbackBar.artwork);
+                } else {
+                    picasso.cancelRequest(binding.playbackBar.artwork);
+                    binding.playbackBar.artwork.setImageDrawable(null);
+                }
+            } else {
+                // Set empty data
+                String track = getString(R.string.playback_bar_no_track);
+                String artist = getString(R.string.playback_bar_no_artist);
+                binding.playbackBar.title.setText(track);
+                binding.playbackBar.artist.setText(artist);
+                // Set empty thumbnail
+                picasso.cancelRequest(binding.playbackBar.artwork);
+                binding.playbackBar.artwork.setImageDrawable(null);
+            }
         }
 
     }

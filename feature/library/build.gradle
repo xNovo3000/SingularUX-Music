@@ -54,6 +54,8 @@ dependencies {
     // Navigation
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
+    // Picasso
+    implementation libs.picasso
     // RecyclerView
     implementation libs.recyclerview
     // RxJava
