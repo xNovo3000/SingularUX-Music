@@ -6,6 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -45,6 +46,9 @@ public class LibraryActivity extends FragmentActivity {
         // Populate view
         binding = ActivityLibraryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // Apply inset listeners
+        ViewCompat.setOnApplyWindowInsetsListener(binding.playbackBar.getRoot(),
+                new PlaybackBarComponentInsetListener());
         // Get ViewModel
         viewModel = new ViewModelProvider(this).get(LibraryViewModel.class);
         // Observe Playback Bar changes
