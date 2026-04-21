@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'org.singularux.music.feature.library'
+    namespace = 'org.singularux.music.data.library'
     buildToolsVersion = '37.0.0'
     compileSdk {
         version = release(37)
@@ -19,9 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    buildFeatures {
-        viewBinding = true
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -31,35 +28,12 @@ android {
 dependencies {
     // Project
     api(project ':core:permission')
-    api(project ':core:threading')
-    api(project ':core:ui')
-    api(project ':data:library')
-    api(project ':feature:playback')
     // AndroidX
     implementation libs.androidx.core
-    implementation libs.androidx.core.splashscreen
-    implementation libs.androidx.activity
-    implementation libs.androidx.fragment
-    // Google Material
-    implementation libs.google.material
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
-    // Lifecycle
-    implementation libs.lifecycle.livedata
-    implementation libs.lifecycle.reactivestreams
-    implementation libs.lifecycle.viewmodel
     // Lombok
     compileOnly libs.lombok
     annotationProcessor libs.lombok
-    // Navigation
-    implementation libs.navigation.fragment
-    implementation libs.navigation.ui
-    // Picasso
-    implementation libs.picasso
-    // RecyclerView
-    implementation libs.recyclerview
-    // RxJava
-    implementation libs.rxjava
-    implementation libs.rxjava.android
 }
