@@ -23,8 +23,8 @@ public class SearchBarInsetListener implements OnApplyWindowInsetsListener {
         ViewGroup.MarginLayoutParams marginLayoutParams =
                 (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         marginLayoutParams.topMargin = insets.top + (int) (density * MARGIN_TOP_DP);
-        marginLayoutParams.leftMargin = insets.top + (int) (density * MARGIN_HORIZONTAL_DP);
-        marginLayoutParams.rightMargin = insets.top + (int) (density * MARGIN_HORIZONTAL_DP);
+        marginLayoutParams.leftMargin = insets.left + (int) (density * MARGIN_HORIZONTAL_DP);
+        marginLayoutParams.rightMargin = insets.right + (int) (density * MARGIN_HORIZONTAL_DP);
         view.setLayoutParams(marginLayoutParams);
         // Last element of the view
         return WindowInsetsCompat.CONSUMED;

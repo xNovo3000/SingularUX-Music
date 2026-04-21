@@ -5,22 +5,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.listitem.ListItemViewHolder;
 import com.google.android.material.textview.MaterialTextView;
 
 import org.singularux.music.feature.library.R;
 import org.singularux.music.feature.library.databinding.ItemTrackBinding;
 
-import lombok.Getter;
+public class TrackItemViewHolder extends ListItemViewHolder {
 
-public class TrackItemViewHolder extends RecyclerView.ViewHolder {
-
-    private final @Getter ShapeableImageView artwork;
-    private final @Getter MaterialTextView title, artistsWithDuration;
-    private final @Getter MaterialButton addToQueue;
+    public final ShapeableImageView artwork;
+    public final MaterialTextView title, artistsWithDuration;
+    public final MaterialButton addToQueue;
 
     public TrackItemViewHolder(@NonNull View itemView) {
         super(itemView);

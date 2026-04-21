@@ -70,7 +70,7 @@
             android:layout_width="72dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="2dp"
-            android:contentDescription="@string/track_add_to_queue"
+            android:contentDescription="@string/track_action_add_to_queue"
             app:icon="@drawable/playlist_add_24"/>
 
     </com.google.android.material.listitem.ListItemRevealLayout>

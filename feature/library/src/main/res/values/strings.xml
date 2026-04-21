@@ -13,7 +13,9 @@
     <string name="search_hint">Search music library</string>
 
     <!-- Item: Track -->
-    <string name="track_add_to_queue">Add to queue</string>
+    <string name="track_duration_artist" formatted="false">%d:%02d &#183; %s</string>
+    <string name="track_unknown_artist">Unknown artist</string>
+    <string name="track_action_add_to_queue">Add to queue</string>
 
     <!-- Navigation -->
     <string name="navigation_tracks">Tracks</string>

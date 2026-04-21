@@ -37,6 +37,7 @@ public class TracksRoute extends Fragment {
         ViewCompat.setOnApplyWindowInsetsListener(binding.playShuffled, new FabInsetListener());
         // Get ViewModel
         viewModel = new ViewModelProvider(this).get(TracksViewModel.class);
+        // Listen data
     }
 
     private static class ListInsetListener implements OnApplyWindowInsetsListener {
