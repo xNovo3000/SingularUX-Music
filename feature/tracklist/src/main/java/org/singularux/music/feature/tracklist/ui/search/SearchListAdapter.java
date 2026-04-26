@@ -6,15 +6,19 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.squareup.picasso.Picasso;
 
+import org.singularux.music.core.threading.ComputationExecutorService;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.ui.search.item.SearchListItem;
 import org.singularux.music.feature.tracklist.ui.search.item.SearchListItemTrack;
 import org.singularux.music.feature.tracklist.ui.search.viewholder.SearchListViewHolder;
 import org.singularux.music.feature.tracklist.ui.search.viewholder.SearchListViewHolderTrack;
+
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -26,8 +30,11 @@ public class SearchListAdapter extends ListAdapter<SearchListItem, SearchListVie
     private @Setter @Nullable SearchListOnClickListener onItemClickListener = null;
 
     @Inject
-    public SearchListAdapter(Picasso picasso) {
-        super(new SearchListItemDiffCallback());
+    public SearchListAdapter(Picasso picasso,
+                             @ComputationExecutorService ExecutorService executorService) {
+        super(new AsyncDifferConfig.Builder<>(new SearchListItemDiffCallback())
+                .setBackgroundThreadExecutor(executorService)
+                .build());
         setHasStableIds(true);
         this.picasso = picasso;
     }

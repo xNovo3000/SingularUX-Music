@@ -2,7 +2,6 @@ package org.singularux.music.feature.tracklist.ui.list;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.squareup.picasso.Picasso;
 
+import org.singularux.music.core.threading.ComputationExecutorService;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
 import org.singularux.music.feature.tracklist.ui.list.viewholder.TrackListViewHolder;
+
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -28,8 +31,11 @@ public class TrackListAdapter extends ListAdapter<TrackListItem, TrackListViewHo
     private @Setter @Nullable TrackListOnClickListener onItemClickListener = null;
 
     @Inject
-    public TrackListAdapter(Picasso picasso) {
-        super(new TrackListItemDiffCallback());
+    public TrackListAdapter(Picasso picasso,
+                            @ComputationExecutorService ExecutorService executorService) {
+        super(new AsyncDifferConfig.Builder<>(new TrackListItemDiffCallback())
+                .setBackgroundThreadExecutor(executorService)
+                .build());
         setHasStableIds(true);
         this.picasso = picasso;
     }

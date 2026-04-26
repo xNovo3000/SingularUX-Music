@@ -33,7 +33,6 @@ android {
 
 dependencies {
     // Project
-    api(project ':core:threading')
     api(project ':feature:nowplaying')
     api(project ':feature:playback')
     api(project ':feature:tracklist')
