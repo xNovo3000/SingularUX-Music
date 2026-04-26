@@ -33,6 +33,7 @@ android {
 
 dependencies {
     // Project
+    api(project ':core:threading')
     api(project ':feature:nowplaying')
     api(project ':feature:playback')
     api(project ':feature:tracklist')
@@ -54,4 +55,6 @@ dependencies {
     // Navigation
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
+    // RxJava
+    implementation libs.rxjava
 }
