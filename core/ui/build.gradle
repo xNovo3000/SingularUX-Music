@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = 'org.singularux.music.core.ui'
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         minSdk = 26
         consumerProguardFiles 'consumer-rules.pro'
