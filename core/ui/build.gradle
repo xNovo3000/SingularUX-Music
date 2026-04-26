@@ -23,6 +23,8 @@ android {
 }
 
 dependencies {
+    // Project
+    api(project ':core:threading')
     // AndroidX
     implementation libs.androidx.core
     implementation libs.androidx.core.splashscreen
