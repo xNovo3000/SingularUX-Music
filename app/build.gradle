@@ -54,4 +54,6 @@ dependencies {
     // Navigation
     implementation libs.navigation.fragment
     implementation libs.navigation.ui
+    // RxJava
+    implementation libs.rxjava
 }

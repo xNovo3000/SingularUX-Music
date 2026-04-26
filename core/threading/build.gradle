@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'org.singularux.music.core.ui'
+    namespace = 'org.singularux.music.core.threading'
     compileSdk = 37
     defaultConfig {
         minSdk = 26
@@ -23,16 +23,12 @@ android {
 }
 
 dependencies {
-    // Project
-    api(project ':core:threading')
     // AndroidX
     implementation libs.androidx.core
-    implementation libs.androidx.core.splashscreen
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
-    // Material 3
-    implementation libs.google.material
-    // Picasso
-    implementation libs.picasso
+    // Lombok
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
 }

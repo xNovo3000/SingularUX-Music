@@ -2,8 +2,31 @@ package org.singularux.music;
 
 import android.app.Application;
 
+import org.singularux.music.core.threading.ComputationExecutorService;
+import org.singularux.music.core.threading.IOExecutorService;
+
+import java.util.concurrent.ExecutorService;
+
+import javax.inject.Inject;
+
 import dagger.hilt.android.HiltAndroidApp;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltAndroidApp
 public class MusicApplication extends Application {
+
+    public @Inject @ComputationExecutorService ExecutorService computationExecutorService;
+    public @Inject @IOExecutorService ExecutorService ioExecutorService;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Override default RxJava executors
+        RxJavaPlugins.setInitComputationSchedulerHandler(
+                schedulerSupplier -> Schedulers.from(computationExecutorService));
+        RxJavaPlugins.setInitIoSchedulerHandler(
+                schedulerSupplier -> Schedulers.from(ioExecutorService));
+    }
+
 }
