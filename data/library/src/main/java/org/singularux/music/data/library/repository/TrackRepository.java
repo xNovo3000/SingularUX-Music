@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface TrackRepository {
     @NonNull List<TrackEntity> getAll();
+    @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String query);
+    @NonNull List<TrackEntity> getAllByAlbumId(long albumId);
+    @NonNull List<TrackEntity> getAllByArtistId(long artistId);
 }

@@ -20,4 +20,8 @@ public class TracksViewModel extends ViewModel {
         this.readMusicPermission = getStringPermissionUseCase.get(MusicPermission.READ_MEDIA_AUDIO);
     }
 
+    public void playShuffled() {
+
+    }
+
 }

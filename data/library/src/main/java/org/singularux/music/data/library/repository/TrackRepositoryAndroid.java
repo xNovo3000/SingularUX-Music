@@ -27,6 +27,9 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private static final String TAG = "TrackRepositoryAndroid";
 
+    private static final Uri ARTWORK_BASE_PATH =
+            Uri.parse("content://media/external/audio/albumart/");
+
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
 
@@ -43,9 +46,6 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private static final String[] GET_ALL_SELECTION_ARGS = {"1", "0"};
     private static final String GET_ALL_SORT_ORDER = MediaStore.Audio.Media.DEFAULT_SORT_ORDER;
 
-    private static final Uri ARTWORK_BASE_PATH =
-            Uri.parse("content://media/external/audio/albumart/");
-
     @Override
     public @NonNull List<TrackEntity> getAll() {
         // Check for permissions
@@ -54,8 +54,6 @@ public class TrackRepositoryAndroid implements TrackRepository {
             return Collections.emptyList();
         }
         // Create query
-        Uri uri = GET_ALL_URI;
-        String[] projection = GET_ALL_PROJECTION;
         Bundle queryArgs = new Bundle();
         queryArgs.putString(ContentResolver.QUERY_ARG_SQL_SELECTION, GET_ALL_SELECTION);
         queryArgs.putStringArray(ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS, GET_ALL_SELECTION_ARGS);
@@ -80,6 +78,21 @@ public class TrackRepositoryAndroid implements TrackRepository {
         }
     }
 
+    @Override
+    public @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String query) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public @NonNull List<TrackEntity> getAllByAlbumId(long albumId) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public @NonNull List<TrackEntity> getAllByArtistId(long artistId) {
+        return Collections.emptyList();
+    }
+
     private static final class TrackEntityExtractor implements Function<Cursor, TrackEntity> {
 
         @Override
@@ -102,6 +115,10 @@ public class TrackRepositoryAndroid implements TrackRepository {
             if (!cursor.isNull(4)) {
                 artistName = cursor.getString(4);
             }
+            if (artistName == null || artistName.equals("<unknown>")) {
+                artistId = null;
+                artistName = null;
+            }
             // Album
             if (!cursor.isNull(5)) {
                 albumId = cursor.getLong(5);
@@ -109,8 +126,12 @@ public class TrackRepositoryAndroid implements TrackRepository {
             if (!cursor.isNull(6)) {
                 albumName = cursor.getString(6);
             }
+            if (albumName == null || albumName.equals("<unknown>")) {
+                albumId = null;
+                albumName = null;
+            }
             // Artwork path
-            if (albumName != null && albumId != null && !albumName.equals("<unknown>")) {
+            if (albumId != null) {
                 artworkPath = Uri.withAppendedPath(ARTWORK_BASE_PATH, albumId.toString());
             }
             // Result

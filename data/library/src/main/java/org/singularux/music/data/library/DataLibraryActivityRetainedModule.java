@@ -15,7 +15,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @Module
 @InstallIn(ActivityRetainedComponent.class)
-public abstract class DataLibraryActivityRetainedModuleBindings {
+public abstract class DataLibraryActivityRetainedModule {
 
     @Provides
     @ActivityRetainedScoped
