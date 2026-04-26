@@ -15,11 +15,12 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @Module
 @InstallIn(ActivityRetainedComponent.class)
-public class DataLibraryModule {
+public class DataLibraryActivityRetainedModule {
 
     @Provides
     @ActivityRetainedScoped
-    public TrackRepository providesTrackRepository(@ApplicationContext Context context,
+    public TrackRepository providesTrackRepository(
+            @ApplicationContext Context context,
             MusicPermissionManager musicPermissionManager) {
         return new TrackRepositoryAndroid(context, musicPermissionManager);
     }

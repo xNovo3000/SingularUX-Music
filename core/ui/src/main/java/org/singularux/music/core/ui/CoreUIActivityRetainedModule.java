@@ -19,7 +19,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 
 @Module
 @InstallIn(ActivityRetainedComponent.class)
-public class CoreUiModule {
+public class CoreUIActivityRetainedModule {
 
     private static final int PICASSO_CACHE_SIZE_BYTES = 8 * 1024 * 1024;
 

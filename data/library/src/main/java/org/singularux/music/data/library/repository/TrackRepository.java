@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TrackRepository {
     @NonNull List<TrackEntity> getAll();
-    @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String title);
+    @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String query);
 }

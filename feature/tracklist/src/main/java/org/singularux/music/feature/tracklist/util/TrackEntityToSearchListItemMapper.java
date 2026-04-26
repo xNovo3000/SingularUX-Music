@@ -20,7 +20,7 @@ public final class TrackEntityToSearchListItemMapper
                 .artistName(trackEntity.getArtistName())
                 .albumId(trackEntity.getAlbumId())
                 .albumTitle(trackEntity.getAlbumTitle())
-                .artworkUri(trackEntity.getArtworkUri())
+                .artworkUri(trackEntity.getArtworkPath())
                 .duration(trackEntity.getDuration())
                 .build();
     }

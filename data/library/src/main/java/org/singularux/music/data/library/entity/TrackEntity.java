@@ -7,16 +7,16 @@ import androidx.annotation.Nullable;
 
 import java.time.Duration;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+@Value
 public class TrackEntity {
-    private final long id;
-    private final @NonNull String title;
-    private final @Nullable Long artistId;
-    private final @Nullable String artistName;
-    private final @Nullable Long albumId;
-    private final @Nullable String albumTitle;
-    private final @Nullable Uri artworkUri;
-    private final @NonNull Duration duration;
+    long id;
+    @NonNull String title;
+    @Nullable Long artistId;
+    @Nullable String artistName;
+    @Nullable Long albumId;
+    @Nullable String albumTitle;
+    @NonNull Duration duration;
+    @Nullable Uri artworkPath;
 }
