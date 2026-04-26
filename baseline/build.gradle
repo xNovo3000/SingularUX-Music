@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     targetProjectPath = ":app"
-    testOptions.managedDevices.devices {
+    testOptions.managedDevices.allDevices {
         pixel9Api35(ManagedVirtualDevice) {
             device = "Pixel 9"
             apiLevel = 35
