@@ -19,7 +19,7 @@ public final class TrackEntityToTrackListItemMapper implements Function<TrackEnt
         return new TrackListItem(trackEntity.getId(), trackEntity.getTitle(),
                 trackEntity.getArtistId(), trackEntity.getArtistName(),
                 trackEntity.getAlbumId(), trackEntity.getAlbumTitle(),
-                trackEntity.getArtworkUri(), trackEntity.getDuration(),
+                trackEntity.getArtworkPath(), trackEntity.getDuration(),
                 trackEntity.getId() == currentPlayingId);
     }
 
