@@ -5,8 +5,10 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.core.content.ContextCompat;
 import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
@@ -43,14 +45,12 @@ public class MusicPlaybackService extends MediaSessionService {
                 PauseWhenCallingBroadcastReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onTaskRemoved(@Nullable Intent rootIntent) {
         // Stop playback when user closes the app from task manager
         // Do not destroy the session, the activity will release the service
-        if (mediaSession != null) {
-            mediaSession.getPlayer().setPlayWhenReady(false);
-        }
-        stopSelf();
+        pauseAllPlayersAndStopSelf();
     }
 
     @Override
