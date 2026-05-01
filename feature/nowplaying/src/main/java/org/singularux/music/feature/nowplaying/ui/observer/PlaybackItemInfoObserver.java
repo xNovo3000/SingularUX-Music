@@ -55,7 +55,7 @@ public class PlaybackItemInfoObserver implements Observer<Optional<PlaybackItemI
             durationString = context.getString(R.string.now_playing_duration,
                     duration.getSeconds() / 60, duration.getSeconds() % 60);
             // Artwork
-            artwork = playbackItemInfo.getArtworkUri();
+            artwork = playbackItemInfo.getArtworkPath();
         } else {
             title = context.getString(R.string.now_playing_title_placeholder);
             artists = context.getString(R.string.now_playing_artist_placeholder);

@@ -32,30 +32,17 @@ public class ListenPlaybackItemInfoUseCase {
 
     private final MusicControllerFacade musicControllerFacade;
 
-    public Flowable<Optional<PlaybackItemInfo>> get() {
-        return Flowable.create(new PlaybackInfoSource(musicControllerFacade),
-                        BackpressureStrategy.LATEST)
-                .subscribeOn(Schedulers.computation());
+    public @NonNull Flowable<Optional<PlaybackItemInfo>> get() {
+        return Flowable.<Optional<PlaybackItemInfo>>create(emitter -> {
+                    musicControllerFacade.getMediaControllerSingle()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new MediaControllerObserver(emitter));
+                }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.computation(), false);
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackInfoSource
-            implements FlowableOnSubscribe<Optional<PlaybackItemInfo>> {
-
-        private final MusicControllerFacade musicControllerFacade;
-
-        @Override
-        public void subscribe(@NonNull FlowableEmitter<Optional<PlaybackItemInfo>> emitter) {
-            // Only start emitting when MediaController is ready
-            musicControllerFacade.getMediaControllerSingle()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new MediaControllerObserver(emitter));
-        }
-
-    }
-
-    @RequiredArgsConstructor
-    private static class MediaControllerObserver implements SingleObserver<MediaController> {
+    private static final class MediaControllerObserver implements SingleObserver<MediaController> {
 
         private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
 
@@ -66,7 +53,7 @@ public class ListenPlaybackItemInfoUseCase {
         public void onSuccess(@NonNull MediaController mediaController) {
             Log.i(TAG, "Adding MediaController listener");
             PlaybackInfoListener listener = new PlaybackInfoListener(mediaController, emitter);
-            // Add listener, force first update and remove when flowable is cancelled
+            // Add listener, force first update and remove when flow is canceled
             mediaController.addListener(listener);
             listener.update();
             emitter.setCancellable(new RemovePlayerListenerCancellable(
@@ -83,7 +70,7 @@ public class ListenPlaybackItemInfoUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackInfoListener implements Player.Listener {
+    private static final class PlaybackInfoListener implements Player.Listener {
 
         private final MediaController mediaController;
         private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;

@@ -40,7 +40,7 @@ public class PlaybackItemInfoObserver implements Observer<Optional<PlaybackItemI
                 artists = context.getString(R.string.playback_bar_unknown_artist);
             }
             // Artwork
-            artwork = playbackItemInfo.getArtworkUri();
+            artwork = playbackItemInfo.getArtworkPath();
         } else {
             title = context.getString(R.string.playback_bar_unknown_track);
             artists = context.getString(R.string.playback_bar_unknown_artist);

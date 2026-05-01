@@ -17,7 +17,7 @@ public class PlaybackItemInfo {
     @Nullable String artistName;
     @Nullable Long albumId;
     @Nullable String albumTitle;
-    @Nullable Uri artworkUri;
+    @Nullable Uri artworkPath;
     @NonNull Duration duration;
     @Nullable String playingFrom;
 }
