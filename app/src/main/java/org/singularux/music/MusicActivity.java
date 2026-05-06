@@ -6,12 +6,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.foreground.MusicPlaybackService;
+import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.presentation.MusicPlaybackService;
 
 import java.util.Objects;
 
