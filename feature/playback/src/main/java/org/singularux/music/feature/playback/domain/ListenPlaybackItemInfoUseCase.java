@@ -9,7 +9,7 @@ import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 
 import java.util.Optional;
 
@@ -25,20 +25,37 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ListenPlaybackItemInfoUseCase {
 
     private static final String TAG = "ListenPlaybackInfoUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
+    @Inject
+    public ListenPlaybackItemInfoUseCase(MusicControllerFacade musicControllerFacade) {
+        this.musicControllerFacade = musicControllerFacade;
+    }
+
     public @NonNull Flowable<Optional<PlaybackItemInfo>> get() {
-        return Flowable.<Optional<PlaybackItemInfo>>create(emitter -> {
-                    musicControllerFacade.getMediaControllerSingle()
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new MediaControllerObserver(emitter));
-                }, BackpressureStrategy.LATEST)
+        return Flowable.create(new OptionalPlaybackItemInfoSource(musicControllerFacade),
+                        BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation(), false);
+    }
+
+    @RequiredArgsConstructor
+    private static class OptionalPlaybackItemInfoSource
+            implements FlowableOnSubscribe<Optional<PlaybackItemInfo>> {
+
+        private final MusicControllerFacade musicControllerFacade;
+
+        @Override
+        public void subscribe(@NonNull FlowableEmitter<Optional<PlaybackItemInfo>> emitter) {
+            // Only start emitting when MediaController is ready
+            musicControllerFacade.getMediaControllerSingle()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new MediaControllerObserver(emitter));
+        }
+
     }
 
     @RequiredArgsConstructor
@@ -51,13 +68,11 @@ public class ListenPlaybackItemInfoUseCase {
 
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
-            Log.i(TAG, "Adding MediaController listener");
             PlaybackInfoListener listener = new PlaybackInfoListener(mediaController, emitter);
             // Add listener, force first update and remove when flow is canceled
             mediaController.addListener(listener);
             listener.update();
-            emitter.setCancellable(new RemovePlayerListenerCancellable(
-                    TAG, mediaController, listener));
+            emitter.setCancellable(() -> mediaController.removeListener(listener));
         }
 
         @Override

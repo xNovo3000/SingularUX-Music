@@ -3,13 +3,11 @@ package org.singularux.music.feature.playback.domain;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackState;
+import org.singularux.music.feature.playback.data.PlaybackState;
 
 import javax.inject.Inject;
 
@@ -23,17 +21,21 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ListenPlaybackStateUseCase {
 
     private static final String TAG = "ListenPlaybackStateUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
+    @Inject
+    public ListenPlaybackStateUseCase(MusicControllerFacade musicControllerFacade) {
+        this.musicControllerFacade = musicControllerFacade;
+    }
+
     public Flowable<PlaybackState> get() {
         return Flowable.create(new PlaybackStateSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
-                .subscribeOn(Schedulers.computation());
+                .subscribeOn(Schedulers.computation(), false);
     }
 
     @RequiredArgsConstructor
@@ -61,13 +63,11 @@ public class ListenPlaybackStateUseCase {
 
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
-            Log.i(TAG, "Adding MediaController listener");
             PlaybackStateListener listener = new PlaybackStateListener(mediaController, emitter);
-            // Add listener, force first update and remove when flowable is cancelled
+            // Add listener, force first update and remove when flow is canceled
             mediaController.addListener(listener);
             listener.update();
-            emitter.setCancellable(new RemovePlayerListenerCancellable(
-                    TAG, mediaController, listener));
+            emitter.setCancellable(() -> mediaController.removeListener(listener));
         }
 
         @Override
@@ -92,11 +92,6 @@ public class ListenPlaybackStateUseCase {
 
         @Override
         public void onIsPlayingChanged(boolean isPlaying) {
-            update();
-        }
-
-        @Override
-        public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
             update();
         }
 

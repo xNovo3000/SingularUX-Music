@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer;
 
 import com.squareup.picasso.Picasso;
 
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.tracklist.R;
 import org.singularux.music.feature.tracklist.databinding.RouteTrackListBinding;
 

@@ -5,7 +5,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
 
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 
 import java.time.Duration;
 import java.util.function.Function;

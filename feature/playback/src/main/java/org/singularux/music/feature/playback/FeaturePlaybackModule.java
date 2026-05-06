@@ -17,7 +17,8 @@ public class FeaturePlaybackModule {
 
     @Provides
     @ActivityRetainedScoped
-    public MusicControllerFacade providesMusicControllerFacade(@ApplicationContext Context context) {
+    public MusicControllerFacade providesMusicControllerFacade(
+            @ApplicationContext Context context) {
         return new MusicControllerFacade(context);
     }
 

@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.data.PlaybackPosition;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +20,6 @@ import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ListenPlaybackPositionUseCase {
 
     private static final String TAG = "ListenPlaybackPositionUseCase";
@@ -31,6 +30,11 @@ public class ListenPlaybackPositionUseCase {
             new PlaybackPosition(0.0F, Duration.ofMillis(0), Duration.ofMillis(1));
 
     private final MusicControllerFacade musicControllerFacade;
+
+    @Inject
+    public ListenPlaybackPositionUseCase(MusicControllerFacade musicControllerFacade) {
+        this.musicControllerFacade = musicControllerFacade;
+    }
 
     public Flowable<PlaybackPosition> get() {
         // Must be watched on main thread because MediaController can be queried only there

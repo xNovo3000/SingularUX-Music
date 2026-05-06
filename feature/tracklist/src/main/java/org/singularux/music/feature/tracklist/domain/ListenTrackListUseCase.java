@@ -16,7 +16,7 @@ import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.data.library.repository.TrackRepositoryAndroid;
 import org.singularux.music.feature.playback.domain.ListenPlaybackItemInfoUseCase;
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;
 import org.singularux.music.feature.tracklist.util.TrackEntityToTrackListItemMapper;
 

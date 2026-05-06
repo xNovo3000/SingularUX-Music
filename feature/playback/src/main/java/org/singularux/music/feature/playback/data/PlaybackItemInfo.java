@@ -1,4 +1,4 @@
-package org.singularux.music.feature.playback.model;
+package org.singularux.music.feature.playback.data;
 
 import android.net.Uri;
 
