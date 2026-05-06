@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class NowPlaying2Activity extends ComponentActivity {
 
-    private @Inject MusicControllerFacade musicControllerFacade;
+    public @Inject MusicControllerFacade musicControllerFacade;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
