@@ -10,14 +10,14 @@ import org.singularux.music.feature.playback.data.PlayerAction;
 
 import javax.inject.Inject;
 
-public class OnPlaybackActionUseCase {
+public class OnPlayerActionUseCase {
 
     private static final String TAG = "OnPlaybackActionUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
     @Inject
-    public OnPlaybackActionUseCase(MusicControllerFacade musicControllerFacade) {
+    public OnPlayerActionUseCase(MusicControllerFacade musicControllerFacade) {
         this.musicControllerFacade = musicControllerFacade;
     }
 
