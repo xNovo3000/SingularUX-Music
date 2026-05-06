@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import org.singularux.music.feature.nowplaying.R;
 import org.singularux.music.feature.nowplaying.databinding.RouteNowPlayingBinding;
 import org.singularux.music.feature.nowplaying.ui.utils.SliderDurationLabelFormatter;
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class PlaybackItemInfoObserver implements Observer<Optional<PlaybackItemI
             durationString = context.getString(R.string.now_playing_duration,
                     duration.getSeconds() / 60, duration.getSeconds() % 60);
             // Artwork
-            artwork = playbackItemInfo.getArtworkUri();
+            artwork = playbackItemInfo.getArtworkPath();
         } else {
             title = context.getString(R.string.now_playing_title_placeholder);
             artists = context.getString(R.string.now_playing_artist_placeholder);

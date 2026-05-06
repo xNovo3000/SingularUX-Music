@@ -17,6 +17,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Emitter;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleEmitter;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -25,13 +26,12 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
 public class MusicControllerFacade {
 
     private static final String TAG = "MusicControllerFacade";
 
-    private final Single<MediaController> mediaControllerSingle;
-    private @Nullable MediaController mediaController = null;
+    private final @Getter Single<MediaController> mediaControllerSingle;
+    private @Nullable @Getter MediaController mediaController = null;
 
     public MusicControllerFacade(@NonNull Context context) {
         // Try to load MediaController
@@ -70,16 +70,25 @@ public class MusicControllerFacade {
 
         @Override
         public void subscribe(@NonNull SingleEmitter<MediaController> emitter) {
-            Futures.addCallback(mediaControllerFuture, new FutureCallback<>() {
-                @Override
-                public void onSuccess(MediaController result) {
-                    emitter.onSuccess(result);
-                }
-                @Override
-                public void onFailure(@NonNull Throwable t) {
-                    emitter.onError(t);
-                }
-            }, ContextCompat.getMainExecutor(context));
+            Futures.addCallback(mediaControllerFuture, new MediaControllerCallback(emitter),
+                    ContextCompat.getMainExecutor(context));
+        }
+
+    }
+
+    @RequiredArgsConstructor
+    private static final class MediaControllerCallback implements FutureCallback<MediaController> {
+
+        private final SingleEmitter<MediaController> emitter;
+
+        @Override
+        public void onSuccess(MediaController result) {
+            emitter.onSuccess(result);
+        }
+
+        @Override
+        public void onFailure(@NonNull Throwable t) {
+            emitter.onError(t);
         }
 
     }
@@ -102,8 +111,7 @@ public class MusicControllerFacade {
 
     }
 
-    private static final class MediaControllerReleaser
-            implements SingleObserver<MediaController> {
+    private static final class MediaControllerReleaser implements SingleObserver<MediaController> {
 
         @Override
         public void onSubscribe(@NonNull Disposable d) {}

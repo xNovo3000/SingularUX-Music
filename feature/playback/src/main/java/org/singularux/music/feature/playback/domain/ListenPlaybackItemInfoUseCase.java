@@ -1,5 +1,6 @@
 package org.singularux.music.feature.playback.domain;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,9 +10,11 @@ import androidx.media3.common.Player;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 
+import java.time.Duration;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.inject.Inject;
 
@@ -25,21 +28,25 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ListenPlaybackItemInfoUseCase {
 
     private static final String TAG = "ListenPlaybackInfoUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
-    public Flowable<Optional<PlaybackItemInfo>> get() {
-        return Flowable.create(new PlaybackInfoSource(musicControllerFacade),
+    @Inject
+    public ListenPlaybackItemInfoUseCase(MusicControllerFacade musicControllerFacade) {
+        this.musicControllerFacade = musicControllerFacade;
+    }
+
+    public @NonNull Flowable<Optional<PlaybackItemInfo>> get() {
+        return Flowable.create(new OptionalPlaybackItemInfoSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
-                .subscribeOn(Schedulers.computation());
+                .subscribeOn(Schedulers.computation(), false);
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackInfoSource
+    private static class OptionalPlaybackItemInfoSource
             implements FlowableOnSubscribe<Optional<PlaybackItemInfo>> {
 
         private final MusicControllerFacade musicControllerFacade;
@@ -55,7 +62,7 @@ public class ListenPlaybackItemInfoUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class MediaControllerObserver implements SingleObserver<MediaController> {
+    private static final class MediaControllerObserver implements SingleObserver<MediaController> {
 
         private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
 
@@ -64,13 +71,11 @@ public class ListenPlaybackItemInfoUseCase {
 
         @Override
         public void onSuccess(@NonNull MediaController mediaController) {
-            Log.i(TAG, "Adding MediaController listener");
             PlaybackInfoListener listener = new PlaybackInfoListener(mediaController, emitter);
-            // Add listener, force first update and remove when flowable is cancelled
+            // Add listener, force first update and remove when flow is canceled
             mediaController.addListener(listener);
             listener.update();
-            emitter.setCancellable(new RemovePlayerListenerCancellable(
-                    TAG, mediaController, listener));
+            emitter.setCancellable(() -> mediaController.removeListener(listener));
         }
 
         @Override
@@ -83,12 +88,10 @@ public class ListenPlaybackItemInfoUseCase {
     }
 
     @RequiredArgsConstructor
-    private static class PlaybackInfoListener implements Player.Listener {
+    private static final class PlaybackInfoListener implements Player.Listener {
 
         private final MediaController mediaController;
         private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
-        private final MediaItemToPlaybackItemInfoMapper mapper =
-                new MediaItemToPlaybackItemInfoMapper();
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
@@ -99,11 +102,71 @@ public class ListenPlaybackItemInfoUseCase {
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
                 Log.d(TAG, "Current MediaItem is not null, updating accordingly " + mediaItem);
-                emitter.onNext(Optional.of(mapper.apply(mediaItem)));
+                PlaybackItemInfoExtractor extractor = new PlaybackItemInfoExtractor();
+                emitter.onNext(Optional.of(extractor.apply(mediaItem)));
             } else {
                 Log.d(TAG, "Current MediaItem is null");
                 emitter.onNext(Optional.empty());
             }
+        }
+
+    }
+
+    private static final class PlaybackItemInfoExtractor
+            implements Function<MediaItem, PlaybackItemInfo> {
+
+        @Override
+        public @NonNull PlaybackItemInfo apply(@NonNull MediaItem mediaItem) {
+            // ID
+            long id;
+            try {
+                id = Long.parseLong(mediaItem.mediaId);
+            } catch (NumberFormatException e) {
+                id = -1;
+            }
+            // Title
+            String title = "";
+            if (mediaItem.mediaMetadata.title != null) {
+                title = mediaItem.mediaMetadata.title.toString();
+            }
+            // Artist ID
+            Long artistId = null;
+            if (mediaItem.mediaMetadata.extras != null &&
+                    mediaItem.mediaMetadata.extras.containsKey("artist_id")) {
+                artistId = mediaItem.mediaMetadata.extras.getLong("artist_id");
+            }
+            // Artist name
+            String artistName = null;
+            if (mediaItem.mediaMetadata.artist != null) {
+                artistName = mediaItem.mediaMetadata.artist.toString();
+            }
+            // Album ID
+            Long albumId = null;
+            if (mediaItem.mediaMetadata.extras != null &&
+                    mediaItem.mediaMetadata.extras.containsKey("album_id")) {
+                albumId = mediaItem.mediaMetadata.extras.getLong("album_id");
+            }
+            // Album title
+            String albumTitle = null;
+            if (mediaItem.mediaMetadata.albumTitle != null) {
+                albumTitle = mediaItem.mediaMetadata.albumTitle.toString();
+            }
+            // Duration
+            Duration duration = Duration.ZERO;
+            if (mediaItem.mediaMetadata.durationMs != null) {
+                duration = Duration.ofMillis(mediaItem.mediaMetadata.durationMs);
+            }
+            // Playback token
+            String playingFrom = null;
+            if (mediaItem.mediaMetadata.extras != null &&
+                    mediaItem.mediaMetadata.extras.containsKey("playing_from")) {
+                playingFrom = mediaItem.mediaMetadata.extras.getString("playing_from");
+            }
+            // Artwork
+            Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
+            // Create PlaybackItemInfo
+            return new PlaybackItemInfo(id, title, artistId, artistName,
+                    albumId, albumTitle, artworkUri, duration, playingFrom);
         }
 
     }

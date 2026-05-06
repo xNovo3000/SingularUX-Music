@@ -9,12 +9,12 @@ import androidx.media3.common.MediaItem;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.feature.playback.foreground.MusicControllerFacade;
-import org.singularux.music.feature.playback.model.PlaybackState;
+import org.singularux.music.feature.playback.data.PlaybackState;
 import org.singularux.music.feature.playback.domain.ListenPlaybackStateUseCase;
 import org.singularux.music.feature.playback.domain.ListenPlaybackItemInfoUseCase;
 import org.singularux.music.feature.playback.domain.ListenPlaybackPositionUseCase;
-import org.singularux.music.feature.playback.model.PlaybackItemInfo;
-import org.singularux.music.feature.playback.model.PlaybackPosition;
+import org.singularux.music.feature.playback.data.PlaybackItemInfo;
+import org.singularux.music.feature.playback.data.PlaybackPosition;
 import org.singularux.music.feature.tracklist.domain.GetTrackListFilteredByNameUseCase;
 import org.singularux.music.feature.tracklist.domain.ListenTrackListUseCase;
 import org.singularux.music.feature.tracklist.ui.list.item.TrackListItem;

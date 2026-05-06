@@ -5,7 +5,10 @@ plugins {
 
 android {
     namespace = 'org.singularux.music.feature.tracklist'
-    compileSdk = 37
+    compileSdk {
+        version = release(37)
+    }
+    buildToolsVersion = '37.0.0'
     defaultConfig {
         minSdk = 30
         consumerProguardFiles 'consumer-rules.pro'

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'org.singularux.music.feature.playback'
+    namespace = 'org.singularux.music.core.playback'
     compileSdk {
         version = release(37)
     }
@@ -32,7 +32,6 @@ dependencies {
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
     // Media3
-    implementation libs.media3.exoplayer
     implementation libs.media3.session
     // Lombok
     compileOnly libs.lombok
