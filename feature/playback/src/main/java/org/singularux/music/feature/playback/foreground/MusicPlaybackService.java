@@ -29,6 +29,8 @@ public class MusicPlaybackService extends MediaSessionService {
         // Create pending intent that opens the application when clicking on the notification
         // Additionally, put an origin tag to tell the system that the intent came from
         // the notification and should go to the "Now Playing" page if not already there
+        // TODO: We need to launch the player activity, not the library activity
+        // TODO: because we are switching to basic multi-activity architecture
         Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         assert intent != null;
         intent.putExtra("origin", INTENT_ORIGIN);

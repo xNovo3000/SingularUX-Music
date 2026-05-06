@@ -129,7 +129,8 @@ public class TrackRepositoryAndroid implements TrackRepository {
 
     private static final class TrackEntityExtractor implements Function<Cursor, TrackEntity> {
 
-        private static final Uri ARTWORK_URI = Uri.parse("content://media/external/audio/albumart");
+        private static final Uri ARTWORK_URI =
+                Uri.parse("content://media/external/audio/albumart");
 
         @Override
         public @NonNull TrackEntity apply(@NonNull Cursor cursor) {
