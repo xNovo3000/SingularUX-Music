@@ -34,6 +34,7 @@ dependencies {
     api(project ':feature:playback')
     // AndroidX
     implementation libs.androidx.core
+    implementation libs.androidx.activity
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
