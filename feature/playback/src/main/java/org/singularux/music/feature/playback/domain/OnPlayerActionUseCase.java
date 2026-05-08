@@ -36,8 +36,10 @@ public class OnPlayerActionUseCase {
             mediaController.pause();
         } else if (action instanceof PlayerAction.SkipPrev) {
             mediaController.seekToPrevious();
+            mediaController.play();
         } else if (action instanceof PlayerAction.SkipNext) {
             mediaController.seekToNext();
+            mediaController.play();
         } else if (action instanceof PlayerAction.SeekTo) {
             PlayerAction.SeekTo seekToAction = (PlayerAction.SeekTo) action;
             mediaController.seekTo(seekToAction.getDuration().toMillis());
