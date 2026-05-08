@@ -64,7 +64,7 @@ public class TrackListRoute extends Fragment {
         NavController navController = NavHostFragment.findNavController(this);
         // Navigation - Now Playing
         binding.playbackBar.playbackBarContainer
-                .setOnClickListener(new PlaybackBarOnClickListener(navController));
+                .setOnClickListener(new PlaybackBarOnClickListener(navController, getContext()));
         // Shuffle button
         binding.shuffle.setOnClickListener((v) -> viewModel.playShuffled());
         // Inset listeners
