@@ -1,0 +1,66 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
+}
+
+android {
+    namespace = 'org.singularux.music.feature.library'
+    compileSdk {
+        version = release(37)
+    }
+    buildToolsVersion = '37.0.0'
+    defaultConfig {
+        minSdk = 30
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+dependencies {
+    // Project
+    api(project ':core:permission')
+    api(project ':core:threading')
+    api(project ':core:ui')
+    api(project ':data:library')
+    api(project ':feature:playback')
+    // AndroidX
+    implementation libs.androidx.core
+    implementation libs.androidx.core.splashscreen
+    implementation libs.androidx.fragment
+    implementation libs.androidx.recyclerview
+    // Hilt
+    implementation libs.hilt.android
+    annotationProcessor libs.hilt.compiler
+    // Lifecycle
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.reactivestreams
+    implementation libs.lifecycle.viewmodel
+    // Lombok
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    // Material 3
+    implementation libs.google.material
+    // Media3
+    implementation libs.media3.exoplayer
+    implementation libs.media3.session
+    // Navigation
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    // Picasso
+    implementation libs.picasso
+    // RxJava
+    implementation libs.rxjava
+    implementation libs.rxjava.android
+}

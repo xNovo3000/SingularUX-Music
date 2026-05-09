@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="navigation_library_tracks">Tracks</string>
+
+    <string name="now_playing_bar_action_play">Play</string>
+    <string name="now_playing_bar_action_pause">Pause</string>
+
+    <string name="now_playing_bar_no_track">No track</string>
+    <string name="now_playing_bar_no_artist">No artist</string>
+    <string name="now_playing_bar_unknown_artist">Unknown artist</string>
+
+</resources>
