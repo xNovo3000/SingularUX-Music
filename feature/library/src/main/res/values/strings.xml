@@ -10,4 +10,6 @@
     <string name="now_playing_bar_no_artist">No artist</string>
     <string name="now_playing_bar_unknown_artist">Unknown artist</string>
 
+    <string name="search_hint">Search music library</string>
+
 </resources>

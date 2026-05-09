@@ -37,7 +37,8 @@ dependencies {
     // Project
     api(project ':feature:nowplaying')
     api(project ':feature:playback')
-    api(project ':feature:tracklist')
+    // api(project ':feature:tracklist')
+    api(project ':feature:library')
     // Baseline
     implementation libs.androidx.profileinstaller
     baselineProfile(project ':baseline')

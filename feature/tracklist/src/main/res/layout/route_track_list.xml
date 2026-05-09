@@ -17,12 +17,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:liftOnScrollColor="?attr/colorSurface">
+        app:liftOnScroll="false"
+        app:liftOnScrollColor="@android:color/transparent">
         <com.google.android.material.search.SearchBar
             android:id="@+id/track_list_search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/track_list_search_bar"/>
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/track_list_search_bar"
+            app:defaultMarginsEnabled="false"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <org.singularux.music.feature.tracklist.ui.search.SearchBarScrimView

@@ -14,17 +14,6 @@
         android:theme="@style/Theme.Music"
         tools:targetApi="36">
 
-        <activity android:name=".MusicActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.Music.Splash"
-            android:windowSoftInputMode="adjustNothing">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.MAIN"/>
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>
