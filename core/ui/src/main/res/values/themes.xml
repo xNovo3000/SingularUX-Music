@@ -112,6 +112,7 @@
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Music.LabelLarge</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.Music.LabelMedium</item>
         <item name="textAppearanceLabelSmall">@style/TextAppearance.Music.LabelSmall</item>
+        <item name="materialSearchViewStyle">@style/Widget.Material3Expressive.SearchView.AppBarWithSearch</item>
     </style>
     <style name="Theme.Music.Splash" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>

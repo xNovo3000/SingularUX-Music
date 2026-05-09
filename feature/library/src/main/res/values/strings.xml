@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="item_track_add_to_queue">Add to queue</string>
+
     <string name="navigation_library_tracks">Tracks</string>
 
     <string name="now_playing_bar_action_play">Play</string>
@@ -11,5 +13,6 @@
     <string name="now_playing_bar_unknown_artist">Unknown artist</string>
 
     <string name="search_hint">Search music library</string>
+    <string name="search_menu">Menu</string>
 
 </resources>

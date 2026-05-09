@@ -9,8 +9,11 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -166,6 +169,19 @@ public class LibraryActivity extends FragmentActivity {
             // Create intent and start activity
             Intent intent = new Intent(getApplicationContext(), nowPlayingActivityClass);
             startActivity(intent);
+        }
+
+    }
+
+    public static final class NowPlayingBarContainerInsetListener
+            implements OnApplyWindowInsetsListener {
+
+        @Override
+        public @NonNull WindowInsetsCompat onApplyWindowInsets(
+                @NonNull View view, @NonNull WindowInsetsCompat windowInsets) {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(insets.left, 0, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
         }
 
     }

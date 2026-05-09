@@ -17,19 +17,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:liftOnScroll="false"
-        app:liftOnScrollColor="@android:color/transparent">
+        app:statusBarForeground="?attr/colorSurface">
         <com.google.android.material.search.SearchBar
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
             android:hint="@string/search_hint"
             android:textAppearance="@style/TextAppearance.Music.SearchBar"
             app:navigationIcon="@drawable/search_24"
-            app:navigationIconTint="?attr/colorOnSurfaceVariant"
-            app:defaultMarginsEnabled="false"/>
+            app:navigationIconTint="?attr/colorOnSurfaceVariant">
+        </com.google.android.material.search.SearchBar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.search.SearchView
