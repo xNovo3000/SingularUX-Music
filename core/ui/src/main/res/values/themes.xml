@@ -44,12 +44,52 @@
     <style name="TextAppearance.Music.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
         <item name="fontFamily">@font/inter</item>
     </style>
-    <style name="TextAppearance.Music.SearchBar" parent="TextAppearance.Material3.SearchBar">
+    <style name="TextAppearance.Music.DisplayLarge.Emphasized" parent="TextAppearance.Material3.DisplayLarge.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.DisplayMedium.Emphasized" parent="TextAppearance.Material3.DisplayMedium.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.DisplaySmall.Emphasized" parent="TextAppearance.Material3.DisplaySmall.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineLarge.Emphasized" parent="TextAppearance.Material3.HeadlineLarge.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineMedium.Emphasized" parent="TextAppearance.Material3.HeadlineMedium.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.HeadlineSmall.Emphasized" parent="TextAppearance.Material3.HeadlineSmall.Emphasized">
+        <item name="fontFamily">@font/pt_serif</item>
+    </style>
+    <style name="TextAppearance.Music.TitleLarge.Emphasized" parent="TextAppearance.Material3.TitleLarge.Emphasized">
         <item name="fontFamily">@font/inter</item>
     </style>
-    <style name="TextAppearance.Music.SearchView" parent="TextAppearance.Material3.SearchView">
+    <style name="TextAppearance.Music.TitleMedium.Emphasized" parent="TextAppearance.Material3.TitleMedium.Emphasized">
         <item name="fontFamily">@font/inter</item>
     </style>
+    <style name="TextAppearance.Music.TitleSmall.Emphasized" parent="TextAppearance.Material3.TitleSmall.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodyLarge.Emphasized" parent="TextAppearance.Material3.BodyLarge.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodyMedium.Emphasized" parent="TextAppearance.Material3.BodyMedium.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.BodySmall.Emphasized" parent="TextAppearance.Material3.BodySmall.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelLarge.Emphasized" parent="TextAppearance.Material3.LabelLarge.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelMedium.Emphasized" parent="TextAppearance.Material3.LabelMedium.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="TextAppearance.Music.LabelSmall.Emphasized" parent="TextAppearance.Material3.LabelSmall.Emphasized">
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <!-- TODO: Fix style for SearchBar -->
     <style name="Theme.Music" parent="Theme.Material3Expressive.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -112,6 +152,21 @@
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Music.LabelLarge</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.Music.LabelMedium</item>
         <item name="textAppearanceLabelSmall">@style/TextAppearance.Music.LabelSmall</item>
+        <item name="textAppearanceDisplayLargeEmphasized">@style/TextAppearance.Music.DisplayLarge.Emphasized</item>
+        <item name="textAppearanceDisplayMediumEmphasized">@style/TextAppearance.Music.DisplayMedium.Emphasized</item>
+        <item name="textAppearanceDisplaySmallEmphasized">@style/TextAppearance.Music.DisplaySmall.Emphasized</item>
+        <item name="textAppearanceHeadlineLargeEmphasized">@style/TextAppearance.Music.HeadlineLarge.Emphasized</item>
+        <item name="textAppearanceHeadlineMediumEmphasized">@style/TextAppearance.Music.HeadlineMedium.Emphasized</item>
+        <item name="textAppearanceHeadlineSmallEmphasized">@style/TextAppearance.Music.HeadlineSmall.Emphasized</item>
+        <item name="textAppearanceTitleLargeEmphasized">@style/TextAppearance.Music.TitleLarge.Emphasized</item>
+        <item name="textAppearanceTitleMediumEmphasized">@style/TextAppearance.Music.TitleMedium.Emphasized</item>
+        <item name="textAppearanceTitleSmallEmphasized">@style/TextAppearance.Music.TitleSmall.Emphasized</item>
+        <item name="textAppearanceBodyLargeEmphasized">@style/TextAppearance.Music.BodyLarge.Emphasized</item>
+        <item name="textAppearanceBodyMediumEmphasized">@style/TextAppearance.Music.BodyMedium.Emphasized</item>
+        <item name="textAppearanceBodySmallEmphasized">@style/TextAppearance.Music.BodySmall.Emphasized</item>
+        <item name="textAppearanceLabelLargeEmphasized">@style/TextAppearance.Music.LabelLarge.Emphasized</item>
+        <item name="textAppearanceLabelMediumEmphasized">@style/TextAppearance.Music.LabelMedium.Emphasized</item>
+        <item name="textAppearanceLabelSmallEmphasized">@style/TextAppearance.Music.LabelSmall.Emphasized</item>
     </style>
     <style name="Theme.Music.Splash" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
