@@ -2,6 +2,8 @@
 <resources>
 
     <string name="item_track_add_to_queue">Add to queue</string>
+    <string name="item_track_duration_artist" formatted="false">%d:%02d &#183; %s</string>
+    <string name="item_track_unknown_artist">Unknown artist</string>
 
     <string name="navigation_library_tracks">Tracks</string>
 

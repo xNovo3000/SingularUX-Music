@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.listitem.ListItemCardView;
+import com.google.android.material.listitem.ListItemLayout;
 import com.google.android.material.listitem.ListItemRevealLayout;
 import com.google.android.material.listitem.ListItemViewHolder;
 import com.google.android.material.textview.MaterialTextView;
@@ -15,6 +16,8 @@ import com.google.android.material.textview.MaterialTextView;
 import org.singularux.music.feature.library.databinding.ItemTrackBinding;
 
 public class TrackItemViewHolder extends ListItemViewHolder {
+
+    public final ListItemLayout root;
 
     public final ListItemCardView viewContent;
     public final ShapeableImageView artwork;
@@ -25,6 +28,7 @@ public class TrackItemViewHolder extends ListItemViewHolder {
 
     public TrackItemViewHolder(@NonNull ItemTrackBinding binding) {
         super(binding.getRoot());
+        this.root = binding.getRoot();
         this.viewContent = binding.viewContent;
         this.artwork = binding.artwork;
         this.title = binding.title;

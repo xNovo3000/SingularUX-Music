@@ -141,11 +141,12 @@ public class LibraryActivity extends FragmentActivity {
         @Override
         public void onChanged(@NonNull PlaybackPosition playbackPosition) {
             // Extract position and duration in milliseconds
-            int positionMs = (int) playbackPosition.getCurrentPosition().toMillis();
-            int durationMs = (int) playbackPosition.getContentDuration().toMillis();
-            // Update slider value and max accordingly
-            binding.nowPlayingBar.progressBar.setMax(durationMs);
-            binding.nowPlayingBar.progressBar.setProgress(positionMs);
+            long sliderMaxValue = binding.nowPlayingBar.progressBar.getMax();
+            long positionMs = playbackPosition.getCurrentPosition().toMillis();
+            long durationMs = playbackPosition.getContentDuration().toMillis();
+            // Calculate progress and update slider value accordingly
+            int progress = (int) (positionMs * sliderMaxValue / durationMs);
+            binding.nowPlayingBar.progressBar.setProgress(progress);
         }
 
     }

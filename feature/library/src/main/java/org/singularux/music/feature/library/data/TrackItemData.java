@@ -9,13 +9,18 @@ import androidx.recyclerview.widget.DiffUtil;
 import java.time.Duration;
 
 import lombok.Value;
+import lombok.With;
 
 @Value
+@With
 public class TrackItemData {
 
     long id;
     @NonNull String title;
+    @Nullable Long artistId;
     @Nullable String artistName;
+    @Nullable Long albumId;
+    @Nullable String albumTitle;
     @NonNull Duration duration;
     @Nullable Uri artworkPath;
     boolean isPlaying;
