@@ -20,16 +20,16 @@ import java.util.concurrent.ExecutorService;
 public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemViewHolder> {
     
     private final Picasso picasso;
-    private final OnActionListener onActionListener;
+    private final ActionListener actionListener;
     
     public TrackItemListAdapter(ExecutorService computationExecutorService,
                                 Picasso picasso,
-                                OnActionListener onActionListener) {
+                                ActionListener actionListener) {
         super(new AsyncDifferConfig.Builder<>(new TrackItemData.Differ())
                 .setBackgroundThreadExecutor(computationExecutorService)
                 .build());
         this.picasso = picasso;
-        this.onActionListener = onActionListener;
+        this.actionListener = actionListener;
         setHasStableIds(true);
         setStateRestorationPolicy(StateRestorationPolicy.PREVENT_WHEN_EMPTY);
     }
@@ -71,9 +71,9 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         }
         // Apply listeners
         holder.viewContent.setOnClickListener(v ->
-                onActionListener.onAction(position, Action.PLAY));
+                actionListener.onAction(position, Action.PLAY));
         holder.addToQueue.setOnClickListener(v -> {
-            onActionListener.onAction(position, Action.ADD_TO_QUEUE);
+            actionListener.onAction(position, Action.ADD_TO_QUEUE);
             // Always return to non-swiped state
             holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll);
         });
@@ -95,8 +95,8 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         PLAY, ADD_TO_QUEUE
     }
     
-    public interface OnActionListener {
-        void onAction(int position, Action action);
+    public interface ActionListener {
+        void onAction(int position, @NonNull Action action);
     }
     
 }

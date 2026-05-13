@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import java.time.Duration;
 
 import lombok.Value;
-import lombok.With;
 
 @Value
-@With
 public class TrackItemData {
 
     long id;

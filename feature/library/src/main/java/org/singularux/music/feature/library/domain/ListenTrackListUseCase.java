@@ -114,7 +114,6 @@ public class ListenTrackListUseCase {
         }
     }
 
-
     @RequiredArgsConstructor
     private static final class TrackEntityMapper implements Function<TrackEntity, TrackItemData> {
 
