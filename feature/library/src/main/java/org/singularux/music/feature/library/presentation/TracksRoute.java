@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.threading.ComputationExecutorService;
+import org.singularux.music.feature.library.data.SearchItemData;
 import org.singularux.music.feature.library.data.TrackItemData;
 import org.singularux.music.feature.library.databinding.RouteTracksBinding;
 
@@ -41,7 +42,7 @@ public class TracksRoute extends Fragment {
     private TracksViewModel viewModel;
 
     private TrackItemListAdapter trackItemListAdapter;
-    private ActivityResultLauncher<String> readMusicPermissionLauncher;
+    private SearchItemListAdapter searchItemListAdapter;
 
     @Override
     public @Nullable View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,29 +59,51 @@ public class TracksRoute extends Fragment {
         ViewCompat.setOnApplyWindowInsetsListener(binding.content, new ContentInsetListener());
         // Extract ViewModel
         viewModel = new ViewModelProvider(this).get(TracksViewModel.class);
-        // Create data adapters
+        // Create and apply data adapters
         trackItemListAdapter = new TrackItemListAdapter(computationExecutorService, picasso,
                 new TrackListItemActionListener());
-        readMusicPermissionLauncher = registerForActivityResult(
+        searchItemListAdapter = new SearchItemListAdapter(computationExecutorService, picasso,
+                new SearchListItemActionListener());
+        binding.content.setAdapter(trackItemListAdapter);
+        binding.searchContent.setAdapter(searchItemListAdapter);
+        // Listen data
+        ActivityResultLauncher<String> readMusicPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 new ReadMusicPermissionLauncherResult());
-        // Apply adapters
-        binding.content.setAdapter(trackItemListAdapter);
-        // Listen data
         readMusicPermissionLauncher.launch(viewModel.getReadMusicPermission());
     }
 
-    private final class TrackListItemActionListener
-            implements TrackItemListAdapter.ActionListener {
+    private final class TrackListItemActionListener implements TrackItemListAdapter.ActionListener {
 
         @Override
-        public void onAction(int position, @NonNull TrackItemListAdapter.Action action) {
+        public void onAction(int position,
+                             @NonNull TrackItemData item,
+                             @NonNull TrackItemListAdapter.Action action) {
             switch (action) {
                 case PLAY:
-                    viewModel.play(position);
+                    viewModel.playFromTrackList(position);
                     break;
                 case ADD_TO_QUEUE:
-                    viewModel.addToQueue(position);
+                    viewModel.addToQueueFromTrackList(position);
+                    break;
+            }
+        }
+
+    }
+
+    private final class SearchListItemActionListener
+            implements SearchItemListAdapter.ActionListener {
+
+        @Override
+        public void onAction(int position,
+                             @NonNull SearchItemData item,
+                             @NonNull SearchItemListAdapter.Action action) {
+            switch (action) {
+                case PLAY:
+                    viewModel.playFromSearchList(position);
+                    break;
+                case ADD_TO_QUEUE:
+                    viewModel.addToQueueFromSearchList(position);
                     break;
             }
         }

@@ -46,14 +46,14 @@ public class ListenTrackListUseCase {
         this.listenPlaybackItemInfoUseCase = listenPlaybackItemInfoUseCase;
     }
 
-    public @NonNull Flowable<List<TrackItemData>> get(@NonNull String playingFrom) {
+    public @NonNull Flowable<List<TrackItemData>> get() {
         Flowable<List<TrackEntity>> trackEntityListFlowable = Flowable
                 .create(new TrackListUpdateEmitter(context), BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation(), false)
                 .observeOn(Schedulers.io())
                 .map(o -> trackRepository.getAll());
         return Flowable.combineLatest(trackEntityListFlowable, listenPlaybackItemInfoUseCase.get(),
-                        new TrackListWithPlaybackInfoCombiner(playingFrom))
+                        new TrackListWithPlaybackInfoCombiner())
                 .subscribeOn(Schedulers.computation());
     }
 
@@ -91,11 +91,10 @@ public class ListenTrackListUseCase {
 
     }
 
-    @RequiredArgsConstructor
     private static final class TrackListWithPlaybackInfoCombiner implements BiFunction<
             List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackItemData>> {
 
-        private final String playingFrom;
+        private static final String PLAYING_FROM = "tracks";
 
         @Override
         public @NonNull List<TrackItemData> apply(
@@ -104,7 +103,7 @@ public class ListenTrackListUseCase {
             // Extract the playing track id only if the playingFrom token matches
             long currentPlayingTrackId = maybePlaybackItemInfo
                     .filter(playbackItemInfo -> Objects
-                            .equals(playbackItemInfo.getPlayingFrom(), playingFrom))
+                            .equals(playbackItemInfo.getPlayingFrom(), PLAYING_FROM))
                     .map(PlaybackItemInfo::getId)
                     .orElse(-1L);
             // Create the final list

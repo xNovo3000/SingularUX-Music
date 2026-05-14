@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="item_search_track_artwork">56dp</dimen>
     <dimen name="item_track_artwork">56dp</dimen>
     <dimen name="now_playing_bar_artwork">48dp</dimen>
 </resources>

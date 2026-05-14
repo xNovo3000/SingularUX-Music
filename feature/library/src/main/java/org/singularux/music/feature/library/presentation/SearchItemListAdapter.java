@@ -12,20 +12,20 @@ import com.google.android.material.listitem.SwipeableListItem;
 import com.squareup.picasso.Picasso;
 
 import org.singularux.music.feature.library.R;
-import org.singularux.music.feature.library.data.TrackItemData;
+import org.singularux.music.feature.library.data.SearchItemData;
 
 import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 
-public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemViewHolder> {
-    
+public class SearchItemListAdapter extends ListAdapter<SearchItemData, SearchItemViewHolder> {
+
     private final Picasso picasso;
     private final ActionListener actionListener;
-    
-    public TrackItemListAdapter(ExecutorService computationExecutorService,
-                                Picasso picasso,
-                                ActionListener actionListener) {
-        super(new AsyncDifferConfig.Builder<>(new TrackItemData.Differ())
+
+    public SearchItemListAdapter(ExecutorService computationExecutorService,
+                                 Picasso picasso,
+                                 ActionListener actionListener) {
+        super(new AsyncDifferConfig.Builder<>(new SearchItemData.Differ())
                 .setBackgroundThreadExecutor(computationExecutorService)
                 .build());
         this.picasso = picasso;
@@ -33,16 +33,34 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         setHasStableIds(true);
         setStateRestorationPolicy(StateRestorationPolicy.PREVENT_WHEN_EMPTY);
     }
-    
+
     @Override
-    public @NonNull TrackItemViewHolder onCreateViewHolder(
+    public @NonNull SearchItemViewHolder onCreateViewHolder(
             @NonNull ViewGroup parent, int viewType) {
-        return TrackItemViewHolder.create(parent);
+        switch (viewType) {
+            case SearchItemData.Track.VIEW_TYPE:
+                return SearchItemViewHolder.Track.create(parent);
+            default:
+                throw new IllegalArgumentException("Invalid viewType: " + viewType);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrackItemViewHolder holder, int position) {
-        TrackItemData item = getItem(position);
+    public void onBindViewHolder(@NonNull SearchItemViewHolder holder, int position) {
+        SearchItemData item = getItem(position);
+        switch (item.getViewType()) {
+            case SearchItemData.Track.VIEW_TYPE:
+                onBindTrackViewHolder((SearchItemData.Track) item,
+                        (SearchItemViewHolder.Track) holder, position);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid viewType: " + item.getViewType());
+        }
+    }
+
+    public void onBindTrackViewHolder(@NonNull SearchItemData.Track item,
+                                      @NonNull SearchItemViewHolder.Track holder,
+                                      int position) {
         Context context = holder.itemView.getContext();
         // Extract data
         boolean isPlaying = item.isPlaying();
@@ -52,9 +70,9 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         if (item.getArtistName() != null) {
             artistName = item.getArtistName();
         } else {
-            artistName = context.getString(R.string.item_track_unknown_artist);
+            artistName = context.getString(R.string.item_search_track_unknown_artist);
         }
-        String durationArtist = context.getString(R.string.item_track_duration_artist,
+        String durationArtist = context.getString(R.string.item_search_track_duration_artist,
                 duration.getSeconds() / 60, duration.getSeconds() % 60, artistName);
         // Apply data
         holder.bind(position, getItemCount());
@@ -63,7 +81,8 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         holder.durationArtist.setText(durationArtist);
         if (artworkPath != null) {
             picasso.load(artworkPath)
-                    .resizeDimen(R.dimen.item_track_artwork, R.dimen.item_track_artwork)
+                    .resizeDimen(R.dimen.item_search_track_artwork,
+                            R.dimen.item_search_track_artwork)
                     .into(holder.artwork);
         } else {
             picasso.cancelRequest(holder.artwork);
@@ -80,23 +99,21 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
     }
 
     @Override
-    public void onViewRecycled(@NonNull TrackItemViewHolder holder) {
-        // Cancel any pending image request and set element non-swiped
-        picasso.cancelRequest(holder.artwork);
-        holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll, false);
+    public int getItemViewType(int position) {
+        return getItem(position).getViewType();
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getId();
+        return getItem(position).getUniqueId();
     }
-    
+
     public enum Action {
         PLAY, ADD_TO_QUEUE
     }
-    
+
     public interface ActionListener {
-        void onAction(int position, @NonNull TrackItemData item, @NonNull Action action);
+        void onAction(int position, @NonNull SearchItemData item, @NonNull Action action);
     }
-    
+
 }
