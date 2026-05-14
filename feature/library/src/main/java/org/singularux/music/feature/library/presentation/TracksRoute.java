@@ -1,6 +1,8 @@
 package org.singularux.music.feature.library.presentation;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +61,8 @@ public class TracksRoute extends Fragment {
         ViewCompat.setOnApplyWindowInsetsListener(binding.content, new ContentInsetListener());
         // Extract ViewModel
         viewModel = new ViewModelProvider(this).get(TracksViewModel.class);
+        // Add static action listeners
+        binding.searchView.getEditText().addTextChangedListener(new SearchViewTextWatcher());
         // Create and apply data adapters
         trackItemListAdapter = new TrackItemListAdapter(computationExecutorService, picasso,
                 new TrackListItemActionListener());
@@ -110,6 +114,21 @@ public class TracksRoute extends Fragment {
 
     }
 
+    private final class SearchViewTextWatcher implements TextWatcher {
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(@NonNull CharSequence s, int start, int before, int count) {
+            viewModel.updateSearchQuery(s.toString());
+        }
+
+    }
+
     private final class ReadMusicPermissionLauncherResult
             implements ActivityResultCallback<Boolean> {
 
@@ -118,6 +137,8 @@ public class TracksRoute extends Fragment {
             if (result) {
                 viewModel.getTrackItemDataList().observe(getViewLifecycleOwner(),
                         new TrackItemDataListObserver());
+                viewModel.getSearchItemDataList().observe(getViewLifecycleOwner(),
+                        new SearchItemDataListObserver());
             }
             // TODO: When permission is not given, tell user what went wrong
         }
@@ -129,6 +150,15 @@ public class TracksRoute extends Fragment {
         @Override
         public void onChanged(@NonNull List<TrackItemData> trackItemDataList) {
             trackItemListAdapter.submitList(trackItemDataList);
+        }
+
+    }
+
+    private final class SearchItemDataListObserver implements Observer<List<SearchItemData>> {
+
+        @Override
+        public void onChanged(@NonNull List<SearchItemData> searchItemDataList) {
+            searchItemListAdapter.submitList(searchItemDataList);
         }
 
     }

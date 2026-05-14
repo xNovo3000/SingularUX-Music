@@ -9,14 +9,13 @@
     <string name="item_track_duration_artist" formatted="false">%d:%02d &#183; %s</string>
     <string name="item_track_unknown_artist">Unknown artist</string>
 
-    <string name="navigation_library_tracks">Tracks</string>
-
     <string name="now_playing_bar_action_play">Play</string>
     <string name="now_playing_bar_action_pause">Pause</string>
-
     <string name="now_playing_bar_no_track">No track</string>
     <string name="now_playing_bar_no_artist">No artist</string>
     <string name="now_playing_bar_unknown_artist">Unknown artist</string>
+
+    <string name="route_tracks">Tracks</string>
 
     <string name="search_hint">Search music library</string>
     <string name="search_menu">Menu</string>

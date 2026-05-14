@@ -7,7 +7,7 @@
 
     <fragment android:id="@+id/tracks"
         android:name="org.singularux.music.feature.library.presentation.TracksRoute"
-        android:label="@string/navigation_library_tracks"
+        android:label="@string/route_tracks"
         tools:layout="@layout/route_tracks"/>
 
 </navigation>

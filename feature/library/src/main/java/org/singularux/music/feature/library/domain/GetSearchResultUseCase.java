@@ -56,7 +56,6 @@ public class GetSearchResultUseCase {
         return Flowable.combineLatest(searchObjectListFlowable, listenPlaybackItemInfoUseCase.get(),
                         new SearchWithPlaybackInfoCombiner())
                 .subscribeOn(Schedulers.computation());
-
     }
 
     private static final class SearchWithPlaybackInfoCombiner implements BiFunction<
