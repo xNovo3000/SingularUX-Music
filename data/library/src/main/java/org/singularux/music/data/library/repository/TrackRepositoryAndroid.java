@@ -41,10 +41,10 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private final Context context;
     private final MusicPermissionManager musicPermissionManager;
 
-    private static final String GET_ALL_SELECTION =
-            MediaStore.Audio.Media.IS_MUSIC + " = ? AND " +
-                    MediaStore.Audio.Media.IS_TRASHED + " = ?";
-    private static final String[] GET_ALL_SELECTION_ARGS = {"1", "0"};
+    private static final String GET_ALL_SELECTION = MediaStore.Audio.Media.IS_MUSIC + " = ? AND " +
+            MediaStore.Audio.Media.IS_TRASHED + " = ? AND " +
+            MediaStore.Audio.Media.DURATION + " > ?";
+    private static final String[] GET_ALL_SELECTION_ARGS = {"1", "0", "60000"};
 
     @Override
     public @NonNull List<TrackEntity> getAll() {
@@ -78,12 +78,12 @@ public class TrackRepositoryAndroid implements TrackRepository {
         }
     }
 
-    private static final String GET_ALL_BY_TITLE_LIKE_SELECTION =
-            MediaStore.Audio.Media.IS_MUSIC + " = ? AND " +
-                    MediaStore.Audio.Media.IS_TRASHED + " = ? AND (" +
-                    MediaStore.Audio.Media.TITLE + " LIKE ? OR " +
-                    MediaStore.Audio.Media.DISPLAY_NAME + " LIKE ?)";
-    private static final String[] GET_ALL_BY_TITLE_SELECTION_ARGS = {"1", "0", "", ""};
+    private static final String GET_ALL_BY_TITLE_LIKE_SELECTION = MediaStore.Audio.Media.IS_MUSIC + " = ? AND " +
+            MediaStore.Audio.Media.IS_TRASHED + " = ? AND (" +
+            MediaStore.Audio.Media.TITLE + " LIKE ? OR " +
+            MediaStore.Audio.Media.DISPLAY_NAME + " LIKE ?) AND " +
+            MediaStore.Audio.Media.DURATION + " > ?";
+    private static final String[] GET_ALL_BY_TITLE_SELECTION_ARGS = {"1", "0", "", "", "60000"};
 
     @Override
     public @NonNull List<TrackEntity> getAllByTitleLike(@NonNull String query) {
@@ -152,7 +152,6 @@ public class TrackRepositoryAndroid implements TrackRepository {
             }
             String artistName;
             if (!cursor.isNull(4)) {
-                artistName = cursor.getString(4);
                 if (cursor.getString(4).equals("<unknown>")) {
                     artistName = null;
                 } else {
