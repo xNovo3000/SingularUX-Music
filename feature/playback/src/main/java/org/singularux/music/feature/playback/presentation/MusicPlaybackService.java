@@ -18,7 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MusicPlaybackService extends MediaSessionService {
 
-    public static final String INTENT_ORIGIN = "system_ui_notification";
+    public static final String NOW_PLAYING_ACTIVITY_CLASS_NAME =
+            "org.singularux.music.feature.nowplaying.presentation.NowPlaying2Activity";
 
     private @Nullable MediaSession mediaSession = null;
     private @Nullable PauseWhenCallingBroadcastReceiver pauseWhenCallingBroadcastReceiver = null;
@@ -27,13 +28,13 @@ public class MusicPlaybackService extends MediaSessionService {
     public void onCreate() {
         super.onCreate();
         // Create pending intent that opens the application when clicking on the notification
-        // Additionally, put an origin tag to tell the system that the intent came from
-        // the notification and should go to the "Now Playing" page if not already there
-        // TODO: We need to launch the player activity, not the library activity
-        // TODO: because we are switching to basic multi-activity architecture
-        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-        assert intent != null;
-        intent.putExtra("origin", INTENT_ORIGIN);
+        Class<?> nowPlayingActivityClass;
+        try {
+            nowPlayingActivityClass = Class.forName(NOW_PLAYING_ACTIVITY_CLASS_NAME);
+        } catch (ClassNotFoundException e) {
+            nowPlayingActivityClass = null;
+        }
+        Intent intent = new Intent(this, nowPlayingActivityClass);
         PendingIntent openApplicationPendingIntent = PendingIntent.getActivity(this, 0,
                 intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         // Create playback session
