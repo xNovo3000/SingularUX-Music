@@ -2,12 +2,16 @@ package org.singularux.music.feature.nowplaying.presentation;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,7 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.nowplaying.R;
-import org.singularux.music.feature.nowplaying.databinding.ActivityNowPlaying2Binding;
+import org.singularux.music.feature.nowplaying.databinding.ActivityNowPlayingBinding;
 import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.playback.data.PlaybackPosition;
 import org.singularux.music.feature.playback.data.PlaybackState;
@@ -30,13 +34,13 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class NowPlaying2Activity extends ComponentActivity {
+public class NowPlayingActivity extends ComponentActivity {
 
     public @Inject MusicControllerFacade musicControllerFacade;
     public @Inject Picasso picasso;
 
-    private ActivityNowPlaying2Binding binding;
-    private NowPlaying2ViewModel viewModel;
+    private ActivityNowPlayingBinding binding;
+    private NowPlayingViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,13 +48,12 @@ public class NowPlaying2Activity extends ComponentActivity {
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         // Extract XML elements
-        binding = ActivityNowPlaying2Binding.inflate(getLayoutInflater());
+        binding = ActivityNowPlayingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // Add inset listeners
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(),
-                new NowPlayingContainerInsetListener());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new ContainerInsetListener());
         // Extract ViewModel
-        viewModel = new ViewModelProvider(this).get(NowPlaying2ViewModel.class);
+        viewModel = new ViewModelProvider(this).get(NowPlayingViewModel.class);
         // Add static action listeners
         binding.topBar.back.setOnClickListener(v -> finish());
         binding.playerController.playPause.setOnClickListener(v -> viewModel.play());
@@ -72,6 +75,18 @@ public class NowPlaying2Activity extends ComponentActivity {
         if (isFinishing())
             musicControllerFacade.release();
         super.onDestroy();
+    }
+
+    public static final class ContainerInsetListener implements OnApplyWindowInsetsListener {
+
+        @Override
+        public @NonNull WindowInsetsCompat onApplyWindowInsets(
+                @NonNull View view, @NonNull WindowInsetsCompat windowInsets) {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        }
+
     }
 
     private final class PlaybackStateObserver implements Observer<PlaybackState> {

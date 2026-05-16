@@ -154,7 +154,7 @@ public class LibraryActivity extends FragmentActivity {
     private final class NowPlayingBarContainerOnClickListener implements View.OnClickListener {
 
         private static final String NOW_PLAYING_ACTIVITY_CLASS_NAME =
-                "org.singularux.music.feature.nowplaying.presentation.NowPlaying2Activity";
+                "org.singularux.music.feature.nowplaying.presentation.NowPlayingActivity";
 
         @Override
         public void onClick(View v) {

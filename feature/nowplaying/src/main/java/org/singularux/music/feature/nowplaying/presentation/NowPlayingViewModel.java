@@ -23,7 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import lombok.Getter;
 
 @HiltViewModel
-public class NowPlaying2ViewModel extends ViewModel {
+public class NowPlayingViewModel extends ViewModel {
 
     private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackItemInfo;
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
@@ -31,7 +31,7 @@ public class NowPlaying2ViewModel extends ViewModel {
     private final OnPlayerActionUseCase onPlayerActionUseCase;
 
     @Inject
-    public NowPlaying2ViewModel(
+    public NowPlayingViewModel(
             OnPlayerActionUseCase onPlayerActionUseCase,
             @NonNull ListenPlaybackItemInfoUseCase listenPlaybackItemInfoUseCase,
             @NonNull ListenPlaybackPositionUseCase listenPlaybackPositionUseCase,

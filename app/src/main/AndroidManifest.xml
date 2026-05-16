@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Music"
         tools:targetApi="36">
 
-        <activity android:name=".feature.nowplaying.presentation.NowPlaying2Activity"
+        <activity android:name=".feature.nowplaying.presentation.NowPlayingActivity"
             android:parentActivityName=".feature.library.presentation.LibraryActivity"
             tools:node="merge"/>
 

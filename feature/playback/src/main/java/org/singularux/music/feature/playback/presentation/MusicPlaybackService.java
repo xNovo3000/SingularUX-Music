@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MusicPlaybackService extends MediaSessionService {
 
     public static final String NOW_PLAYING_ACTIVITY_CLASS_NAME =
-            "org.singularux.music.feature.nowplaying.presentation.NowPlaying2Activity";
+            "org.singularux.music.feature.nowplaying.presentation.NowPlayingActivity";
 
     private @Nullable MediaSession mediaSession = null;
     private @Nullable PauseWhenCallingBroadcastReceiver pauseWhenCallingBroadcastReceiver = null;

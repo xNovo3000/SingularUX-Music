@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="now_playing_skip_prev">Skip previous</string>
-    <string name="now_playing_skip_next">Skip next</string>
-    <string name="now_playing_play">Play</string>
-    <string name="now_playing_pause">Pause</string>
-    <string name="now_playing_progress">Progress</string>
-</resources>
