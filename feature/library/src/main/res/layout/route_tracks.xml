@@ -32,6 +32,12 @@
         </com.google.android.material.search.SearchBar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <org.singularux.music.feature.library.presentation.SearchBarScrimView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:background="?attr/colorSurface"/>
+
     <com.google.android.material.search.SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
