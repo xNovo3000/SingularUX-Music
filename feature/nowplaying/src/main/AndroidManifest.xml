@@ -3,7 +3,7 @@
 
     <application>
 
-        <activity android:name=".presentation.NowPlaying2Activity"
+        <activity android:name=".presentation.NowPlayingActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustNothing"/>

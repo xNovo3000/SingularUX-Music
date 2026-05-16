@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="now_playing_close">Close</string>
-    <string name="now_playing_container_title">Now playing</string>
-    <string name="now_playing_title_placeholder">Unknown track</string>
-    <string name="now_playing_artist_placeholder">Unknown artist</string>
+
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_skip_prev">Skip prev</string>
+    <string name="action_skip_next">Skip next</string>
+
+    <string name="duration_placeholder">0:00</string>
+    <string name="duration_formatted" formatted="false">%d:%02d</string>
+
+    <string name="title_no_track">No track</string>
+    <string name="title_no_artist">No artist</string>
+    <string name="title_unknown_artist">Unknown artist</string>
+
+    <string name="top_bar_title">Now playing</string>
+
 </resources>
