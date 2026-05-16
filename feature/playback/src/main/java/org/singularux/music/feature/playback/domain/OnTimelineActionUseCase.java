@@ -1,8 +1,6 @@
 package org.singularux.music.feature.playback.domain;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +9,7 @@ import androidx.media3.common.MediaMetadata;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
+import org.singularux.music.feature.playback.data.QueueItem;
 import org.singularux.music.feature.playback.data.TimelineAction;
 
 import java.util.Collections;
@@ -47,12 +46,12 @@ public class OnTimelineActionUseCase {
             TimelineAction.ReplaceMediaItems replaceMediaItemsAction =
                     (TimelineAction.ReplaceMediaItems) action;
             if (replaceMediaItemsAction.getIndex() < 0 || replaceMediaItemsAction.getIndex() >
-                    replaceMediaItemsAction.getMediaItemList().size()) {
+                    replaceMediaItemsAction.getQueueItemList().size()) {
                 Log.e(TAG, "Index out of bounds, index: " + replaceMediaItemsAction.getIndex());
                 return;
             }
-            List<MediaItem> mediaItems = replaceMediaItemsAction.getMediaItemList().stream()
-                    .map(new MediaItemExtractor(false))
+            List<MediaItem> mediaItems = replaceMediaItemsAction.getQueueItemList().stream()
+                    .map(new MediaItemExtractor())
                     .collect(Collectors.toList());
             if (replaceMediaItemsAction.isShuffled()) {
                 MediaItem first = mediaItems.remove(replaceMediaItemsAction.getIndex());
@@ -81,7 +80,7 @@ public class OnTimelineActionUseCase {
                 index++;
             }
             // Extract MediaItem and add to the list
-            MediaItemExtractor mediaItemExtractor = new MediaItemExtractor(true);
+            MediaItemExtractor mediaItemExtractor = new MediaItemExtractor();
             MediaItem mediaItem = mediaItemExtractor.apply(addToCustomQueueAction.getMediaItem());
             Log.d(TAG, "Adding MediaItem to custom queue at index: " + index);
             mediaController.addMediaItem(index, mediaItem);
@@ -89,44 +88,36 @@ public class OnTimelineActionUseCase {
     }
 
     @RequiredArgsConstructor
-    private static final class MediaItemExtractor
-            implements Function<TimelineAction.MediaItem, MediaItem> {
-
-        private final boolean customQueue;
+    private static final class MediaItemExtractor implements Function<QueueItem, MediaItem> {
 
         @Override
-        public @NonNull MediaItem apply(@NonNull TimelineAction.MediaItem mediaItem) {
+        public @NonNull MediaItem apply(@NonNull QueueItem queueItem) {
             Bundle extras = new Bundle();
-            if (mediaItem.getArtistId() != null) {
-                extras.putLong("artist_id", mediaItem.getArtistId());
+            if (queueItem.getArtistId() != null) {
+                extras.putLong("artist_id", queueItem.getArtistId());
             }
-            if (mediaItem.getAlbumId() != null) {
-                extras.putLong("album_id", mediaItem.getAlbumId());
+            if (queueItem.getAlbumId() != null) {
+                extras.putLong("album_id", queueItem.getAlbumId());
             }
-            if (mediaItem.getPlayingFrom() != null) {
-                extras.putString("playing_from", mediaItem.getPlayingFrom());
+            if (queueItem.getPlayingFrom() != null) {
+                extras.putString("playing_from", queueItem.getPlayingFrom());
             }
-            if (customQueue) {
+            if (queueItem.isCustomQueue()) {
                 extras.putBoolean("custom_queue", true);
             }
             MediaMetadata mediaMetadata = new MediaMetadata.Builder()
-                    .setTitle(mediaItem.getTitle())
-                    .setAlbumArtist(mediaItem.getAlbumTitle())
-                    .setArtist(mediaItem.getArtistName())
-                    .setArtworkUri(mediaItem.getArtworkPath())
-                    .setDurationMs(mediaItem.getDuration().toMillis())
+                    .setTitle(queueItem.getTitle())
+                    .setAlbumArtist(queueItem.getAlbumTitle())
+                    .setArtist(queueItem.getArtistName())
+                    .setArtworkUri(queueItem.getArtworkPath())
+                    .setDurationMs(queueItem.getDuration().toMillis())
                     .setExtras(extras)
                     .build();
             return new MediaItem.Builder()
-                    .setMediaId(String.valueOf(mediaItem.getId()))
-                    .setUri(getTrackUriFromId(mediaItem.getId()))
+                    .setMediaId(String.valueOf(queueItem.getId()))
+                    .setUri(queueItem.getUri())
                     .setMediaMetadata(mediaMetadata)
                     .build();
-        }
-
-        private static Uri getTrackUriFromId(long trackId) {
-            return Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    String.valueOf(trackId));
         }
 
     }
