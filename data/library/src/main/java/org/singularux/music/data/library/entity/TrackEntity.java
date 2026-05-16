@@ -18,5 +18,6 @@ public class TrackEntity {
     @Nullable Long albumId;
     @Nullable String albumTitle;
     @NonNull Duration duration;
+    @NonNull Uri uri;
     @Nullable Uri artworkPath;
 }
