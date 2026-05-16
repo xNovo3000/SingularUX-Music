@@ -46,4 +46,6 @@ dependencies {
     // Hilt
     implementation libs.hilt.android
     annotationProcessor libs.hilt.compiler
+    // RxJava
+    implementation libs.rxjava
 }
