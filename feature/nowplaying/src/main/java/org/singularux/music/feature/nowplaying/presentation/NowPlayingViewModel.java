@@ -15,7 +15,6 @@ import org.singularux.music.feature.playback.domain.ListenPlaybackStateUseCase;
 import org.singularux.music.feature.playback.domain.OnPlayerActionUseCase;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -25,7 +24,7 @@ import lombok.Getter;
 @HiltViewModel
 public class NowPlayingViewModel extends ViewModel {
 
-    private final @Getter LiveData<Optional<PlaybackItemInfo>> playbackItemInfo;
+    private final @Getter LiveData<PlaybackItemInfo> playbackItemInfo;
     private final @Getter LiveData<PlaybackPosition> playbackPosition;
     private final @Getter LiveData<PlaybackState> playbackState;
     private final OnPlayerActionUseCase onPlayerActionUseCase;

@@ -26,8 +26,7 @@ import org.singularux.music.feature.library.databinding.ActivityLibraryBinding;
 import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.playback.data.PlaybackPosition;
 import org.singularux.music.feature.playback.data.PlaybackState;
-
-import java.util.Optional;
+import org.singularux.music.feature.playback.data.QueueItem;
 
 import javax.inject.Inject;
 
@@ -97,23 +96,23 @@ public class LibraryActivity extends FragmentActivity {
 
     }
 
-    private final class PlaybackItemInfoObserver implements Observer<Optional<PlaybackItemInfo>> {
+    private final class PlaybackItemInfoObserver implements Observer<PlaybackItemInfo> {
 
         @Override
-        public void onChanged(@NonNull Optional<PlaybackItemInfo> maybePlaybackItemInfo) {
+        public void onChanged(@NonNull PlaybackItemInfo playbackItemInfo) {
             // Get title, artist (if present) and artwork (if present)
             String title, artist;
             Uri artworkPath;
-            if (maybePlaybackItemInfo.isPresent()) {
-                PlaybackItemInfo playbackItemInfo = maybePlaybackItemInfo.get();
-                title = playbackItemInfo.getTitle();
-                if (playbackItemInfo.getArtistName() != null) {
-                    artist = playbackItemInfo.getArtistName();
+            if (playbackItemInfo.getQueueItem() != null) {
+                QueueItem queueItem = playbackItemInfo.getQueueItem();
+                title = queueItem.getTitle();
+                if (queueItem.getArtistName() != null) {
+                    artist = queueItem.getArtistName();
                 } else {
                     artist = getString(R.string.now_playing_bar_unknown_artist);
                 }
-                if (playbackItemInfo.getArtworkPath() != null) {
-                    artworkPath = playbackItemInfo.getArtworkPath();
+                if (queueItem.getArtworkPath() != null) {
+                    artworkPath = queueItem.getArtworkPath();
                 } else {
                     artworkPath = null;
                 }

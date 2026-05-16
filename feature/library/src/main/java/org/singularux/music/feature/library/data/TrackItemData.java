@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
+import org.singularux.music.feature.playback.data.QueueItem;
 import org.singularux.music.feature.playback.data.TimelineAction;
 
 import java.time.Duration;
@@ -24,6 +25,7 @@ public class TrackItemData {
     @Nullable Long albumId;
     @Nullable String albumTitle;
     @NonNull Duration duration;
+    @NonNull Uri uri;
     @Nullable Uri artworkPath;
     boolean isPlaying;
 
@@ -45,15 +47,16 @@ public class TrackItemData {
 
     @RequiredArgsConstructor
     public static final class ToTimelineMediaItemMapper
-            implements Function<TrackItemData, TimelineAction.MediaItem> {
+            implements Function<TrackItemData, QueueItem> {
 
         private final String playingFrom;
+        private final boolean customQueue;
 
         @Override
-        public @NonNull TimelineAction.MediaItem apply(@NonNull TrackItemData item) {
-            return new TimelineAction.MediaItem(item.id, item.title,
-                    item.artistId, item.artistName, item.albumId, item.albumTitle,
-                    item.duration, item.artworkPath, playingFrom);
+        public @NonNull QueueItem apply(@NonNull TrackItemData item) {
+            return new QueueItem(item.id, item.title, item.artistId, item.artistName,
+                    item.albumId, item.albumTitle, item.duration,
+                    item.uri, item.artworkPath, playingFrom, customQueue);
         }
 
     }

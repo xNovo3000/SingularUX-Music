@@ -17,6 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="?attr/colorSurfaceContainerHighest"
-        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraLarge"/>
+        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

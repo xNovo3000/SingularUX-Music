@@ -1,6 +1,5 @@
 package org.singularux.music.feature.playback.domain;
 
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,10 +10,7 @@ import androidx.media3.session.MediaController;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.playback.data.PlaybackItemInfo;
-
-import java.time.Duration;
-import java.util.Optional;
-import java.util.function.Function;
+import org.singularux.music.feature.playback.data.QueueItem;
 
 import javax.inject.Inject;
 
@@ -39,20 +35,20 @@ public class ListenPlaybackItemInfoUseCase {
         this.musicControllerFacade = musicControllerFacade;
     }
 
-    public @NonNull Flowable<Optional<PlaybackItemInfo>> get() {
-        return Flowable.create(new OptionalPlaybackItemInfoSource(musicControllerFacade),
+    public @NonNull Flowable<PlaybackItemInfo> get() {
+        return Flowable.create(new PlaybackItemInfoSource(musicControllerFacade),
                         BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.computation(), false);
     }
 
     @RequiredArgsConstructor
-    private static class OptionalPlaybackItemInfoSource
-            implements FlowableOnSubscribe<Optional<PlaybackItemInfo>> {
+    private static class PlaybackItemInfoSource
+            implements FlowableOnSubscribe<PlaybackItemInfo> {
 
         private final MusicControllerFacade musicControllerFacade;
 
         @Override
-        public void subscribe(@NonNull FlowableEmitter<Optional<PlaybackItemInfo>> emitter) {
+        public void subscribe(@NonNull FlowableEmitter<PlaybackItemInfo> emitter) {
             // Only start emitting when MediaController is ready
             musicControllerFacade.getMediaControllerSingle()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +60,7 @@ public class ListenPlaybackItemInfoUseCase {
     @RequiredArgsConstructor
     private static final class MediaControllerObserver implements SingleObserver<MediaController> {
 
-        private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
+        private final FlowableEmitter<PlaybackItemInfo> emitter;
 
         @Override
         public void onSubscribe(@NonNull Disposable d) {}
@@ -91,8 +87,8 @@ public class ListenPlaybackItemInfoUseCase {
     private static final class PlaybackInfoListener implements Player.Listener {
 
         private final MediaController mediaController;
-        private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
-        private final PlaybackItemInfoExtractor extractor = new PlaybackItemInfoExtractor();
+        private final FlowableEmitter<PlaybackItemInfo> emitter;
+        private final QueueItem.FromMediaItem fromMediaItem = new QueueItem.FromMediaItem();
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
@@ -102,72 +98,13 @@ public class ListenPlaybackItemInfoUseCase {
         public void update() {
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
-                PlaybackItemInfo playbackItemInfo = extractor.apply(mediaItem);
-                Log.d(TAG, "Current MediaItem is not null, updating accordingly " + playbackItemInfo);
-                emitter.onNext(Optional.of(playbackItemInfo));
+                QueueItem queueItem = fromMediaItem.apply(mediaItem);
+                Log.d(TAG, "Current MediaItem is not null, updating accordingly " + queueItem);
+                emitter.onNext(new PlaybackItemInfo(queueItem));
             } else {
                 Log.d(TAG, "Current MediaItem is null");
-                emitter.onNext(Optional.empty());
+                emitter.onNext(new PlaybackItemInfo(null));
             }
-        }
-
-    }
-
-    private static final class PlaybackItemInfoExtractor
-            implements Function<MediaItem, PlaybackItemInfo> {
-
-        @Override
-        public @NonNull PlaybackItemInfo apply(@NonNull MediaItem mediaItem) {
-            // ID
-            long id;
-            try {
-                id = Long.parseLong(mediaItem.mediaId);
-            } catch (NumberFormatException e) {
-                id = -1;
-            }
-            // Title
-            String title = "";
-            if (mediaItem.mediaMetadata.title != null) {
-                title = mediaItem.mediaMetadata.title.toString();
-            }
-            // Artist ID
-            Long artistId = null;
-            if (mediaItem.mediaMetadata.extras != null &&
-                    mediaItem.mediaMetadata.extras.containsKey("artist_id")) {
-                artistId = mediaItem.mediaMetadata.extras.getLong("artist_id");
-            }
-            // Artist name
-            String artistName = null;
-            if (mediaItem.mediaMetadata.artist != null) {
-                artistName = mediaItem.mediaMetadata.artist.toString();
-            }
-            // Album ID
-            Long albumId = null;
-            if (mediaItem.mediaMetadata.extras != null &&
-                    mediaItem.mediaMetadata.extras.containsKey("album_id")) {
-                albumId = mediaItem.mediaMetadata.extras.getLong("album_id");
-            }
-            // Album title
-            String albumTitle = null;
-            if (mediaItem.mediaMetadata.albumTitle != null) {
-                albumTitle = mediaItem.mediaMetadata.albumTitle.toString();
-            }
-            // Duration
-            Duration duration = Duration.ZERO;
-            if (mediaItem.mediaMetadata.durationMs != null) {
-                duration = Duration.ofMillis(mediaItem.mediaMetadata.durationMs);
-            }
-            // Playback token
-            String playingFrom = null;
-            if (mediaItem.mediaMetadata.extras != null &&
-                    mediaItem.mediaMetadata.extras.containsKey("playing_from")) {
-                playingFrom = mediaItem.mediaMetadata.extras.getString("playing_from");
-            }
-            // Artwork
-            Uri artworkUri = mediaItem.mediaMetadata.artworkUri;
-            // Create PlaybackItemInfo
-            return new PlaybackItemInfo(id, title, artistId, artistName,
-                    albumId, albumTitle, artworkUri, duration, playingFrom);
         }
 
     }
