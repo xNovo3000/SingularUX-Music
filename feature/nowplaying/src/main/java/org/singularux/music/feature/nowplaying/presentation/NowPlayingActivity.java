@@ -25,9 +25,9 @@ import org.singularux.music.feature.nowplaying.databinding.ActivityNowPlayingBin
 import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.playback.data.PlaybackPosition;
 import org.singularux.music.feature.playback.data.PlaybackState;
+import org.singularux.music.feature.playback.data.QueueItem;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -114,26 +114,26 @@ public class NowPlayingActivity extends ComponentActivity {
 
     }
 
-    private final class PlaybackItemInfoObserver implements Observer<Optional<PlaybackItemInfo>> {
+    private final class PlaybackItemInfoObserver implements Observer<PlaybackItemInfo> {
 
         @Override
-        public void onChanged(@NonNull Optional<PlaybackItemInfo> maybePlaybackItemInfo) {
+        public void onChanged(@NonNull PlaybackItemInfo playbackItemInfo) {
             // Get title, titleDuration, artist (if present) and artwork (if present)
             String title, artist, sliderDuration;
             Uri artworkPath;
-            if (maybePlaybackItemInfo.isPresent()) {
-                PlaybackItemInfo playbackItemInfo = maybePlaybackItemInfo.get();
-                title = playbackItemInfo.getTitle();
-                if (playbackItemInfo.getArtistName() != null) {
-                    artist = playbackItemInfo.getArtistName();
+            if (playbackItemInfo.getQueueItem() != null) {
+                QueueItem queueItem = playbackItemInfo.getQueueItem();
+                title = queueItem.getTitle();
+                if (queueItem.getArtistName() != null) {
+                    artist = queueItem.getArtistName();
                 } else {
                     artist = getString(R.string.title_unknown_artist);
                 }
-                long labelMinutes = playbackItemInfo.getDuration().getSeconds() / 60;
-                long labelSeconds = playbackItemInfo.getDuration().getSeconds() % 60;
+                long labelMinutes = queueItem.getDuration().getSeconds() / 60;
+                long labelSeconds = queueItem.getDuration().getSeconds() % 60;
                 sliderDuration = getString(R.string.duration_formatted, labelMinutes, labelSeconds);
-                if (playbackItemInfo.getArtworkPath() != null) {
-                    artworkPath = playbackItemInfo.getArtworkPath();
+                if (queueItem.getArtworkPath() != null) {
+                    artworkPath = queueItem.getArtworkPath();
                 } else {
                     artworkPath = null;
                 }
