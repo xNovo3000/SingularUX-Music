@@ -20,9 +20,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import lombok.RequiredArgsConstructor;
+
 public class OnTimelineActionUseCase {
 
-    private static final String TAG = "OnPlaybackActionUseCase";
+    private static final String TAG = "OnTimelineActionUseCase";
 
     private final MusicControllerFacade musicControllerFacade;
 
@@ -40,8 +42,8 @@ public class OnTimelineActionUseCase {
         }
         MediaController mediaController = musicControllerFacade.requireMediaController();
         // Run actions based on class type
+        // TODO: Make this inside rx
         if (action instanceof TimelineAction.ReplaceMediaItems) {
-            // TODO: Make this inside rx
             TimelineAction.ReplaceMediaItems replaceMediaItemsAction =
                     (TimelineAction.ReplaceMediaItems) action;
             if (replaceMediaItemsAction.getIndex() < 0 || replaceMediaItemsAction.getIndex() >
@@ -50,24 +52,47 @@ public class OnTimelineActionUseCase {
                 return;
             }
             List<MediaItem> mediaItems = replaceMediaItemsAction.getMediaItemList().stream()
-                    .map(new MediaItemExtractor())
+                    .map(new MediaItemExtractor(false))
                     .collect(Collectors.toList());
             if (replaceMediaItemsAction.isShuffled()) {
                 MediaItem first = mediaItems.remove(replaceMediaItemsAction.getIndex());
                 Collections.shuffle(mediaItems);
                 mediaItems.add(0, first);
+                Log.d(TAG, "Adding new item list in shuffled fashion");
                 mediaController.setMediaItems(mediaItems, 0, 0);
             } else {
+                Log.d(TAG, "Adding new item list in unshuffled fashion");
                 mediaController.setMediaItems(mediaItems,
                         replaceMediaItemsAction.getIndex(), 0);
             }
             mediaController.prepare();
-            mediaController.play();
+        } else if (action instanceof TimelineAction.AddToCustomQueue) {
+            TimelineAction.AddToCustomQueue addToCustomQueueAction =
+                    (TimelineAction.AddToCustomQueue) action;
+            // Get index of the first item without the extra "custom_queue" extra
+            int index = mediaController.getCurrentMediaItemIndex() + 1;
+            int count = mediaController.getMediaItemCount();
+            while (index < count) {
+                MediaItem mediaItem = mediaController.getMediaItemAt(index);
+                if (mediaItem.mediaMetadata.extras != null &&
+                        !mediaItem.mediaMetadata.extras.containsKey("custom_queue")) {
+                    break;
+                }
+                index++;
+            }
+            // Extract MediaItem and add to the list
+            MediaItemExtractor mediaItemExtractor = new MediaItemExtractor(true);
+            MediaItem mediaItem = mediaItemExtractor.apply(addToCustomQueueAction.getMediaItem());
+            Log.d(TAG, "Adding MediaItem to custom queue at index: " + index);
+            mediaController.addMediaItem(index, mediaItem);
         }
     }
 
+    @RequiredArgsConstructor
     private static final class MediaItemExtractor
             implements Function<TimelineAction.MediaItem, MediaItem> {
+
+        private final boolean customQueue;
 
         @Override
         public @NonNull MediaItem apply(@NonNull TimelineAction.MediaItem mediaItem) {
@@ -80,6 +105,9 @@ public class OnTimelineActionUseCase {
             }
             if (mediaItem.getPlayingFrom() != null) {
                 extras.putString("playing_from", mediaItem.getPlayingFrom());
+            }
+            if (customQueue) {
+                extras.putBoolean("custom_queue", true);
             }
             MediaMetadata mediaMetadata = new MediaMetadata.Builder()
                     .setTitle(mediaItem.getTitle())

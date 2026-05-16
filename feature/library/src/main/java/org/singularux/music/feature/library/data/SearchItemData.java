@@ -48,6 +48,15 @@ public abstract class SearchItemData {
             return ((long) VIEW_TYPE << 32) | Objects.hash(id);
         }
 
+        public static final class Filter implements Predicate<SearchItemData> {
+
+            @Override
+            public boolean test(SearchItemData searchItemData) {
+                return searchItemData instanceof Track;
+            }
+
+        }
+
         @RequiredArgsConstructor
         public static final class ToTimelineMediaItemMapper
                 implements Function<Track, TimelineAction.MediaItem> {
@@ -61,15 +70,6 @@ public abstract class SearchItemData {
                         item.duration, item.artworkPath, PLAYING_FROM);
             }
 
-        }
-
-    }
-
-    public static final class Filter implements Predicate<SearchItemData> {
-
-        @Override
-        public boolean test(SearchItemData searchItemData) {
-            return searchItemData instanceof Track;
         }
 
     }

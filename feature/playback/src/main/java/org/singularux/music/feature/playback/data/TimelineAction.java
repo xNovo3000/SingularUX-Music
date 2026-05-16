@@ -34,4 +34,10 @@ public class TimelineAction {
         boolean shuffled;
     }
 
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class AddToCustomQueue extends TimelineAction {
+        MediaItem mediaItem;
+    }
+
 }
