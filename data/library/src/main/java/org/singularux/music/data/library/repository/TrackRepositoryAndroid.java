@@ -42,7 +42,7 @@ public class TrackRepositoryAndroid implements TrackRepository {
     private final MusicPermissionManager musicPermissionManager;
 
     private static final String GET_ALL_SELECTION = MediaStore.Audio.Media.IS_MUSIC + " = ? AND " +
-            MediaStore.Audio.Media.IS_TRASHED + " = ? AND" +
+            MediaStore.Audio.Media.IS_TRASHED + " = ? AND " +
             MediaStore.Audio.Media.DURATION + " > ?";
     private static final String[] GET_ALL_SELECTION_ARGS = {"1", "0", "60000"};
 
