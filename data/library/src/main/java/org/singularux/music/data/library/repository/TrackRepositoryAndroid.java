@@ -153,6 +153,11 @@ public class TrackRepositoryAndroid implements TrackRepository {
             String artistName;
             if (!cursor.isNull(4)) {
                 artistName = cursor.getString(4);
+                if (cursor.getString(4).equals("<unknown>")) {
+                    artistName = null;
+                } else {
+                    artistName = cursor.getString(4);
+                }
             } else {
                 artistName = null;
             }
@@ -165,12 +170,19 @@ public class TrackRepositoryAndroid implements TrackRepository {
             }
             String albumTitle;
             if (!cursor.isNull(6)) {
-                albumTitle = cursor.getString(6);
+                if (cursor.getString(6).equals("<unknown>")) {
+                    albumTitle = null;
+                } else {
+                    albumTitle = cursor.getString(6);
+                }
             } else {
                 albumTitle = null;
             }
             // Duration
             Duration duration = Duration.ofMillis(cursor.getLong(7));
+            // Uri
+            Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    String.valueOf(id));
             // Artwork path
             Uri artworkPath;
             if (albumId != null) {
@@ -180,7 +192,7 @@ public class TrackRepositoryAndroid implements TrackRepository {
             }
             // Create object
             return new TrackEntity(id, title, artistId, artistName,
-                    albumId, albumTitle, duration, artworkPath);
+                    albumId, albumTitle, duration, uri, artworkPath);
         }
 
     }
