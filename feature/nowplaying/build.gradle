@@ -49,8 +49,6 @@ dependencies {
     implementation libs.google.material
     // Media3
     implementation libs.media3.session
-    // Navigation
-    implementation libs.navigation.fragment
     // Picasso
     implementation libs.picasso
     // RxJava
