@@ -6,10 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
+import org.singularux.music.feature.playback.data.TimelineAction;
+
 import java.time.Duration;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 public abstract class SearchItemData {
@@ -41,6 +46,30 @@ public abstract class SearchItemData {
         @Override
         public long getUniqueId() {
             return ((long) VIEW_TYPE << 32) | Objects.hash(id);
+        }
+
+        @RequiredArgsConstructor
+        public static final class ToTimelineMediaItemMapper
+                implements Function<Track, TimelineAction.MediaItem> {
+
+            private static final String PLAYING_FROM = "search";
+
+            @Override
+            public @NonNull TimelineAction.MediaItem apply(@NonNull Track item) {
+                return new TimelineAction.MediaItem(item.id, item.title,
+                        item.artistId, item.artistName, item.albumId, item.albumTitle,
+                        item.duration, item.artworkPath, PLAYING_FROM);
+            }
+
+        }
+
+    }
+
+    public static final class Filter implements Predicate<SearchItemData> {
+
+        @Override
+        public boolean test(SearchItemData searchItemData) {
+            return searchItemData instanceof Track;
         }
 
     }

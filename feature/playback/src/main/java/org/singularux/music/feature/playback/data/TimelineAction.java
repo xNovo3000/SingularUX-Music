@@ -21,8 +21,8 @@ public class TimelineAction {
         @Nullable String artistName;
         @Nullable Long albumId;
         @Nullable String albumTitle;
-        @Nullable Uri artworkPath;
         @NonNull Duration duration;
+        @Nullable Uri artworkPath;
         @Nullable String playingFrom;
     }
 
@@ -31,6 +31,7 @@ public class TimelineAction {
     public static class ReplaceMediaItems extends TimelineAction {
         List<MediaItem> mediaItemList;
         int index;
+        boolean shuffled;
     }
 
 }

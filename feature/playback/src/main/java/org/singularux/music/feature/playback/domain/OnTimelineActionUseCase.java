@@ -1,14 +1,19 @@
 package org.singularux.music.feature.playback.domain;
 
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
 import androidx.media3.session.MediaController;
 
 import org.singularux.music.core.playback.MusicControllerFacade;
 import org.singularux.music.feature.playback.data.TimelineAction;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,11 +44,25 @@ public class OnTimelineActionUseCase {
             // TODO: Make this inside rx
             TimelineAction.ReplaceMediaItems replaceMediaItemsAction =
                     (TimelineAction.ReplaceMediaItems) action;
+            if (replaceMediaItemsAction.getIndex() < 0 || replaceMediaItemsAction.getIndex() >
+                    replaceMediaItemsAction.getMediaItemList().size()) {
+                Log.e(TAG, "Index out of bounds, index: " + replaceMediaItemsAction.getIndex());
+                return;
+            }
             List<MediaItem> mediaItems = replaceMediaItemsAction.getMediaItemList().stream()
                     .map(new MediaItemExtractor())
                     .collect(Collectors.toList());
-            mediaController.setMediaItems(mediaItems,
-                    replaceMediaItemsAction.getIndex(), 0);
+            if (replaceMediaItemsAction.isShuffled()) {
+                MediaItem first = mediaItems.remove(replaceMediaItemsAction.getIndex());
+                Collections.shuffle(mediaItems);
+                mediaItems.add(0, first);
+                mediaController.setMediaItems(mediaItems, 0, 0);
+            } else {
+                mediaController.setMediaItems(mediaItems,
+                        replaceMediaItemsAction.getIndex(), 0);
+            }
+            mediaController.prepare();
+            mediaController.play();
         }
     }
 
@@ -52,7 +71,34 @@ public class OnTimelineActionUseCase {
 
         @Override
         public @NonNull MediaItem apply(@NonNull TimelineAction.MediaItem mediaItem) {
-            return null;
+            Bundle extras = new Bundle();
+            if (mediaItem.getArtistId() != null) {
+                extras.putLong("artist_id", mediaItem.getArtistId());
+            }
+            if (mediaItem.getAlbumId() != null) {
+                extras.putLong("album_id", mediaItem.getAlbumId());
+            }
+            if (mediaItem.getPlayingFrom() != null) {
+                extras.putString("playing_from", mediaItem.getPlayingFrom());
+            }
+            MediaMetadata mediaMetadata = new MediaMetadata.Builder()
+                    .setTitle(mediaItem.getTitle())
+                    .setAlbumArtist(mediaItem.getAlbumTitle())
+                    .setArtist(mediaItem.getArtistName())
+                    .setArtworkUri(mediaItem.getArtworkPath())
+                    .setDurationMs(mediaItem.getDuration().toMillis())
+                    .setExtras(extras)
+                    .build();
+            return new MediaItem.Builder()
+                    .setMediaId(String.valueOf(mediaItem.getId()))
+                    .setUri(getTrackUriFromId(mediaItem.getId()))
+                    .setMediaMetadata(mediaMetadata)
+                    .build();
+        }
+
+        private static Uri getTrackUriFromId(long trackId) {
+            return Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    String.valueOf(trackId));
         }
 
     }
