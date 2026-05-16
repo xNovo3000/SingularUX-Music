@@ -5,13 +5,11 @@ import androidx.annotation.NonNull;
 import org.singularux.music.data.library.entity.TrackEntity;
 import org.singularux.music.data.library.repository.TrackRepository;
 import org.singularux.music.feature.library.data.SearchItemData;
-import org.singularux.music.feature.library.data.TrackItemData;
 import org.singularux.music.feature.playback.data.PlaybackItemInfo;
 import org.singularux.music.feature.playback.domain.ListenPlaybackItemInfoUseCase;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -59,20 +57,20 @@ public class GetSearchResultUseCase {
     }
 
     private static final class SearchWithPlaybackInfoCombiner implements BiFunction<
-            List<Object>, Optional<PlaybackItemInfo>, List<SearchItemData>> {
+            List<Object>, PlaybackItemInfo, List<SearchItemData>> {
 
         private static final String PLAYING_FROM = "search";
 
         @Override
         public @NonNull List<SearchItemData> apply(
                 @NonNull List<Object> objects,
-                @NonNull Optional<PlaybackItemInfo> maybePlaybackItemInfo) {
+                @NonNull PlaybackItemInfo playbackItemInfo) {
             // Extract the playing track id only if the playingFrom token matches
-            long currentPlayingTrackId = maybePlaybackItemInfo
-                    .filter(playbackItemInfo -> Objects
-                            .equals(playbackItemInfo.getPlayingFrom(), PLAYING_FROM))
-                    .map(PlaybackItemInfo::getId)
-                    .orElse(-1L);
+            long currentPlayingTrackId = -1L;
+            if (playbackItemInfo.getQueueItem() != null &&
+                    Objects.equals(playbackItemInfo.getQueueItem().getPlayingFrom(), PLAYING_FROM)) {
+                currentPlayingTrackId = playbackItemInfo.getQueueItem().getId();
+            }
             // Create the final list
             return objects.stream()
                     .map(new SearchObjectMapper(currentPlayingTrackId))
@@ -92,8 +90,8 @@ public class GetSearchResultUseCase {
                 return new SearchItemData.Track(trackEntity.getId(), trackEntity.getTitle(),
                         trackEntity.getArtistId(), trackEntity.getArtistName(),
                         trackEntity.getAlbumId(), trackEntity.getAlbumTitle(),
-                        trackEntity.getDuration(), trackEntity.getArtworkPath(),
-                        trackEntity.getId() == currentPlayingTrackId);
+                        trackEntity.getDuration(), trackEntity.getUri(),
+                        trackEntity.getArtworkPath(), trackEntity.getId() == currentPlayingTrackId);
             }
             throw new IllegalArgumentException("Found invalid object " + object);
         }

@@ -16,7 +16,6 @@ import org.singularux.music.feature.playback.domain.ListenPlaybackItemInfoUseCas
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -92,20 +91,20 @@ public class ListenTrackListUseCase {
     }
 
     private static final class TrackListWithPlaybackInfoCombiner implements BiFunction<
-            List<TrackEntity>, Optional<PlaybackItemInfo>, List<TrackItemData>> {
+            List<TrackEntity>, PlaybackItemInfo, List<TrackItemData>> {
 
         private static final String PLAYING_FROM = "tracks";
 
         @Override
         public @NonNull List<TrackItemData> apply(
                 @NonNull List<TrackEntity> trackEntities,
-                @NonNull Optional<PlaybackItemInfo> maybePlaybackItemInfo) {
+                @NonNull PlaybackItemInfo playbackItemInfo) {
             // Extract the playing track id only if the playingFrom token matches
-            long currentPlayingTrackId = maybePlaybackItemInfo
-                    .filter(playbackItemInfo -> Objects
-                            .equals(playbackItemInfo.getPlayingFrom(), PLAYING_FROM))
-                    .map(PlaybackItemInfo::getId)
-                    .orElse(-1L);
+            long currentPlayingTrackId = -1L;
+            if (playbackItemInfo.getQueueItem() != null &&
+                    Objects.equals(playbackItemInfo.getQueueItem().getPlayingFrom(), PLAYING_FROM)) {
+                currentPlayingTrackId = playbackItemInfo.getQueueItem().getId();
+            }
             // Create the final list
             return trackEntities.stream()
                     .map(new TrackEntityMapper(currentPlayingTrackId))
@@ -123,8 +122,8 @@ public class ListenTrackListUseCase {
             return new TrackItemData(trackEntity.getId(), trackEntity.getTitle(),
                     trackEntity.getArtistId(), trackEntity.getArtistName(),
                     trackEntity.getAlbumId(), trackEntity.getAlbumTitle(),
-                    trackEntity.getDuration(), trackEntity.getArtworkPath(),
-                    trackEntity.getId() == currentPlayingTrackId);
+                    trackEntity.getDuration(), trackEntity.getUri(),
+                    trackEntity.getArtworkPath(), trackEntity.getId() == currentPlayingTrackId);
         }
 
     }

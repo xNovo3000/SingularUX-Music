@@ -17,7 +17,6 @@ import org.singularux.music.feature.playback.domain.OnPlayerActionUseCase;
 import org.singularux.music.feature.playback.domain.OnTimelineActionUseCase;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -63,7 +62,7 @@ public class TracksViewModel extends ViewModel {
         if (current != null) {
             TimelineAction action = new TimelineAction.ReplaceMediaItems(
                     current.stream()
-                            .map(new TrackItemData.ToTimelineMediaItemMapper("tracks"))
+                            .map(new TrackItemData.ToTimelineMediaItemMapper("tracks", false))
                             .collect(Collectors.toList()),
                     index, false);
             onTimelineActionUseCase.run(action);
@@ -78,7 +77,7 @@ public class TracksViewModel extends ViewModel {
                     current.stream()
                             .filter(new SearchItemData.Track.Filter())
                             .map(searchItemData -> (SearchItemData.Track) searchItemData)
-                            .map(new SearchItemData.Track.ToTimelineMediaItemMapper())
+                            .map(new SearchItemData.Track.ToQueueItemMapper(false))
                             .collect(Collectors.toList()),
                     index, false);
             onTimelineActionUseCase.run(action);
@@ -91,7 +90,7 @@ public class TracksViewModel extends ViewModel {
         if (current != null) {
             TrackItemData itemData = current.get(index);
             TrackItemData.ToTimelineMediaItemMapper mapper =
-                    new TrackItemData.ToTimelineMediaItemMapper("tracks");
+                    new TrackItemData.ToTimelineMediaItemMapper("tracks", true);
             TimelineAction action = new TimelineAction.AddToCustomQueue(mapper.apply(itemData));
             onTimelineActionUseCase.run(action);
         }
@@ -104,8 +103,8 @@ public class TracksViewModel extends ViewModel {
             SearchItemData.Track.Filter filter = new SearchItemData.Track.Filter();
             if (filter.test(itemData)) {
                 SearchItemData.Track trackItemData = (SearchItemData.Track) itemData;
-                SearchItemData.Track.ToTimelineMediaItemMapper mapper =
-                        new SearchItemData.Track.ToTimelineMediaItemMapper();
+                SearchItemData.Track.ToQueueItemMapper mapper =
+                        new SearchItemData.Track.ToQueueItemMapper(true);
                 TimelineAction action = new TimelineAction
                         .AddToCustomQueue(mapper.apply(trackItemData));
                 onTimelineActionUseCase.run(action);
