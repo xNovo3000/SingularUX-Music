@@ -167,6 +167,7 @@
         <item name="textAppearanceLabelLargeEmphasized">@style/TextAppearance.Music.LabelLarge.Emphasized</item>
         <item name="textAppearanceLabelMediumEmphasized">@style/TextAppearance.Music.LabelMedium.Emphasized</item>
         <item name="textAppearanceLabelSmallEmphasized">@style/TextAppearance.Music.LabelSmall.Emphasized</item>
+        <item name="materialSearchViewStyle">@style/Widget.Material3Expressive.SearchView.AppBarWithSearch</item>
     </style>
     <style name="Theme.Music.Splash" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>

@@ -24,12 +24,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "Music"
 include ':app'
+include ':baseline'
 include ':core:permission'
+include ':core:playback'
 include ':core:threading'
 include ':core:ui'
 include ':data:library'
+include ':feature:library'
 include ':feature:playback'
 include ':feature:tracklist'
 include ':feature:nowplaying'
-include ':baseline'
-include ':core:playback'

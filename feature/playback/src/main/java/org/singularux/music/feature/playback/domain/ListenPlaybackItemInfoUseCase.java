@@ -92,6 +92,7 @@ public class ListenPlaybackItemInfoUseCase {
 
         private final MediaController mediaController;
         private final FlowableEmitter<Optional<PlaybackItemInfo>> emitter;
+        private final PlaybackItemInfoExtractor extractor = new PlaybackItemInfoExtractor();
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
@@ -101,9 +102,9 @@ public class ListenPlaybackItemInfoUseCase {
         public void update() {
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
-                Log.d(TAG, "Current MediaItem is not null, updating accordingly " + mediaItem);
-                PlaybackItemInfoExtractor extractor = new PlaybackItemInfoExtractor();
-                emitter.onNext(Optional.of(extractor.apply(mediaItem)));
+                PlaybackItemInfo playbackItemInfo = extractor.apply(mediaItem);
+                Log.d(TAG, "Current MediaItem is not null, updating accordingly " + playbackItemInfo);
+                emitter.onNext(Optional.of(playbackItemInfo));
             } else {
                 Log.d(TAG, "Current MediaItem is null");
                 emitter.onNext(Optional.empty());

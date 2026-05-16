@@ -25,7 +25,7 @@ public class ListenPlaybackPositionUseCase {
     private static final String TAG = "ListenPlaybackPositionUseCase";
 
     private static final int INITIAL_DELAY_MS = 0;
-    private static final int UPDATE_PERIOD_MS = 250;
+    private static final int UPDATE_PERIOD_MS = 100;
     private static final PlaybackPosition EMPTY_PLAYBACK_POSITION =
             new PlaybackPosition(0.0F, Duration.ofMillis(0), Duration.ofMillis(1));
 

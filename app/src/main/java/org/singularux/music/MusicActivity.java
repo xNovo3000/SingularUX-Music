@@ -34,18 +34,6 @@ public class MusicActivity extends FragmentActivity {
                 .setKeepOnScreenCondition(() -> !musicControllerFacade.isReady());
         EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-
-        // Add listener for notification click listener
-        // TODO: Works with duct tape, should be refactored better
-        addOnNewIntentListener(intent -> {
-            if (Objects.equals(intent.getStringExtra("origin"), MusicPlaybackService.INTENT_ORIGIN)) {
-                NavController navController = Navigation
-                        .findNavController(this, R.id.navigation_root);
-                if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.track_list) {
-                    navController.navigate(R.id.track_list_go_to_now_playing);
-                }
-            }
-        });
     }
 
     @Override

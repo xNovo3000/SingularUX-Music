@@ -25,7 +25,6 @@ import lombok.Getter;
 public class MusicControllerFacade {
 
     private static final String TAG = "MusicControllerFacade";
-
     private static final String PLAYBACK_SERVICE_CLASS =
             "org.singularux.music.feature.playback.presentation.MusicPlaybackService";
 
@@ -80,9 +79,9 @@ public class MusicControllerFacade {
         public void onSubscribe(@NonNull Disposable d) {}
 
         @Override
-        public void onSuccess(@NonNull MediaController mediaController) {
+        public void onSuccess(@NonNull MediaController controller) {
             Log.d(TAG, "Loading MediaController");
-            MusicControllerFacade.this.mediaController = mediaController;
+            mediaController = controller;
         }
 
         @Override

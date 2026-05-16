@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.listitem.ListItemLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.listitem.ListItemCardView
+        android:id="@+id/view_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/item_search_track">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                style="@style/Widget.Material3.ShapeableImageView.ListItem.LeadingImage"
+                android:id="@+id/artwork"
+                android:layout_width="@dimen/item_search_track_artwork"
+                android:layout_height="@dimen/item_search_track_artwork"
+                android:layout_gravity="center_vertical"
+                android:background="?attr/colorSurfaceContainerHighest"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Material3.TextView.ListItem.LabelText"
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/placeholder"
+                    android:textColor="@color/item_search_track_text"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/Widget.Material3.TextView.ListItem.SupportingText"
+                    android:id="@+id/duration_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/placeholder"
+                    android:textColor="@color/item_search_track_text"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.listitem.ListItemCardView>
+
+    <com.google.android.material.listitem.ListItemRevealLayout
+        android:id="@+id/view_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:primaryActionSwipeMode="disabled">
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialIconButtonFilledStyle"
+            android:id="@+id/add_to_queue"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:contentDescription="@string/item_search_track_add_to_queue"
+            app:icon="@drawable/playlist_add_28"/>
+
+    </com.google.android.material.listitem.ListItemRevealLayout>
+
+</com.google.android.material.listitem.ListItemLayout>

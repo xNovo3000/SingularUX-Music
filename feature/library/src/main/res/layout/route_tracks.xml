@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/track_list_recyclerview"
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -20,60 +20,31 @@
         app:liftOnScroll="false"
         app:liftOnScrollColor="@android:color/transparent">
         <com.google.android.material.search.SearchBar
-            android:id="@+id/track_list_search_bar"
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
-            android:hint="@string/track_list_search_bar"
-            app:defaultMarginsEnabled="false"/>
+            app:navigationIcon="@drawable/search_24"
+            app:navigationIconTint="?attr/colorOnSurfaceVariant"
+            app:defaultMarginsEnabled="false">
+        </com.google.android.material.search.SearchBar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <org.singularux.music.feature.tracklist.ui.search.SearchBarScrimView
-        android:id="@+id/track_list_scrim"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        android:alpha="0.85"/>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/shuffle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="16dp"
-            android:text="@string/track_list_shuffle"
-            app:icon="@drawable/round_shuffle_24"/>
-
-        <include layout="@layout/component_playback_bar"
-            android:id="@+id/playback_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
     <com.google.android.material.search.SearchView
-        android:id="@+id/track_list_search_view"
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="@string/track_list_search_bar"
-        app:layout_anchor="@id/track_list_search_bar">
-
+        android:hint="@string/search_hint"
+        app:layout_anchor="@id/search_bar">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/track_list_search_recyclerview"
+            android:id="@+id/search_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="vertical"
-            app:layout_behavior="@string/searchbar_scrolling_view_behavior"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
