@@ -3,6 +3,7 @@ package org.singularux.music.feature.library.presentation;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class TracksRoute extends Fragment {
+
+    private static final String TAG = "TracksRoute";
 
     public @Inject @ComputationExecutorService ExecutorService computationExecutorService;
     public @Inject Picasso picasso;
@@ -83,6 +86,8 @@ public class TracksRoute extends Fragment {
         public void onAction(int position,
                              @NonNull TrackItemData item,
                              @NonNull TrackItemListAdapter.Action action) {
+            Log.d(TAG, "Executing TrackListItem action " + action +
+                    " on position " + position + ", item " + item);
             switch (action) {
                 case PLAY:
                     viewModel.playFromTrackList(position);
@@ -102,6 +107,8 @@ public class TracksRoute extends Fragment {
         public void onAction(int position,
                              @NonNull SearchItemData item,
                              @NonNull SearchItemListAdapter.Action action) {
+            Log.d(TAG, "Executing SearchTrackListItem action " + action +
+                    " on position " + position + ", item " + item);
             switch (action) {
                 case PLAY:
                     viewModel.playFromSearchList(position);

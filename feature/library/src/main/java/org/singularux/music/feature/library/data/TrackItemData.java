@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
-import org.singularux.music.feature.playback.data.QueueItem;
-import org.singularux.music.feature.playback.data.TimelineAction;
 import org.singularux.music.feature.playback.data.TrackDto;
 
 import java.time.Duration;

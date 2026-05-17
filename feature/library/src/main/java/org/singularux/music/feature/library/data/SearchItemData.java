@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 
-import org.singularux.music.feature.playback.data.QueueItem;
-import org.singularux.music.feature.playback.data.TimelineAction;
 import org.singularux.music.feature.playback.data.TrackDto;
 
 import java.time.Duration;
@@ -16,7 +14,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 public abstract class SearchItemData {

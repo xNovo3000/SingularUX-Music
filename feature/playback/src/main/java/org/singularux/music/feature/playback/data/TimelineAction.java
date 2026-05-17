@@ -7,12 +7,12 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
-public class TimelineAction {
+public abstract class TimelineAction {
 
     @Value
     @EqualsAndHashCode(callSuper = false)
     public static class ReplaceMediaItems extends TimelineAction {
-        @NonNull List<QueueItem> queueItemList;
+        @NonNull List<TrackDto> trackDtoList;
         int index;
         boolean shuffled;
     }
@@ -20,7 +20,7 @@ public class TimelineAction {
     @Value
     @EqualsAndHashCode(callSuper = false)
     public static class AddToCustomQueue extends TimelineAction {
-        @NonNull QueueItem mediaItem;
+        @NonNull TrackDto trackDto;
     }
 
 }
