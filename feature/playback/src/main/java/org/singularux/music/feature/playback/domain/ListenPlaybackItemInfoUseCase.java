@@ -88,7 +88,7 @@ public class ListenPlaybackItemInfoUseCase {
 
         private final MediaController mediaController;
         private final FlowableEmitter<PlaybackItemInfo> emitter;
-        private final QueueItem.FromMediaItem fromMediaItem = new QueueItem.FromMediaItem();
+        private final QueueItem.FromMediaItemMapper mapper = new QueueItem.FromMediaItemMapper();
 
         @Override
         public void onMediaItemTransition(@Nullable MediaItem mediaItem, int reason) {
@@ -98,7 +98,7 @@ public class ListenPlaybackItemInfoUseCase {
         public void update() {
             MediaItem mediaItem = mediaController.getCurrentMediaItem();
             if (mediaItem != null) {
-                QueueItem queueItem = fromMediaItem.apply(mediaItem);
+                QueueItem queueItem = mapper.apply(mediaItem);
                 Log.d(TAG, "Current MediaItem is not null, updating accordingly " + queueItem);
                 emitter.onNext(new PlaybackItemInfo(queueItem));
             } else {

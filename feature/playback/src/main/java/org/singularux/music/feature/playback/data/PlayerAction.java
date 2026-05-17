@@ -1,5 +1,7 @@
 package org.singularux.music.feature.playback.data;
 
+import androidx.annotation.NonNull;
+
 import java.time.Duration;
 
 import lombok.EqualsAndHashCode;
@@ -16,7 +18,7 @@ public class PlayerAction {
     @Value
     @EqualsAndHashCode(callSuper = false)
     public static class SeekTo extends PlayerAction {
-        Duration duration;
+        @NonNull Duration duration;
     }
 
 }

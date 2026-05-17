@@ -1,11 +1,13 @@
 package org.singularux.music.feature.playback.data;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -27,7 +29,7 @@ public class QueueItem {
     @Nullable String playingFrom;
     boolean customQueue;
 
-    public static final class FromMediaItem implements Function<MediaItem, QueueItem> {
+    public static final class FromMediaItemMapper implements Function<MediaItem, QueueItem> {
 
         @Override
         public @NonNull QueueItem apply(@NonNull MediaItem mediaItem) {
@@ -88,14 +90,45 @@ public class QueueItem {
                 playingFrom = mediaItem.mediaMetadata.extras.getString("playing_from");
             }
             // Custom queue
-            boolean customQueue = false;
-            if (mediaItem.mediaMetadata.extras != null &&
-                    mediaItem.mediaMetadata.extras.containsKey("custom_queue")) {
-                customQueue = true;
-            }
+            boolean customQueue = mediaItem.mediaMetadata.extras != null &&
+                    mediaItem.mediaMetadata.extras.containsKey("custom_queue");
             // Create final object
             return new QueueItem(id, title, artistId, artistName, albumId, albumTitle,
                     duration, uri, artworkUri, playingFrom, customQueue);
+        }
+
+    }
+
+    public static final class ToMediaItemMapper implements Function<QueueItem, MediaItem> {
+
+        @Override
+        public @NonNull MediaItem apply(@NonNull QueueItem queueItem) {
+            Bundle extras = new Bundle();
+            if (queueItem.getArtistId() != null) {
+                extras.putLong("artist_id", queueItem.getArtistId());
+            }
+            if (queueItem.getAlbumId() != null) {
+                extras.putLong("album_id", queueItem.getAlbumId());
+            }
+            if (queueItem.getPlayingFrom() != null) {
+                extras.putString("playing_from", queueItem.getPlayingFrom());
+            }
+            if (queueItem.isCustomQueue()) {
+                extras.putBoolean("custom_queue", true);
+            }
+            MediaMetadata mediaMetadata = new MediaMetadata.Builder()
+                    .setTitle(queueItem.getTitle())
+                    .setAlbumArtist(queueItem.getAlbumTitle())
+                    .setArtist(queueItem.getArtistName())
+                    .setArtworkUri(queueItem.getArtworkPath())
+                    .setDurationMs(queueItem.getDuration().toMillis())
+                    .setExtras(extras)
+                    .build();
+            return new MediaItem.Builder()
+                    .setMediaId(String.valueOf(queueItem.getId()))
+                    .setUri(queueItem.getUri())
+                    .setMediaMetadata(mediaMetadata)
+                    .build();
         }
 
     }

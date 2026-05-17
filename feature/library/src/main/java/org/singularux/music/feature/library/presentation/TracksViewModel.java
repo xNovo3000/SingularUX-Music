@@ -57,6 +57,8 @@ public class TracksViewModel extends ViewModel {
         addCloseable(this.searchQueryEmitter);
     }
 
+    /* Play */
+
     public void playFromTrackList(int index) {
         List<TrackItemData> current = trackItemDataList.getValue();
         if (current != null) {

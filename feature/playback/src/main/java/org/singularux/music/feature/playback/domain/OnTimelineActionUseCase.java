@@ -51,7 +51,7 @@ public class OnTimelineActionUseCase {
                 return;
             }
             List<MediaItem> mediaItems = replaceMediaItemsAction.getQueueItemList().stream()
-                    .map(new MediaItemExtractor())
+                    .map(new QueueItem.ToMediaItemMapper())
                     .collect(Collectors.toList());
             if (replaceMediaItemsAction.isShuffled()) {
                 MediaItem first = mediaItems.remove(replaceMediaItemsAction.getIndex());
@@ -80,46 +80,11 @@ public class OnTimelineActionUseCase {
                 index++;
             }
             // Extract MediaItem and add to the list
-            MediaItemExtractor mediaItemExtractor = new MediaItemExtractor();
-            MediaItem mediaItem = mediaItemExtractor.apply(addToCustomQueueAction.getMediaItem());
+            QueueItem.ToMediaItemMapper mapper = new QueueItem.ToMediaItemMapper();
+            MediaItem mediaItem = mapper.apply(addToCustomQueueAction.getMediaItem());
             Log.d(TAG, "Adding MediaItem to custom queue at index: " + index);
             mediaController.addMediaItem(index, mediaItem);
         }
-    }
-
-    @RequiredArgsConstructor
-    private static final class MediaItemExtractor implements Function<QueueItem, MediaItem> {
-
-        @Override
-        public @NonNull MediaItem apply(@NonNull QueueItem queueItem) {
-            Bundle extras = new Bundle();
-            if (queueItem.getArtistId() != null) {
-                extras.putLong("artist_id", queueItem.getArtistId());
-            }
-            if (queueItem.getAlbumId() != null) {
-                extras.putLong("album_id", queueItem.getAlbumId());
-            }
-            if (queueItem.getPlayingFrom() != null) {
-                extras.putString("playing_from", queueItem.getPlayingFrom());
-            }
-            if (queueItem.isCustomQueue()) {
-                extras.putBoolean("custom_queue", true);
-            }
-            MediaMetadata mediaMetadata = new MediaMetadata.Builder()
-                    .setTitle(queueItem.getTitle())
-                    .setAlbumArtist(queueItem.getAlbumTitle())
-                    .setArtist(queueItem.getArtistName())
-                    .setArtworkUri(queueItem.getArtworkPath())
-                    .setDurationMs(queueItem.getDuration().toMillis())
-                    .setExtras(extras)
-                    .build();
-            return new MediaItem.Builder()
-                    .setMediaId(String.valueOf(queueItem.getId()))
-                    .setUri(queueItem.getUri())
-                    .setMediaMetadata(mediaMetadata)
-                    .build();
-        }
-
     }
 
 }

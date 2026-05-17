@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import org.singularux.music.feature.playback.data.QueueItem;
 import org.singularux.music.feature.playback.data.TimelineAction;
+import org.singularux.music.feature.playback.data.TrackDto;
 
 import java.time.Duration;
 import java.util.Objects;
@@ -59,19 +60,24 @@ public abstract class SearchItemData {
 
         }
 
-        @RequiredArgsConstructor
-        public static final class ToQueueItemMapper
-                implements Function<Track, QueueItem> {
+        public static final class MapAfterFilter implements Function<SearchItemData, Track> {
+
+            @Override
+            public @NonNull Track apply(@NonNull SearchItemData item) {
+                return (Track) item;
+            }
+
+        }
+
+        public static final class ToTrackDtoMapper implements Function<Track, TrackDto> {
 
             private static final String PLAYING_FROM = "search";
 
-            private final boolean customQueue;
-
             @Override
-            public @NonNull QueueItem apply(@NonNull Track item) {
-                return new QueueItem(item.id, item.title, item.artistId, item.artistName,
+            public @NonNull TrackDto apply(@NonNull Track item) {
+                return new TrackDto(item.id, item.title, item.artistId, item.artistName,
                         item.albumId, item.albumTitle, item.duration,
-                        item.uri, item.artworkPath, PLAYING_FROM, customQueue);
+                        item.uri, item.artworkPath, PLAYING_FROM);
             }
 
         }
