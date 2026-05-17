@@ -2,7 +2,6 @@ package org.singularux.music.feature.library.presentation;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,8 +18,6 @@ import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 
 public class SearchItemListAdapter extends ListAdapter<SearchItemData, SearchItemViewHolder> {
-
-    private static final String TAG = "SearchItemListAdapter";
 
     private final Picasso picasso;
     private final ActionListener actionListener;
@@ -108,7 +105,6 @@ public class SearchItemListAdapter extends ListAdapter<SearchItemData, SearchIte
     }
 
     public void onTrackViewRecycled(@NonNull SearchItemViewHolder.Track holder) {
-        Log.d(TAG, "Holder recycled " + holder);
         // Cancel any pending image request and set element non-swiped
         holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll, false);
         picasso.cancelRequest(holder.artwork);
