@@ -71,9 +71,9 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
         }
         // Apply listeners
         holder.viewContent.setOnClickListener(v ->
-                actionListener.onAction(position, item, Action.PLAY));
+                actionListener.onAction(holder.getBindingAdapterPosition(), item, Action.PLAY));
         holder.addToQueue.setOnClickListener(v -> {
-            actionListener.onAction(position, item, Action.ADD_TO_QUEUE);
+            actionListener.onAction(holder.getBindingAdapterPosition(), item, Action.ADD_TO_QUEUE);
             // Always return to non-swiped state
             holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll);
         });
@@ -82,8 +82,8 @@ public class TrackItemListAdapter extends ListAdapter<TrackItemData, TrackItemVi
     @Override
     public void onViewRecycled(@NonNull TrackItemViewHolder holder) {
         // Cancel any pending image request and set element non-swiped
-        picasso.cancelRequest(holder.artwork);
         holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll, false);
+        picasso.cancelRequest(holder.artwork);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.singularux.music.feature.library.presentation;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -24,10 +26,15 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.core.FlowableEmitter;
 import io.reactivex.rxjava3.core.FlowableOnSubscribe;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.Getter;
 
 @HiltViewModel
 public class TracksViewModel extends ViewModel {
+
+    private static final String TAG = "TracksViewModel";
 
     private final OnTimelineActionUseCase onTimelineActionUseCase;
     private final OnPlayerActionUseCase onPlayerActionUseCase;
@@ -38,6 +45,8 @@ public class TracksViewModel extends ViewModel {
     /* Search */
     private final SearchQueryEmitter searchQueryEmitter;
     private final @Getter LiveData<List<SearchItemData>> searchItemDataList;
+
+    private @Nullable Disposable currentAction = null;
 
     @Inject
     public TracksViewModel(GetReadMusicPermissionUseCase getReadMusicPermissionUseCase,
@@ -57,58 +66,97 @@ public class TracksViewModel extends ViewModel {
         addCloseable(this.searchQueryEmitter);
     }
 
+    /* Play */
+
     public void playFromTrackList(int index) {
+        Log.d(TAG, "Executing playFromTrackList with index " + index);
         List<TrackItemData> current = trackItemDataList.getValue();
-        if (current != null) {
-            TimelineAction action = new TimelineAction.ReplaceMediaItems(
-                    current.stream()
-                            .map(new TrackItemData.ToTimelineMediaItemMapper("tracks", false))
-                            .collect(Collectors.toList()),
-                    index, false);
-            onTimelineActionUseCase.run(action);
-            onPlayerActionUseCase.run(new PlayerAction.Play());
+        if (current != null && index < current.size()) {
+            if (currentAction != null && !currentAction.isDisposed()) {
+                currentAction.dispose();
+            }
+            currentAction = Observable.just(current)
+                    .observeOn(Schedulers.computation())
+                    .map(list -> list.stream()
+                            .map(new TrackItemData.ToTrackDtoMapper("tracks"))
+                            .collect(Collectors.toList()))
+                    .flatMapCompletable(list -> {
+                        TimelineAction action = new TimelineAction.ReplaceMediaItems(
+                                list, index, false);
+                        return onTimelineActionUseCase.run(action);
+                    })
+                    .doOnComplete(() -> onPlayerActionUseCase.run(new PlayerAction.Play()))
+                    .subscribe();
         }
     }
 
     public void playFromSearchList(int index) {
+        Log.d(TAG, "Executing playFromSearchList with index " + index);
         List<SearchItemData> current = searchItemDataList.getValue();
-        if (current != null) {
-            TimelineAction action = new TimelineAction.ReplaceMediaItems(
-                    current.stream()
+        if (current != null && index < current.size()) {
+            if (currentAction != null && !currentAction.isDisposed()) {
+                currentAction.dispose();
+            }
+            currentAction = Observable.just(current)
+                    .observeOn(Schedulers.computation())
+                    .map(list -> list.stream()
                             .filter(new SearchItemData.Track.Filter())
-                            .map(searchItemData -> (SearchItemData.Track) searchItemData)
-                            .map(new SearchItemData.Track.ToQueueItemMapper(false))
-                            .collect(Collectors.toList()),
-                    index, false);
-            onTimelineActionUseCase.run(action);
-            onPlayerActionUseCase.run(new PlayerAction.Play());
+                            .map(new SearchItemData.Track.MapAfterFilter())
+                            .map(new SearchItemData.Track.ToTrackDtoMapper())
+                            .collect(Collectors.toList()))
+                    .flatMapCompletable(list -> {
+                        TimelineAction action = new TimelineAction.ReplaceMediaItems(
+                                list, index, false);
+                        return onTimelineActionUseCase.run(action);
+                    })
+                    .doOnComplete(() -> onPlayerActionUseCase.run(new PlayerAction.Play()))
+                    .subscribe();
         }
     }
 
     public void addToQueueFromTrackList(int index) {
+        Log.d(TAG, "Executing addToQueueFromTrackList with index " + index);
         List<TrackItemData> current = trackItemDataList.getValue();
-        if (current != null) {
-            TrackItemData itemData = current.get(index);
-            TrackItemData.ToTimelineMediaItemMapper mapper =
-                    new TrackItemData.ToTimelineMediaItemMapper("tracks", true);
-            TimelineAction action = new TimelineAction.AddToCustomQueue(mapper.apply(itemData));
-            onTimelineActionUseCase.run(action);
+        if (current != null && index < current.size()) {
+            if (currentAction != null && !currentAction.isDisposed()) {
+                currentAction.dispose();
+            }
+            TrackItemData.ToTrackDtoMapper mapper =
+                    new TrackItemData.ToTrackDtoMapper("tracks");
+            currentAction = Observable.just(current.get(index))
+                    .observeOn(Schedulers.computation())
+                    .map(mapper::apply)
+                    .flatMapCompletable(item -> {
+                        TimelineAction action = new TimelineAction.AddToCustomQueue(item);
+                        return onTimelineActionUseCase.run(action);
+                    })
+                    .subscribe();
         }
     }
 
     public void addToQueueFromSearchList(int index) {
+        Log.d(TAG, "Executing addToQueueFromSearchList with index " + index);
         List<SearchItemData> current = searchItemDataList.getValue();
-        if (current != null) {
-            SearchItemData itemData = current.get(index);
-            SearchItemData.Track.Filter filter = new SearchItemData.Track.Filter();
-            if (filter.test(itemData)) {
-                SearchItemData.Track trackItemData = (SearchItemData.Track) itemData;
-                SearchItemData.Track.ToQueueItemMapper mapper =
-                        new SearchItemData.Track.ToQueueItemMapper(true);
-                TimelineAction action = new TimelineAction
-                        .AddToCustomQueue(mapper.apply(trackItemData));
-                onTimelineActionUseCase.run(action);
+        if (current != null && index < current.size()) {
+            if (currentAction != null && !currentAction.isDisposed()) {
+                currentAction.dispose();
             }
+            SearchItemData.Track.Filter filter =
+                    new SearchItemData.Track.Filter();
+            SearchItemData.Track.MapAfterFilter mapAfterFilter =
+                    new SearchItemData.Track.MapAfterFilter();
+            SearchItemData.Track.ToTrackDtoMapper mapper =
+                    new SearchItemData.Track.ToTrackDtoMapper();
+            currentAction = Observable.just(current.get(index))
+                    .observeOn(Schedulers.computation())
+                    .filter(filter::test)
+                    .map(mapAfterFilter::apply)
+                    .map(mapper::apply)
+                    .flatMapCompletable(item -> {
+                        TimelineAction action = new TimelineAction.AddToCustomQueue(item);
+                        return onTimelineActionUseCase.run(action);
+                    })
+                    .subscribe();
         }
     }
 

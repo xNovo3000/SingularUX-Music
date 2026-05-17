@@ -81,8 +81,7 @@ public class SearchItemListAdapter extends ListAdapter<SearchItemData, SearchIte
         holder.durationArtist.setText(durationArtist);
         if (artworkPath != null) {
             picasso.load(artworkPath)
-                    .resizeDimen(R.dimen.item_search_track_artwork,
-                            R.dimen.item_search_track_artwork)
+                    .resizeDimen(R.dimen.item_search_track_artwork, R.dimen.item_search_track_artwork)
                     .into(holder.artwork);
         } else {
             picasso.cancelRequest(holder.artwork);
@@ -90,12 +89,25 @@ public class SearchItemListAdapter extends ListAdapter<SearchItemData, SearchIte
         }
         // Apply listeners
         holder.viewContent.setOnClickListener(v ->
-                actionListener.onAction(position, item, Action.PLAY));
+                actionListener.onAction(holder.getBindingAdapterPosition(), item, Action.PLAY));
         holder.addToQueue.setOnClickListener(v -> {
-            actionListener.onAction(position, item, Action.ADD_TO_QUEUE);
+            actionListener.onAction(holder.getBindingAdapterPosition(), item, Action.ADD_TO_QUEUE);
             // Always return to non-swiped state
             holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll);
         });
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull SearchItemViewHolder holder) {
+        if (holder instanceof SearchItemViewHolder.Track) {
+            onTrackViewRecycled((SearchItemViewHolder.Track) holder);
+        }
+    }
+
+    public void onTrackViewRecycled(@NonNull SearchItemViewHolder.Track holder) {
+        // Cancel any pending image request and set element non-swiped
+        holder.root.setSwipeState(SwipeableListItem.STATE_CLOSED, holder.viewScroll, false);
+        picasso.cancelRequest(holder.artwork);
     }
 
     @Override
