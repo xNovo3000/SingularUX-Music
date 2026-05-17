@@ -19,6 +19,7 @@ import org.singularux.music.feature.playback.domain.OnPlayerActionUseCase;
 import org.singularux.music.feature.playback.domain.OnTimelineActionUseCase;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -107,6 +108,29 @@ public class TracksViewModel extends ViewModel {
                     .flatMapCompletable(list -> {
                         TimelineAction action = new TimelineAction.ReplaceMediaItems(
                                 list, index, false);
+                        return onTimelineActionUseCase.run(action);
+                    })
+                    .doOnComplete(() -> onPlayerActionUseCase.run(new PlayerAction.Play()))
+                    .subscribe();
+        }
+    }
+
+    public void playShuffled() {
+        Log.d(TAG, "Executing playShuffled");
+        List<TrackItemData> current = trackItemDataList.getValue();
+        if (current != null) {
+            if (currentAction != null && !currentAction.isDisposed()) {
+                currentAction.dispose();
+            }
+            int index = new Random().nextInt(current.size());
+            currentAction = Observable.just(current)
+                    .observeOn(Schedulers.computation())
+                    .map(list -> list.stream()
+                            .map(new TrackItemData.ToTrackDtoMapper("tracks"))
+                            .collect(Collectors.toList()))
+                    .flatMapCompletable(list -> {
+                        TimelineAction action = new TimelineAction.ReplaceMediaItems(
+                                list, index, true);
                         return onTimelineActionUseCase.run(action);
                     })
                     .doOnComplete(() -> onPlayerActionUseCase.run(new PlayerAction.Play()))

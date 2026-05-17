@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -62,10 +63,14 @@ public class TracksRoute extends Fragment {
         // Add inset listeners
         ViewCompat.setOnApplyWindowInsetsListener(binding.searchBar, new SearchBarInsetListener());
         ViewCompat.setOnApplyWindowInsetsListener(binding.content, new ContentInsetListener());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.fab, new FabInsetListener());
         // Extract ViewModel
         viewModel = new ViewModelProvider(this).get(TracksViewModel.class);
+        // Add static behavior listeners
+        binding.content.addOnScrollListener(new CollapseFabOnContentScrollListener());
         // Add static action listeners
         binding.searchView.getEditText().addTextChangedListener(new SearchViewTextWatcher());
+        binding.fab.setOnClickListener(v -> viewModel.playShuffled());
         // Create and apply data adapters
         trackItemListAdapter = new TrackItemListAdapter(computationExecutorService, picasso,
                 new TrackListItemActionListener());
@@ -208,6 +213,41 @@ public class TracksRoute extends Fragment {
             int bottomPadding = 0;
             view.setPadding(leftPadding, topPadding, rightPadding, bottomPadding);
             return WindowInsetsCompat.CONSUMED;
+        }
+
+    }
+
+    private static final class FabInsetListener implements OnApplyWindowInsetsListener {
+
+        private static final int MARGIN_DP = 16;
+
+        @Override
+        public @NonNull WindowInsetsCompat onApplyWindowInsets(
+                @NonNull View view, @NonNull WindowInsetsCompat windowInsets) {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            float density = view.getContext().getResources().getDisplayMetrics().density;
+            ViewGroup.MarginLayoutParams marginLayoutParams =
+                    (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            int leftMargin = (int) (MARGIN_DP * density);
+            int topMargin = (int) (MARGIN_DP * density);
+            int rightMargin = insets.right + (int) (MARGIN_DP * density);
+            int bottomMargin = (int) (MARGIN_DP * density);
+            marginLayoutParams.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);
+            view.setLayoutParams(marginLayoutParams);
+            return WindowInsetsCompat.CONSUMED;
+        }
+
+    }
+
+    private final class CollapseFabOnContentScrollListener extends RecyclerView.OnScrollListener {
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            if (dy < -12 && !binding.fab.isExtended()) {
+                binding.fab.extend();
+            } else if (dy > 12 && binding.fab.isExtended()) {
+                binding.fab.shrink();
+            }
         }
 
     }

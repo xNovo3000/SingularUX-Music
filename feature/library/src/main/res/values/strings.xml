@@ -20,4 +20,6 @@
     <string name="search_hint">Search music library</string>
     <string name="search_menu">Menu</string>
 
+    <string name="tracks_shuffle">Shuffle</string>
+
 </resources>

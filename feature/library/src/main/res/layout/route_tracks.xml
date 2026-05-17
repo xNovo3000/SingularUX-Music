@@ -32,6 +32,15 @@
         </com.google.android.material.search.SearchBar>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:text="@string/tracks_shuffle"
+        app:icon="@drawable/shuffle_24"/>
+
     <org.singularux.music.feature.library.presentation.SearchBarScrimView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
